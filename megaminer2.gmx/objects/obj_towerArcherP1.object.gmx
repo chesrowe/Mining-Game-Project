@@ -155,7 +155,7 @@ if (placed){
         attackTimer ++;
         if (attackTimer &gt;= rof){
             arrow = instance_create(x,y,obj_arrow);
-            arrow.dmg = dmg;
+            arrow.dmg = (dmg+choose(0,1,2,-1,-3));
             arrow.direction = (point_direction(arrow.x,arrow.y,target.x,target.y)+choose(.5,-.5,1,-1));
             arrow.startDir = (point_direction(arrow.x,arrow.y,target.x,target.y)+choose(.5,-.5,1,-1)); 
             arrow.speed = 4;

@@ -34,12 +34,14 @@ dmgNumber = 0;
 knockBackLeft = 0;
 knockBackRight = 0;
 knockTimer = 0;
+moveSpeed = 0;
 
 hpBar = instance_create(x,y,obj_enemyHpDraw);
 hpBar.myEnemy = id;
 hpBar.hp = hp;
 hpBar.hpMult = (hp/10);
 dying = 0;
+image_speed = .1;
 </string>
           </argument>
         </arguments>
@@ -88,6 +90,7 @@ if (!dying){
         speed = .5;
     }   
 }else{
+    image_speed = 0;
     image_alpha -= .01;
     speed = 0;
     if (image_alpha &lt;= 0){
