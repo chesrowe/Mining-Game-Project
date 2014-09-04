@@ -122,8 +122,8 @@
     <scripts name="Misc">
       <script>scripts\scr_pop_main.gml</script>
       <script>scripts\scr_effects_fade_in.gml</script>
+      <script>scripts\spr_part_blood_init.gml</script>
     </scripts>
-    <script>scripts\spr_part_blood_init.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\ft_gameFont</font>

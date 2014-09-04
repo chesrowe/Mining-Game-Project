@@ -42,6 +42,12 @@ hpBar.hp = hp;
 hpBar.hpMult = (hp/10);
 dying = 0;
 image_speed = .1;
+jumpAttack = 1;
+state = 'walking'
+jumpTimer = 0;
+jumping = 0;
+nearestTarget = 0;
+
 </string>
           </argument>
         </arguments>
@@ -66,6 +72,35 @@ image_speed = .1;
             <kind>1</kind>
             <string>
 if (!dying){
+    if (place_meeting(x,y+7,obj_solidGround)){
+        gravity = 0;   
+    }else{
+        gravity = .5;
+    }
+    
+    if (instance_exists(obj_minerP1)){
+        nearestTarget = instance_nearest(x,y,obj_minerP1);
+        if (distance_to_object(nearestTarget &lt; 250)){
+            state = 'attacking';   
+            if (distance_to_object(nearestTarget)&lt; 250 &amp;&amp; distance_to_object(nearestTarget) &gt; 90 &amp;&amp; jumpAttack){
+                jumpTimer ++;   
+                if (jumpTimer &gt;= 50){
+                    vspeed -= .5;
+                    hspeed = 5;
+                    jumpTimer = 0; 
+                }
+            }else{
+                
+                vspeed = 0;
+                jumpTimer = 0;
+            }
+        }else{
+            state = 'walking';
+        }
+    }else{
+        state = 'walking';
+    }
+    
     if (knockBackLeft){
         knockTimer ++;
         if (knockTimer &lt; 20){
@@ -86,9 +121,12 @@ if (!dying){
             friction = 0;  
         }    
     }
-    if (!knockBackRight &amp;&amp; !knockBackLeft){
-        speed = .5;
-    }   
+    if (!knockBackRight &amp;&amp; !knockBackLeft &amp;&amp; state == 'walking'){
+        hspeed = .5;
+    } 
+    if (!knockBackRight &amp;&amp; !knockBackLeft &amp;&amp; state == 'attacking'){
+        hspeed = .8;    
+    }  
 }else{
     image_speed = 0;
     image_alpha -= .01;

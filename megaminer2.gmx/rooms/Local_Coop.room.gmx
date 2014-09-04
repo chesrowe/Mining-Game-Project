@@ -25,9 +25,9 @@
     <showViews>0</showViews>
     <deleteUnderlyingObj>0</deleteUnderlyingObj>
     <deleteUnderlyingTiles>0</deleteUnderlyingTiles>
-    <page>4</page>
-    <xoffset>687</xoffset>
-    <yoffset>68</yoffset>
+    <page>0</page>
+    <xoffset>367</xoffset>
+    <yoffset>-132</yoffset>
   </makerSettings>
   <backgrounds>
     <background visible="-1" foreground="0" name="bg_sky" x="0" y="0" htiled="-1" vtiled="-1" hspeed="0" vspeed="0" stretch="0"/>
@@ -68,17 +68,17 @@
     <instance objName="&lt;undefined&gt;" x="7803" y="680" name="inst_B98372A5" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="&lt;undefined&gt;" x="4824" y="680" name="inst_D2FE35BE" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="&lt;undefined&gt;" x="1485" y="680" name="inst_A78B0E4A" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_wolf" x="1000" y="700" name="inst_CE7A2155" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_wolf" x="1048" y="700" name="inst_BA00146A" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_wolf" x="976" y="701" name="inst_F1642376" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="&lt;undefined&gt;" x="156" y="6" name="inst_5A1B2537" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="&lt;undefined&gt;" x="-136" y="709" name="inst_CE20A5CA" locked="0" code="" scaleX="319.742004394531" scaleY="1.74194002151489" colour="4294967295" rotation="0"/>
+    <instance objName="olj_gold" x="1496" y="676" name="inst_0B5CD73E" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_stone" x="4360" y="675" name="inst_37CDD785" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_globalConP2" x="40" y="12" name="inst_73D9C222" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_soundCon" x="72" y="5" name="inst_5A77A057" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_cameraConP1" x="224" y="355" name="inst_0143B9A5" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_cameraConP2" x="1080" y="418" name="inst_11F56FE7" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_enemyPartCon" x="168" y="8" name="inst_37A8E5F5" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_townCenter" x="2000" y="582" name="inst_24E044E0" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_townCenter" x="2840" y="580" name="inst_24E044E0" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solidGround" x="-64" y="711" name="inst_9089492B" locked="0" code="" scaleX="318" scaleY="2.375" colour="4294967295" rotation="0"/>
     <instance objName="obj_globalCon" x="8" y="7" name="inst_243DB3A9" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
   </instances>
