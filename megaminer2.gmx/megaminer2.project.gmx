@@ -52,6 +52,9 @@
       </sprites>
       <sprite>sprites\spr_hpBack</sprite>
       <sprite>sprites\spr_hpFront</sprite>
+      <sprites name="fonts">
+        <sprite>sprites\spr_dmgFont</sprite>
+      </sprites>
     </sprites>
     <sprites name="Structures">
       <sprite>sprites\spr_townCenter</sprite>
@@ -134,6 +137,7 @@
       <objects name="miners">
         <object>objects\obj_minerP2</object>
         <object>objects\obj_minerP1</object>
+        <object>objects\obj_minerParentP1</object>
         <objects name="miner controllers">
           <object>objects\obj_minerNumDraw</object>
         </objects>

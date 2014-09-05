@@ -71,6 +71,7 @@ global.defenceMenuP1 = 0;
 global.defenceMenuP2 = 0;
 global.buildingDefenceP1 = 0;
 global.buildingDefenceP2 = 0;
+global.fontDmg = font_add_sprite(spr_dmgFont,ord('!'),1,1);
 
 </string>
           </argument>
@@ -280,7 +281,7 @@ draw_sprite(spr_stoneUi,0,view_xport[1]+8,view_yport[1]+27); // stone Ui
           <argument>
             <kind>1</kind>
             <string>
-//draw_set_font(ft_gameFont);
+draw_set_font(global.fontDmg);
 draw_set_color(c_black);
 draw_text(42, 28, string(global.goldP1));
 draw_text(42, 60, string(global.stoneP1));

@@ -29,6 +29,8 @@
 myEnemy = 0;
 hp = 0;
 hpWidth = 1;
+enemy = 0;
+
 
 
 
@@ -85,9 +87,17 @@ if (instance_exists(myEnemy)){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
-draw_sprite(spr_hpBack,0,myEnemy.x-3,myEnemy.y-15);
-draw_sprite_ext(spr_hpFront,0,myEnemy.x-3,myEnemy.y-15,hpWidth,1,0,-1,1);
+            <string>if (enemy){
+    if (myEnemy.state = 'attacking'){
+        draw_sprite(spr_hpBack,0,myEnemy.x-3,myEnemy.y-15);
+        draw_sprite_ext(spr_hpFront,0,myEnemy.x-3,myEnemy.y-15,hpWidth,1,0,-1,1);
+    }
+}else{
+    if (myEnemy.beingAttacked){
+        draw_sprite(spr_hpBack,0,myEnemy.x-3,myEnemy.y-15);
+        draw_sprite_ext(spr_hpFront,0,myEnemy.x-3,myEnemy.y-15,hpWidth,1,0,-1,1);
+    }    
+}
 </string>
           </argument>
         </arguments>

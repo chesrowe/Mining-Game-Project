@@ -35,8 +35,10 @@ knockBackLeft = 0;
 knockBackRight = 0;
 knockTimer = 0;
 moveSpeed = 0;
+facing = 'right';
 
 hpBar = instance_create(x,y,obj_enemyHpDraw);
+hpBar.enemy = 1;
 hpBar.myEnemy = id;
 hpBar.hp = hp;
 hpBar.hpMult = (hp/10);
@@ -46,7 +48,18 @@ jumpAttack = 1;
 state = 'walking'
 jumpTimer = 0;
 jumping = 0;
+walkSpeed = .5;
+runSpeed = 1.5;
 nearestTarget = 0;
+knockBackSpeed = 2;
+minerDist = 0;
+madeContact = 0;
+contactTarget = 0;
+attack = 0;
+attackTimer = 0;
+
+spriteAttackingRight = spr_wolfAttackingRight;
+spriteAttackingLeft = spr_wolfAttackingLeft;
 
 </string>
           </argument>
@@ -71,70 +84,109 @@ nearestTarget = 0;
           <argument>
             <kind>1</kind>
             <string>
+
 if (!dying){
-    if (place_meeting(x,y+7,obj_solidGround)){
-        gravity = 0;   
+    //sets nearest to the nearest miner
+    if (instance_exists(obj_minerParentP1)){
+        nearestTarget = instance_nearest(x,y,obj_minerParentP1);
+        minerDist = distance_to_point(nearestTarget.x,nearestTarget.y);
     }else{
-        gravity = .5;
+        madeContact = 0;
+        contactTarget = -1;
+        minerDist = 999999999999;
+        nearestTarget = -1;
     }
+    if (jumpAttack){
     
-    if (instance_exists(obj_minerP1)){
-        nearestTarget = instance_nearest(x,y,obj_minerP1);
-        if (distance_to_object(nearestTarget &lt; 250)){
-            state = 'attacking';   
-            if (distance_to_object(nearestTarget)&lt; 250 &amp;&amp; distance_to_object(nearestTarget) &gt; 90 &amp;&amp; jumpAttack){
-                jumpTimer ++;   
-                if (jumpTimer &gt;= 50){
-                    vspeed -= .5;
-                    hspeed = 5;
-                    jumpTimer = 0; 
-                }
-            }else{
-                
-                vspeed = 0;
-                jumpTimer = 0;
-            }
-        }else{
+    }else{
+        
+    }
+    if (minerDist &lt; 150 &amp;&amp; nearestTarget != -1){
+            state = 'attacking';
+    }else{
             state = 'walking';
-        }
-    }else{
-        state = 'walking';
-    }
-    
+    } 
     if (knockBackLeft){
         knockTimer ++;
-        if (knockTimer &lt; 20){
-            speed = -5;
-            friction = 4.5;
+        if (knockTimer &lt; 10){
+            x += -(knockBackSpeed);
+            
         }else{
             knockBackLeft = 0;
-            friction = 0;    
+               
         }    
     }
     if (knockBackRight){
         knockTimer ++;
-        if (knockTimer &lt; 20){
-            speed = 5;
-            friction = 4.5;
+        if (knockTimer &lt; 10){
+            x  += knockBackSpeed;
+            
         }else{
             knockBackRight = 0;
-            friction = 0;  
+              
         }    
     }
     if (!knockBackRight &amp;&amp; !knockBackLeft &amp;&amp; state == 'walking'){
-        hspeed = .5;
+        x += walkSpeed;
     } 
     if (!knockBackRight &amp;&amp; !knockBackLeft &amp;&amp; state == 'attacking'){
-        hspeed = .8;    
+        if (!madeContact){
+            x += runSpeed;    
+        }else{
+            if (contactTarget.x &gt; x){
+                sprite_index = spriteAttackingRight;
+            }else{
+                sprite_index = spriteAttackingLeft;
+            }
+            attackTimer ++;
+            if (attackTimer &gt;= 20){
+                image_speed = .08;
+            }
+            if (attackTimer &gt;= 50){
+                x += runSpeed;
+                if (attackTimer &gt;= 60){
+                    attackTimer = 0;
+                    image_speed = 0;
+                    image_index = 0;
+                }
+            }
+        }
     }  
 }else{
     image_speed = 0;
     image_alpha -= .01;
-    speed = 0;
     if (image_alpha &lt;= 0){
         instance_destroy();
     }
 }
+
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_minerParentP1">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>
+madeContact = 1;
+contactTarget = other.id;
 
 </string>
           </argument>
@@ -160,6 +212,8 @@ if (!dying){
             <kind>1</kind>
             <string>//destroy the arrow when it hits the enemy
 if (!other.stuck){
+    madeContact = 0;
+    attackTimer = 0;
     with(other){
         //instance_destroy();
     }
