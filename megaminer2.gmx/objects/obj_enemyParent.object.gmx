@@ -26,40 +26,41 @@
           <argument>
             <kind>1</kind>
             <string>
-image_speed = .2;
+// Defines the default values for the variables the enemy children when need(default is the wolf)
+hp = 160; //the amount of Healt the enemy is going to have
+dmg = 5; // The base amount of damage an enemy deals
+dmgNumber = 0; // A variable used to store the id of the dmg number created when the enemy is damaged
+knockBackLeft = 0; // A boolean variable used to check if the enemy is being knocked back to the left or not
+knockBackRight = 0; // A boolean variable used to check if the enemy is being knocked back to the left or not 
+knockTimer = 0; // A timer variable used to control how long the enemy is knockedback
+moveSpeed = 0; 
+facing = 'right'; // Which way the enemy is facing
 
-hp = 160;
-dmg = 5;
-dmgNumber = 0;
-knockBackLeft = 0;
-knockBackRight = 0;
-knockTimer = 0;
-moveSpeed = 0;
-facing = 'right';
+hpBar = instance_create(x,y,obj_enemyHpDraw); // Creates the instance that controls  the drawing of the enemy's health bar
+hpBar.enemy = 1; // A boolean variable in hpbar that checks whether the hpbar is being drawn for an enemy or a miner(in this case, it's for a enemy)
+hpBar.myEnemy = id; // sets the myEnemy var in hpBar to the id of this enemy
+hpBar.hp = hp; // Tells hpBar how much health the enemy has so it can draw the bar right
+hpBar.hpMult = (hp/10); // A variable whos value is 1/10th of the enemy's Hp ( used to draw the hp bar proportional to the amount of hp the enemy has)
+dying = 0; // A boolean var used to check if the enemy is dying or not
+image_speed = .1; // sets the starting image_speed for the enemy
+jumpAttack = 1; // A boolean used to check if the enemy has a jump attack or not
+state = 'walking' // Sets the starting state for the enemy to walking
+jumpTimer = 0; // A timer used to set how long a jump will last(counter)
+jumping = 0; // A boolean used to check if the enemy is jumping or not
+walkSpeed = .5; // sets the walking speed for the enemy
+runSpeed = 1.5; // Sets the run speed for the enemy
+nearestTarget = 0;// A var that stores the id of the nearest enemy
+knockBackSpeed = 2; // the speed at which the enemy is knocked back at
+curKBSpeed = 2; // The current speed of the knockback(this value is decreased as the enemey is knocked back to simulate friction)
+fric = .1; // The amount of friction the enemy has when being knocked back
+minerDist = 0; // Stores the distance from the enemy to the nearest miner(if one exists)
+madeContact = 0; // A boolean used to check to see if the enemy has made contact with the target yet
+contactTarget = 0; // if the enemy has made contact with the target, it's id is stored in this var
+attack = 0; // NOT USED
+attackTimer = 0; // A tiemr that counts up between each attack(basicly used to set the attack speed)
 
-hpBar = instance_create(x,y,obj_enemyHpDraw);
-hpBar.enemy = 1;
-hpBar.myEnemy = id;
-hpBar.hp = hp;
-hpBar.hpMult = (hp/10);
-dying = 0;
-image_speed = .1;
-jumpAttack = 1;
-state = 'walking'
-jumpTimer = 0;
-jumping = 0;
-walkSpeed = .5;
-runSpeed = 1.5;
-nearestTarget = 0;
-knockBackSpeed = 2;
-minerDist = 0;
-madeContact = 0;
-contactTarget = 0;
-attack = 0;
-attackTimer = 0;
-
-spriteAttackingRight = spr_wolfAttackingRight;
-spriteAttackingLeft = spr_wolfAttackingLeft;
+spriteAttackingRight = spr_wolfAttackingRight; // sets the sprite for when the enemy is attacking to the right
+spriteAttackingLeft = spr_wolfAttackingLeft; // sets the sprite for when the enemy is attacking to the right
 
 </string>
           </argument>
@@ -84,9 +85,9 @@ spriteAttackingLeft = spr_wolfAttackingLeft;
           <argument>
             <kind>1</kind>
             <string>
-
+// Checks to see if the enemy is dying or not
 if (!dying){
-    //sets nearest to the nearest miner
+    //sets nearestEnemy to the nearest miner
     if (instance_exists(obj_minerParentP1)){
         nearestTarget = instance_nearest(x,y,obj_minerParentP1);
         minerDist = distance_to_point(nearestTarget.x,nearestTarget.y);
@@ -95,43 +96,53 @@ if (!dying){
         contactTarget = -1;
         minerDist = 999999999999;
         nearestTarget = -1;
-    }
-    if (jumpAttack){
-    
-    }else{
-        
-    }
+    }  
+    //Sets the state to attack if a target is in range 
     if (minerDist &lt; 150 &amp;&amp; nearestTarget != -1){
             state = 'attacking';
     }else{
             state = 'walking';
     } 
+    //KnockBack Code
     if (knockBackLeft){
         knockTimer ++;
+        curKBSpeed -= fric;
         if (knockTimer &lt; 10){
-            x += -(knockBackSpeed);
+            x += -(curKBSpeed);
             
         }else{
             knockBackLeft = 0;
-               
+            curKBSpeed = knockBackSpeed;    
         }    
     }
     if (knockBackRight){
         knockTimer ++;
+        curKBSpeed -= fric;
         if (knockTimer &lt; 10){
-            x  += knockBackSpeed;
+            
+            x  += (curKBSpeed);
             
         }else{
             knockBackRight = 0;
-              
+            curKBSpeed = knockBackSpeed;  
         }    
     }
+    //Checks to see if the enemy is not being knocked back and if the state is walking(if so the walk forward)
     if (!knockBackRight &amp;&amp; !knockBackLeft &amp;&amp; state == 'walking'){
         x += walkSpeed;
     } 
+    // Checks to see if the enemy is not being knocked back, if so then start attacking
     if (!knockBackRight &amp;&amp; !knockBackLeft &amp;&amp; state == 'attacking'){
         if (!madeContact){
-            x += runSpeed;    
+            if (!jumpAttack){
+                x += runSpeed; 
+            }else{
+                if (minerDist &lt; 150 &amp;&amp; minerDist &gt; 75){
+                //jump at enemy
+                }else{
+                    x += runSpeed;
+                }
+            }  
         }else{
             if (contactTarget.x &gt; x){
                 sprite_index = spriteAttackingRight;
@@ -161,32 +172,6 @@ if (!dying){
 }
 
 
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="4" ename="obj_minerParentP1">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>
-madeContact = 1;
-contactTarget = other.id;
 
 </string>
           </argument>
@@ -255,6 +240,32 @@ if (!other.stuck){
 if (hp &lt;= 0){
     dying = 1;
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_minerParentP1">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>
+madeContact = 1;
+contactTarget = other.id;
+
 </string>
           </argument>
         </arguments>
