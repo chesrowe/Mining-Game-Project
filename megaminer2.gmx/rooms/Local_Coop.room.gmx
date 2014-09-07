@@ -80,6 +80,7 @@
     <instance objName="obj_enemyPartCon" x="168" y="8" name="inst_37A8E5F5" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_townCenter" x="2840" y="580" name="inst_24E044E0" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solidGround" x="-64" y="711" name="inst_9089492B" locked="0" code="" scaleX="318" scaleY="2.375" colour="4294967295" rotation="0"/>
+    <instance objName="obj_minerP1" x="1320" y="696" name="inst_47C34DFC" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_globalCon" x="8" y="7" name="inst_243DB3A9" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
   </instances>
   <tiles>
