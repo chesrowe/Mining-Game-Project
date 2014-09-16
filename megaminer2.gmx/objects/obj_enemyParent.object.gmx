@@ -2,7 +2,7 @@
 <object>
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
-  <visible>-1</visible>
+  <visible>0</visible>
   <depth>0</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
@@ -43,7 +43,7 @@ hpBar.hp = hp; // Tells hpBar how much health the enemy has so it can draw the b
 hpBar.hpMult = (hp/10); // A variable whos value is 1/10th of the enemy's Hp ( used to draw the hp bar proportional to the amount of hp the enemy has)
 dying = 0; // A boolean var used to check if the enemy is dying or not
 image_speed = .1; // sets the starting image_speed for the enemy
-jumpAttack = 0; // A boolean used to check if the enemy has a jump attack or not
+jumpAttack = 1; // A boolean used to check if the enemy has a jump attack or not
 state = 'walking' // Sets the starting state for the enemy to walking
 jumpTimer = 0; // A timer used to set how long a jump will last(counter)
 jumping = 0; // A boolean used to check if the enemy is jumping or not
@@ -109,7 +109,6 @@ if (!dying){
         curKBSpeed -= fric;
         if (knockTimer &lt; 10){
             x += -(curKBSpeed);
-            
         }else{
             knockBackLeft = 0;
             curKBSpeed = knockBackSpeed;    
@@ -119,9 +118,7 @@ if (!dying){
         knockTimer ++;
         curKBSpeed -= fric;
         if (knockTimer &lt; 10){
-            
             x  += (curKBSpeed);
-            
         }else{
             knockBackRight = 0;
             curKBSpeed = knockBackSpeed;  
@@ -142,8 +139,23 @@ if (!dying){
                 }else{
                     x += runSpeed;
                 }
-            }  
+            } 
+            //Makes the enemy jump(if the enemy has a jump attack)
+            if (jumping){
+                jumpTimer ++;
+                if (jumpTimer &lt; 20){
+                    x += runSpeed+1.5;
+                    y -= 1.5;
+                    gravity = .1;
+                }
+                if (jumpTimer &gt;= 15){
+                    jumping = 0;
+                    gravity = 0;
+                    
+                }
+            } 
         }else{
+            // Sets the enemy's sprite facing the right way
             if (contactTarget.x &gt; x){
                 sprite_index = spriteAttackingRight;
             }else{
@@ -162,18 +174,10 @@ if (!dying){
                 }
             }
         }
-        if (jumping){
-            jumpTimer ++;
-            if (jumpTimer &lt; 20){
-                x += runSpeed+1.5;
-                y -= 1.5;
-                
-                jumpTimer = 0;
-            }
-            if (jumpTimer &gt;= 20){
-                jumping = 0;
-                
-            }
+        //Checks to see if the enemy is colliding with the ground or not.
+        if (position_meeting(x,y+10,obj_solidGround)){
+            gravity = 0;
+            vspeed = 0;
         }
     }  
 }else{
@@ -187,28 +191,6 @@ if (!dying){
 
 
 </string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="4" ename="obj_solidGround">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string></string>
           </argument>
         </arguments>
       </action>

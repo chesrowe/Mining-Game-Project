@@ -41,6 +41,7 @@ refresh__ = 0;
 alpha = 1;
 countUp = 0;
 countDown = 1;
+global.localCoop = 0;
 global.goldP1 = 900000;
 global.stoneP1 = 0;
 global.goldP2 = 400;
@@ -72,6 +73,10 @@ global.defenceMenuP2 = 0;
 global.buildingDefenceP1 = 0;
 global.buildingDefenceP2 = 0;
 global.fontDmg = font_add_sprite(spr_dmgFont,ord('!'),1,1);
+
+if (room == Local_Coop){
+    global.localCoop = 1;
+}
 
 </string>
           </argument>
@@ -178,7 +183,7 @@ if (keyboard_check_released(vk_space)){
 } // &lt;-- End of spacebar full screen code!
 
 if (global.minerSelectP1){  
-    scr_miner_rock_select_create(1,1488,688,4365,688,1485,4350,400,obj_minerP1);
+    scr_miner_rock_select_create(1,2496,670,6880,670,2496,6880,400,obj_minerP1);
 }
 
 
@@ -216,7 +221,9 @@ draw_sprite(spr_backUi,0,view_xport[0],view_yport[0]);
 draw_sprite(spr_backUi,0,view_xport[0]+640,view_yport[0]);
 draw_sprite(spr_uiIcons,0,view_xport[0]+2,view_yport[0]+120);
 draw_sprite(spr_uiIcons,0,view_xport[0]+642,view_yport[0]+120);
-draw_sprite(spr_uiLine,0,view_xport[0]+637, view_yport[0]+252);
+if (global.localCoop){
+    draw_sprite(spr_uiLine,0,view_xport[0]+637, view_yport[0]+252);
+}
 draw_sprite(spr_goldUi,0,view_xport[0]+8,view_yport[0]+4); //Gold Ui
 draw_sprite(spr_stoneUi,0,view_xport[0]+8,view_yport[0]+27); // stone Ui
 //Draws main menu player 1
@@ -256,6 +263,10 @@ draw_text(view_xport[1]+35,view_yport+35, string(global.stoneP2)); // Stone Text
 draw_sprite(spr_goldUi,0,view_xport[1]+8,view_yport[1]+4); //Gold Ui
 draw_sprite(spr_stoneUi,0,view_xport[1]+8,view_yport[1]+27); // stone Ui
 
+// Draw early dev text
+draw_set_alpha(.8);
+draw_text(5,700,"Very early in development");
+draw_set_alpha(1);
 
 
 </string>

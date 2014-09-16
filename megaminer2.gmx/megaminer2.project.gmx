@@ -103,6 +103,10 @@
     <background>background\bg_sky</background>
     <background>background\bg_mountains</background>
     <background>background\background9</background>
+    <background>background\bg_longTrees</background>
+    <background>background\bg_treesPara</background>
+    <background>background\bg_close_trees</background>
+    <background>background\background11</background>
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
@@ -126,6 +130,7 @@
       <script>scripts\scr_pop_main.gml</script>
       <script>scripts\scr_effects_fade_in.gml</script>
       <script>scripts\spr_part_blood_init.gml</script>
+      <script>scripts\draw_background_tiled_hor.gml</script>
     </scripts>
   </scripts>
   <fonts name="fonts">
@@ -168,10 +173,12 @@
       <object>objects\obj_cameraConP1</object>
       <object>objects\obj_cameraConP2</object>
       <object>objects\obj_enemyPartCon</object>
+      <object>objects\obj_bgCon</object>
     </objects>
     <objects name="Evironment">
       <object>objects\olj_gold</object>
       <object>objects\obj_stone</object>
+      <object>objects\obj_resourceParent</object>
     </objects>
     <objects name="Structures">
       <object>objects\obj_townCenterP2</object>
@@ -187,6 +194,7 @@
     </objects>
   </objects>
   <rooms name="rooms">
+    <room>rooms\singleplayer</room>
     <room>rooms\Local_Coop</room>
   </rooms>
   <help>

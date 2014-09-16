@@ -44,7 +44,7 @@ if (player == 1){
     }
     if (global.rockSelectedP1){
         switch(global.selectRockP1){
-                case 0: miner = scr_make_miner_create(minerType,3000,697) global.minerSelectP1 = 0 global.goldP1 -= minerCost global.rockSelectedP1 = 0;
+                case 0: miner = scr_make_miner_create(minerType,3000,692) global.minerSelectP1 = 0 global.goldP1 -= minerCost global.rockSelectedP1 = 0;
                     global.popP1 += 1;
                     timer = 0;
                     with(miner){
@@ -52,7 +52,7 @@ if (player == 1){
                         stone = 0;
                     } 
                 break;
-                case 1: miner = scr_make_miner_create(minerType,3000,697) global.minerSelectP1 = 0 global.goldP1 -= minerCost global.rockSelectedP1 = 0;
+                case 1: miner = scr_make_miner_create(minerType,3000,692) global.minerSelectP1 = 0 global.goldP1 -= minerCost global.rockSelectedP1 = 0;
                     global.popP1 += 1;
                     timer = 0;
                     with(miner){
