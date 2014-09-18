@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-1</depth>
+  <depth>0</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -25,14 +25,21 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>refresh = 0;
+            <string>///General 
+
+//Local variables
+refresh = 0;
 refresh_ = 0;
+
 makeMinerP1 = 0;
 makeMinerP2 = 0;
+
 minerTimerP1 = 0;
 minerTimerP2 = 0;
+
 lastWheat = 0;
 lastWheatP2 = 0;
+
 timer = 0;
 created = 0;
 myStruc = 0;
@@ -41,43 +48,202 @@ refresh__ = 0;
 alpha = 1;
 countUp = 0;
 countDown = 1;
+
+//General
+global.battleLayer = -1;
+
+//layers
+global.currentLayer = 0;
+global.layersDiscovered = 0;
+
+//workers
+global.workerSelected = noone;
+
+//Controls
 global.gamepad = 0;
 global.localCoop = 0;
+
+//Resources
 global.goldP1 = 900000;
 global.stoneP1 = 0;
+
 global.goldP2 = 400;
 global.stoneP2 = 0;
+
+global.crystalP1 = 0;
+global.crystalP1 = 0;
+
+global.brimstoneP1 = 0;
+global.brimstoneP2 = 0;
+
+global.mushroomP1 = 0;
+global.mushroomP2 = 0;
+
+//Gamepad Specific
 global.controllerCount = 0;
-global.selectedP1 = 0;
-global.selectedP2 = 0;
-global.buildingP1 = 0;
-global.buildingP2 = 0;
-global.buildingMenuP1 = 0;
-global.buildingMenuP2 = 0;
-global.minersP1 = 0;
-global.minersP2 = 0;
-global.minerSelectP1 = 0;
+
+//Farming/Population
 global.popP1 = 0;
-global.maxPopP1 = 10;
 global.popP2 = 0;
-global.maxPopP2 = 10; 
+
+global.maxPopP1 = 10;
+global.maxPopP2 = 10;
+ 
 global.farmLevelP1 = 1;
 global.farmLevelP2 = 1;
-global.whatStructureP1 = 0;
-global.whatStructureP2 = 0;
-global.selectRockP1 = 0;
-global.selectRockP2 = 0;
-global.rockSelectedP1 = 0;
-global.rockSelectedP2 = 0;
-global.defenceMenuP1 = 0;
-global.defenceMenuP2 = 0;
-global.buildingDefenceP1 = 0;
-global.buildingDefenceP2 = 0;
-global.fontDmg = font_add_sprite(spr_dmgFont,ord('!'),1,1);
 
+//Fonts
+global.fontDmg = font_add_sprite(spr_dmgFont,ord('!'),1,1);
+draw_set_font(global.fontDmg);
+
+// Checks to see if the game is co op or not
 if (room == Local_Coop){
     global.localCoop = 1;
 }
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///UI
+
+//Gamepad Specific
+global.selectedP1 = 0;
+global.selectedP2 = 0;
+
+global.buildingP1 = 0;
+global.buildingP2 = 0;
+
+global.buildingMenuP1 = 0;
+global.buildingMenuP2 = 0;
+
+global.minersP1 = 0;
+global.minersP2 = 0;
+
+global.minerSelectP1 = 0;
+global.minerSelectP2 = 0;
+
+global.selectRockP1 = 0;
+global.selectRockP2 = 0;
+
+global.rockSelectedP1 = 0;
+global.rockSelectedP2 = 0;
+
+global.defenceMenuP1 = 0;
+global.defenceMenuP2 = 0;
+
+global.buildingDefenceP1 = 0;
+global.buildingDefenceP2 = 0;
+
+//Mouse/keyboard Specific 
+global.building = 0;
+global.buildingDefense = 0;
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Sound
+
+//Sound Variables
+global.currentSong = 0;
+
+//Putting sounds into arrays
+global.specialMusic[0] = sd_mainTheme; //Main theme for game
+
+global.surfaceMusic[0] = 0; //day neutral 1
+global.surfaceMusic[1] = 0; //day neutral 2
+global.surfaceMusic[2] = 0; //day battle 1
+global.surfaceMusic[3] = 0; // day battle 2
+global.surfaceMusic[4] = sd_surfaceNightNeutral1; // night neutral 1
+global.surfaceMusic[5] = 0; //Night neutral 2
+global.surfaceMusic[6] = 0; //Night battle 1
+global.surfaceMusic[7] = 0; //Night battle 2
+
+global.caveMusic[0] = sd_caveNeutral1; // Cave neutral 1
+global.caveMusic[1] = 0; // Cave neutral 2
+global.caveMusic[2] = 0; //Cave battle 1
+global.caveMusic[3] = 0; // Cave battle 3
+
+global.mushroomMusic[0] = 0; // neutal 1
+global.mushroomMusic[1] = 0; // neutral 2
+global.mushroomMusic[2] = 0; // battle 1
+global.mushroomMusic[3] = 0; // battle 2
+
+global.hauntedMusic[0] = 0;
+global.hauntedMusic[1] = 0;
+global.hauntedMusic[2] = 0;
+global.hauntedMusic[3] = 0;
+
+global.fireMusic[0] = 0;
+global.fireMusic[1] = 0;
+global.fireMusic[2] = 0;
+global.fireMusic[3] = 0;
+
+global.frozenMusic[0] = 0;
+global.frozenMusic[1] = 0;
+global.frozenMusic[2] = 0;
+global.frozenMusic[3] = 0;
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Particles
+
+//create the particle system for blood
+spr_part_blood_init();
+
+
 
 </string>
           </argument>
@@ -101,79 +267,148 @@ if (room == Local_Coop){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//Deals with main game mechcanics!! MIXED PLAYERS!! not just player1
-global.controllerCount = gamepad_get_device_count(); //
-//Sloppy jumbled code below --&gt;
-if (gamepad_is_connected(0)){ // &lt;-- Checks to see if the gamepad is connected
-    if (gamepad_button_check_released(0, gp_face1)){// &lt;-- Checks for the 'A' button to be released!! 
-      
-          if (global.buildingMenuP1){
-            global.buildingP1 = 1;
-          }
-         if (global.selectedP1 == 1 &amp;&amp; !global.minersP1 &amp;&amp; !global.defenceMenuP1){
-            global.buildingMenuP1 = 1;
-            global.minersP1 = 0;
-        }
-       if (global.selectedP1 == 0 &amp;&amp; !global.buildingMenuP1 &amp;&amp; !global.minerSelectP1 &amp;&amp; global.minersP1 &amp;&amp; !global.defenceMenuP1){    
-            if (global.goldP1 &gt;= 400){ 
-                if (global.popP1 &lt;= (global.maxPopP1-1)){ //&lt;-- Checks to make sure you still have population space left
-                    global.minerSelectP1 = 1;
-                    
-                }
+            <string>///Gamepad
+if (global.gamepad){
+    //Deals with main game mechcanics!! MIXED PLAYERS!! not just player1
+    global.controllerCount = gamepad_get_device_count(); //
+    //Sloppy jumbled code below --&gt;
+    if (gamepad_is_connected(0)){ // &lt;-- Checks to see if the gamepad is connected
+        if (gamepad_button_check_released(0, gp_face1)){// &lt;-- Checks for the 'A' button to be released!! 
+          
+              if (global.buildingMenuP1){
+                global.buildingP1 = 1;
+              }
+             if (global.selectedP1 == 1 &amp;&amp; !global.minersP1 &amp;&amp; !global.defenceMenuP1){
+                global.buildingMenuP1 = 1;
+                global.minersP1 = 0;
+            }
+           if (global.selectedP1 == 0 &amp;&amp; !global.buildingMenuP1 &amp;&amp; !global.minerSelectP1 &amp;&amp; global.minersP1 &amp;&amp; !global.defenceMenuP1){    
+                if (global.goldP1 &gt;= 400){ 
+                    if (global.popP1 &lt;= (global.maxPopP1-1)){ //&lt;-- Checks to make sure you still have population space left
+                        global.minerSelectP1 = 1;
+                        
+                    }
+                }    
+            }
+             if (global.selectedP1 == 0 &amp;&amp; !global.buildingMenuP1 &amp;&amp; !global.minersP1 &amp;&amp; !global.defenceMenuP1){ // &lt;-- If the miner icon is selected, this makes the miner menu show up! 
+                global.minersP1 = 1;
+                global.buildingMenuP1 = 0;
+            }
+             if (global.defenceMenuP1 &amp;&amp; !global.minersP1 &amp;&amp; !global.buildingMenuP1){
+                global.buildingDefenceP1 = 1;    
+            }
+            if (global.selectedP1 == 2 &amp;&amp; !global.buildingMenuP1 &amp;&amp; !global.minersP1){
+                global.defenceMenuP1 = 1;
+            }
+           
+            
+        } // &lt;-- End of 'A' button check :D \\
+        
+        //Exits out of base menus when the 'B' button is pressed 
+        if (gamepad_button_check_released(0, gp_face2)){
+            if (global.minersP1 || global.buildingMenuP1 || global.defenceMenuP1){
+                global.minersP1  = 0;
+                global.buildingMenuP1 = 0;
+                global.defenceMenuP1 = 0;
+                global.buildingDefence = 0;
+                global.building = 0;
             }    
         }
-         if (global.selectedP1 == 0 &amp;&amp; !global.buildingMenuP1 &amp;&amp; !global.minersP1 &amp;&amp; !global.defenceMenuP1){ // &lt;-- If the miner icon is selected, this makes the miner menu show up! 
-            global.minersP1 = 1;
-            global.buildingMenuP1 = 0;
-        }
-         if (global.defenceMenuP1 &amp;&amp; !global.minersP1 &amp;&amp; !global.buildingMenuP1){
-            global.buildingDefenceP1 = 1;    
-        }
-        if (global.selectedP1 == 2 &amp;&amp; !global.buildingMenuP1 &amp;&amp; !global.minersP1){
-            global.defenceMenuP1 = 1;
-        }
-       
-        
-    } // &lt;-- End of 'A' button check :D \\
     
-    //Exits out of base menus when the 'B' button is pressed 
-    if (gamepad_button_check_released(0, gp_face2)){
-        if (global.minersP1 || global.buildingMenuP1 || global.defenceMenuP1){
-            global.minersP1  = 0;
-            global.buildingMenuP1 = 0;
-            global.defenceMenuP1 = 0;
-            global.buildingDefence = 0;
-            global.building = 0;
-        }    
-    }
-
-
-    //Controls D-pad menu movement for menus
-    if (gamepad_button_check_released(0, gp_padr)){ 
-        if(global.selectedP1 &lt;= 2 &amp;&amp; !global.buildingP1 &amp;&amp; !global.buildingDefenceP1){
-            global.selectedP1 += 1;
+    
+        //Controls D-pad menu movement for menus
+        if (gamepad_button_check_released(0, gp_padr)){ 
+            if(global.selectedP1 &lt;= 2 &amp;&amp; !global.buildingP1 &amp;&amp; !global.buildingDefenceP1){
+                global.selectedP1 += 1;
+            }
         }
-    }
-    if (gamepad_button_check_released(0, gp_padl)){
-        if(global.selectedP1 &gt;= 1 &amp;&amp; !global.buildingP1 &amp;&amp; !global.buildingDefenceP1){
-            global.selectedP1 -= 1;
+        if (gamepad_button_check_released(0, gp_padl)){
+            if(global.selectedP1 &gt;= 1 &amp;&amp; !global.buildingP1 &amp;&amp; !global.buildingDefenceP1){
+                global.selectedP1 -= 1;
+            }
         }
+    } 
+    if (global.buildingP1){
+        switch(global.selectedP1){
+            case 0: 
+                scr_gamepad_build_structure(obj_wheatFarmP1,500,1);
+            break;
+        }  
     }
-} 
-if (global.buildingP1){
-    switch(global.selectedP1){
-        case 0: 
-            scr_build_structure(obj_wheatFarmP1,500,1);
-        break;
-    }  
-}
-if (global.buildingDefenceP1){
-    switch(global.selectedP1){
-        case 0: 
-            scr_build_structure(obj_towerArcherP1,1000,1);
-        break;
+    if (global.buildingDefenceP1){
+        switch(global.selectedP1){
+            case 0: 
+                scr_gamepad_build_structure(obj_towerArcherP1,1000,1);
+            break;
+        }
+    }   
+    if (global.minerSelectP1){  
+        scr_miner_rock_select_create(1,2496,670,6880,670,2496,6880,400,obj_workerHumanP1);
     }
 }
+
+
+
+
+
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Sound
+
+//Checks to see which layer the player is on and if there is a battle or not, then plays the appropriate music
+
+//Surface layer
+if (global.currentLayer == 0){
+    // Battle music
+    if (global.battleLayer &gt; -1){
+    //battle music    
+    }else{
+    //Neutral Music
+    
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Keyboard/Mouse
+
 //Spacebar makes the game go to full screen!
 if (keyboard_check_released(vk_space)){ 
     if (!window_get_fullscreen()){
@@ -181,18 +416,32 @@ if (keyboard_check_released(vk_space)){
     }else{
         window_set_fullscreen(false);
     }
-} // &lt;-- End of spacebar full screen code!
+} 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="57">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Deselect
 
-if (global.minerSelectP1){  
-    scr_miner_rock_select_create(1,2496,670,6880,670,2496,6880,400,obj_minerP1);
-}
-
-
-
-
-
-
-
+global.workerSelected = noone;
 </string>
           </argument>
         </arguments>
@@ -215,61 +464,79 @@ if (global.minerSelectP1){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Deals with drawing all the ui in the game! \\\\\ BOTH PLAYERS!!!
-
-//Draws static main ui for both players!
-draw_sprite(spr_backUi,0,view_xport[0],view_yport[0]);
-draw_sprite(spr_backUi,0,view_xport[0]+640,view_yport[0]);
-draw_sprite(spr_uiIcons,0,view_xport[0]+2,view_yport[0]+120);
-draw_sprite(spr_uiIcons,0,view_xport[0]+642,view_yport[0]+120);
-if (global.localCoop){
-    draw_sprite(spr_uiLine,0,view_xport[0]+637, view_yport[0]+252);
+            <string>///Gamepad Ui
+if (global.gamepad){
+    //Draws static main ui for both players!
+    draw_sprite(spr_backUi,0,view_xport[0],view_yport[0]);
+    draw_sprite(spr_backUi,0,view_xport[0]+640,view_yport[0]);
+    draw_sprite(spr_uiIcons,0,view_xport[0]+2,view_yport[0]+120);
+    draw_sprite(spr_uiIcons,0,view_xport[0]+642,view_yport[0]+120);
+    if (global.localCoop){
+        draw_sprite(spr_uiLine,0,view_xport[0]+637, view_yport[0]+252);
+    }
+    draw_sprite(spr_goldUi,0,view_xport[0]+8,view_yport[0]+4); //Gold Ui
+    draw_sprite(spr_stoneUi,0,view_xport[0]+8,view_yport[0]+27); // stone Ui
+    //Draws main menu player 1
+    if (!global.buildingMenuP1 &amp;&amp; !global.minersP1 &amp;&amp; !global.defenceMenuP1){
+        draw_sprite(spr_minerIcon,0,view_xport[0]+45, view_yport[0]+155);
+        draw_sprite(spr_buildIcon,-1,view_xport[0]+203, view_yport[0]+155);
+        draw_sprite(spr_uiTowerIcon,-1,view_xport[0]+380, view_yport[0]+155);
+        draw_sprite(spr_uiUpgradeIcon,-1,view_xport[0]+540, view_yport[0]+155);
+    }
+    //Draws miner menu player 1
+    if (!global.buildingMenuP1 &amp;&amp; global.minersP1){
+        draw_sprite(spr_uiMinerIcon2,0,view_xport[0]+41, view_yport[0]+155);
+        draw_sprite(spr_uiGolemIcon,0,view_xport[0]+203, view_yport[0]+155);
+    }
+    //Text in ui
+    draw_set_color(c_white);
+    draw_text(view_xport[0]+35,view_yport+11, string(global.goldP1)); // Gold Text
+    draw_text(view_xport[0]+35,view_yport+35, string(global.stoneP1)); // Stone Text 
+    if (global.minerSelectP1){
+        draw_flashing_text(115,550,.02,"Press     to select which resource to mine!");
+        draw_sprite(spr_gamepadA,0,173,545);
+    }
+    //Player 2 copy ---&gt;&gt;
+    if (!global.buildingP2 &amp;&amp; !global.minersP2){
+        draw_sprite(spr_minerIcon,-1,view_xport[1]+45, view_yport[1]+155);
+        draw_sprite(spr_buildIcon,-1,view_xport[1]+203, view_yport[1]+155);
+        draw_sprite(spr_uiTowerIcon,-1,view_xport[1]+380, view_yport[1]+155);
+        draw_sprite(spr_uiUpgradeIcon,-1,view_xport[1]+540, view_yport[1]+155);
+    }
+    if (!global.buildingP2 &amp;&amp; global.minersP2){
+        draw_sprite(spr_uiMinerIcon2,0,view_xport[1]+41, view_yport[1]+155);
+        draw_sprite(spr_uiGolemIcon,0,view_xport[1]+203, view_yport[1]+155);
+    }
+    draw_text(view_xport[1]+35,view_yport+11, string(global.goldP2)); // Gold Text
+    draw_text(view_xport[1]+35,view_yport+35, string(global.stoneP2)); // Stone Text
+    draw_sprite(spr_goldUi,0,view_xport[1]+8,view_yport[1]+4); //Gold Ui
+    draw_sprite(spr_stoneUi,0,view_xport[1]+8,view_yport[1]+27); // stone Ui
 }
-draw_sprite(spr_goldUi,0,view_xport[0]+8,view_yport[0]+4); //Gold Ui
-draw_sprite(spr_stoneUi,0,view_xport[0]+8,view_yport[0]+27); // stone Ui
-//Draws main menu player 1
-if (!global.buildingMenuP1 &amp;&amp; !global.minersP1 &amp;&amp; !global.defenceMenuP1){
-    draw_sprite(spr_minerIcon,0,view_xport[0]+45, view_yport[0]+155);
-    draw_sprite(spr_buildIcon,-1,view_xport[0]+203, view_yport[0]+155);
-    draw_sprite(spr_uiTowerIcon,-1,view_xport[0]+380, view_yport[0]+155);
-    draw_sprite(spr_uiUpgradeIcon,-1,view_xport[0]+540, view_yport[0]+155);
-}
-//Draws miner menu player 1
-if (!global.buildingMenuP1 &amp;&amp; global.minersP1){
-    draw_sprite(spr_uiMinerIcon2,0,view_xport[0]+41, view_yport[0]+155);
-    draw_sprite(spr_uiGolemIcon,0,view_xport[0]+203, view_yport[0]+155);
-}
-//Text in ui
-draw_set_color(c_white);
-draw_set_font(ft_uiFont);
-draw_text(view_xport[0]+35,view_yport+11, string(global.goldP1)); // Gold Text
-draw_text(view_xport[0]+35,view_yport+35, string(global.stoneP1)); // Stone Text 
-if (global.minerSelectP1){
-    draw_flashing_text(115,550,.02,"Press     to select which resource to mine!");
-    draw_sprite(spr_gamepadA,0,173,545);
-}
-//Player 2 copy ---&gt;&gt;
-if (!global.buildingP2 &amp;&amp; !global.minersP2){
-    draw_sprite(spr_minerIcon,-1,view_xport[1]+45, view_yport[1]+155);
-    draw_sprite(spr_buildIcon,-1,view_xport[1]+203, view_yport[1]+155);
-    draw_sprite(spr_uiTowerIcon,-1,view_xport[1]+380, view_yport[1]+155);
-    draw_sprite(spr_uiUpgradeIcon,-1,view_xport[1]+540, view_yport[1]+155);
-}
-if (!global.buildingP2 &amp;&amp; global.minersP2){
-    draw_sprite(spr_uiMinerIcon2,0,view_xport[1]+41, view_yport[1]+155);
-    draw_sprite(spr_uiGolemIcon,0,view_xport[1]+203, view_yport[1]+155);
-}
-draw_text(view_xport[1]+35,view_yport+11, string(global.goldP2)); // Gold Text
-draw_text(view_xport[1]+35,view_yport+35, string(global.stoneP2)); // Stone Text
-draw_sprite(spr_goldUi,0,view_xport[1]+8,view_yport[1]+4); //Gold Ui
-draw_sprite(spr_stoneUi,0,view_xport[1]+8,view_yport[1]+27); // stone Ui
-
-// Draw early dev text
-draw_set_alpha(.8);
-draw_text(5,700,"Very early in development");
-draw_set_alpha(1);
 
 
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Mouse/keyboard Ui
 </string>
           </argument>
         </arguments>
@@ -292,14 +559,10 @@ draw_set_alpha(1);
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
-draw_set_font(global.fontDmg);
-draw_set_color(c_black);
-draw_text(42, 28, string(global.goldP1));
-draw_text(42, 60, string(global.stoneP1));
-draw_text(968, 28, string(global.goldP2));
-draw_text(968, 60, string(global.stoneP2));
+            <string>///General
 
+draw_set_font(global.fontDmg);
+draw_text(5,20,"In VERY early development");
 </string>
           </argument>
         </arguments>
@@ -321,9 +584,11 @@ draw_text(968, 60, string(global.stoneP2));
           <argument>
             <kind>1</kind>
             <string>///Background
-draw_background_tiled_hor(bg_mountains,view_xview[0]/1.1,view_yview[0]+290);
-draw_background_tiled_hor(bg_longTrees,view_xview[0]/1.5,view_yview[0]+590);
-draw_background_tiled_hor(bg_close_trees,view_xview[0]/2.5,view_yview[0]+590);
+depth = 10;
+draw_background_tiled_hor(bg_mountains,view_xview[0]/1.1,view_yview[0]+250);
+draw_background_tiled_hor(bg_longTrees,view_xview[0]/1.5,view_yview[0]+580);
+draw_background_tiled_hor(bg_close_trees,view_xview[0]/2.5,view_yview[0]+570);
+depth = 0;
 </string>
           </argument>
         </arguments>
@@ -346,7 +611,9 @@ draw_background_tiled_hor(bg_close_trees,view_xview[0]/2.5,view_yview[0]+590);
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>game_end();
+            <string>///End game
+
+game_end();
 </string>
           </argument>
         </arguments>

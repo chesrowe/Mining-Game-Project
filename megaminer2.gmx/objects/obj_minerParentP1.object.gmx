@@ -25,26 +25,14 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>redColor = 'red';
+            <string>///General
+state = 'idle';
+BloodColor = 'red';
 gold = 1;
 stone = 0;
 goingTo = 1;
 comingFrom = 0;
 beingAttacked = 0;
-hp = 100;
-hpBar = instance_create(x,y,obj_enemyHpDraw);
-hpBar.myEnemy = id;
-hpBar.hp = hp;
-hpBar.hpMult = (hp/10);
-level = 1;
-goldHeld = 0;
-stoneHeld = 0;
-miningTime = 300;
-miningTimer = 0;
-mineStart = 0;
-maxStone = 40;
-maxGold = 40;
-walkSpeed = 1;
 animationSpeed = .1;
 beingAttacked = 0;
 attacker = 0;
@@ -52,6 +40,39 @@ knockBackTimer = 0;
 knockBack = 0;
 numberTimer = 0;
 dying = 0;
+selecting = 0;
+target = 0;
+myDraw = instance_create(x,y,obj_workerDraw);
+myDraw.myWorker = id;
+
+//Stats
+hp = 100;
+hpBar = instance_create(x,y,obj_enemyHpDraw);
+hpBar.myEnemy = id;
+hpBar.hp = hp;
+hpBar.hpMult = (hp/10);
+level = 1;
+walkSpeed = 1;
+
+//Resources
+goldHeld = 0;
+maxGold = 40;
+
+stoneHeld = 0;
+maxStone = 40;
+
+brimstoneHeld = 0;
+maxBrimstone = 20;
+
+crystalHeld = 0;
+maxCrystal = 20;
+
+//mining
+miningTime = 300;
+miningTimer = 0;
+mineStart = 0;
+
+//Sprites
 spriteWalkingLeftEmpty = spr_miner1RegLeftWalkingEmpty;
 spriteWalkingLeftFull = spr_miner1RegLeftWalkingFull;
 spriteWalkingRightEmpty = spr_miner1RegRightWalkingEmpty;
@@ -80,85 +101,66 @@ spriteMiningRight = spr_miner1RegRightMining;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
+            <string>///Mining
 if (!dying){
-    if (hp &lt;= 0){
-        dying = 1;
-    }
-    // Changes the miners sprite and speed based on what the miner is currently doing
-    if (gold &amp;&amp; goingTo &amp;&amp; !mineStart &amp;&amp; !beingAttacked){
-        x -= walkSpeed;
-        sprite_index = spriteWalkingLeftEmpty;
-        image_speed = animationSpeed;
-    }
-    if (gold &amp;&amp; comingFrom &amp;&amp; !beingAttacked){
-        x += (walkSpeed-(walkSpeed/4));
-        sprite_index = spriteWalkingRightFull;
-        image_speed = (animationSpeed-(animationSpeed/4));
-    }
-    if (stone &amp;&amp; goingTo &amp;&amp; !mineStart){
-        x += walkSpeed;
-        sprite_index = spriteWalkingRightEmpty;
-        image_speed = animationSpeed;
-    }
-    if (stone &amp;&amp; comingFrom){
-        x -= (walkSpeed-(walkSpeed/4));
-        sprite_index = spriteWalkingLeftFull;
-        image_speed = (animationSpeed-(animationSpeed/4));
-    }
-    //sets the sprite and start the timer for mining
-    if (mineStart){
-        if (gold){
-            sprite_index = spriteMiningLeft;
-        }else{
-            sprite_index = spriteMiningRight;
+    if (state == 'mining'){
+        //Miners walks to the resource to mine it
+        if (target.x &gt; x &amp;&amp; !mineStart &amp;&amp; goingTo){
+            x += walkSpeed;
+        }else if(!mineStart &amp;&amp; goingTo){
+            x -= walkSpeed;
         }
-        miningTimer ++;
-        if (miningTimer &gt;= miningTime){
-            if (gold){
-                goldHeld = maxGold;
-            }else{
-                stoneHeld = maxStone;
+        //Starts the miner to mining
+        if (mineStart){
+            miningTimer ++;
+            if (miningTimer &gt;= miningTime){
+                goingTo = 0;
+                comingFrom = 1;
+                mineStart = 0;
+                miningTimer = 0;
             }
-            miningTimer = 0;
-            goingTo = 0;
-            comingFrom = 1;
-            mineStart = 0;
         }
-    }
-    //When the miner is being attacked
-    if (beingAttacked){
-        miningTimer = 0;
-        mineStart = 0;
-        if (knockBack){
-            knockBackTimer ++;
-            if (knockBackTimer &lt; 20){
-                if (attacker.x &gt; x){
-                    x -= .8;
-                }else{
-                    x += .8;
-                }
-            }else{
-                knockBack = 0;
-                knockBackTimer = 0;
-            }
-        }    
-    }else{
-        knockBackTimer = 0;
-        knockBack = 0;
-    }
+        if (comingFrom &amp;&amp; x &lt; obj_townCenter.x){
+            x += walkSpeed;    
+        }else if (comingFrom){
+            x -= walkSpeed;
+        }
     
-    if (numberTimer &gt;= 1){
-        numberTimer ++;
-        if (numberTimer &gt;= 10){
-            dmgNumber = instance_create(x,y-10,obj_enemyDrawCon);
-            dmgNumber.myEnemy = id;
-            dmgNumber.dmg = attacker.dmg;
-            numberTimer = 0;
-            hp -= attacker.dmg;
-            part_particles_create(global.partEnemyBlood,x,y,global.partBloodRed,20);
+    }    
+        //When the miner is being attacked
+        if (beingAttacked){
+            miningTimer = 0;
+            mineStart = 0;
+            if (knockBack){
+                knockBackTimer ++;
+                if (knockBackTimer &lt; 20){
+                    if (attacker.x &gt; x){
+                        x -= .8;
+                    }else{
+                        x += .8;
+                    }
+                }else{
+                    knockBack = 0;
+                    knockBackTimer = 0;
+                }
+            }    
+        }else{
+            knockBackTimer = 0;
+            knockBack = 0;
         }
-    }
+        
+        if (numberTimer &gt;= 1){
+            numberTimer ++;
+            if (numberTimer &gt;= 10){
+                dmgNumber = instance_create(x,y-10,obj_enemyDrawCon);
+                dmgNumber.myEnemy = id;
+                dmgNumber.dmg = attacker.dmg;
+                numberTimer = 0;
+                hp -= attacker.dmg;
+                part_particles_create(global.partEnemyBlood,x,y,global.partBloodRed,20);
+            }
+        }
+    
 }else{
     image_speed = 0;
     image_alpha -= .01;
@@ -189,23 +191,18 @@ if (!dying){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (comingFrom &amp;&amp; gold &amp;&amp; !beingAttacked){
-    global.goldP1 += goldHeld;
+            <string>
+if (state == 'mining' &amp;&amp; comingFrom){
     comingFrom = 0;
     goingTo = 1;
-    goldHeld -= maxGold;
-}else if (comingFrom &amp;&amp; stone &amp;&amp; !beingAttacked){
-    global.stoneP1 += stoneHeld;
-    comingFrom = 0;
-    goingTo = 1;
-    stoneHeld -= maxStone;
+    
 }
 </string>
           </argument>
         </arguments>
       </action>
     </event>
-    <event eventtype="4" ename="obj_stone">
+    <event eventtype="4" ename="obj_resourceParent">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -222,35 +219,11 @@ if (!dying){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (stone &amp;&amp; goingTo &amp;&amp; !beingAttacked ){   
-    mineStart = 1;
-    
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="4" ename="olj_gold">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>if (gold &amp;&amp; goingTo &amp;&amp; !beingAttacked){   
-    mineStart = 1;
-    
+            <string>
+//Starts the worker mining
+
+if (state == 'mining' &amp;&amp; other.id == target &amp;&amp; goingTo){
+    mineStart = 1;    
 }
 </string>
           </argument>
@@ -281,6 +254,30 @@ attacker = other.id;
 //minerTimer = 1;
 numberTimer =1;
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="7">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>
+global.workerSelected = id;
 </string>
           </argument>
         </arguments>

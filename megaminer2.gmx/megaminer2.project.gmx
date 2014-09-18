@@ -5,15 +5,33 @@
   </Configs>
   <NewExtensions/>
   <sounds name="sound">
-    <sound>sound\sd_wind</sound>
-    <sound>sound\sd_testSong</sound>
-    <sound>sound\sd_pickaxe1</sound>
-    <sound>sound\sd_pickaxe2</sound>
-    <sound>sound\sd_pickaxe3</sound>
-    <sound>sound\sd_pickaxe4</sound>
-    <sound>sound\sd_pickaxe5</sound>
-    <sound>sound\sd_pickaxe6</sound>
-    <sound>sound\sd_pickaxe7</sound>
+    <sounds name="Music">
+      <sounds name="Special">
+        <sound>sound\sd_mainTheme</sound>
+      </sounds>
+      <sounds name="Cave ">
+        <sound>sound\sd_caveNeutral1</sound>
+      </sounds>
+      <sounds name="Surface">
+        <sounds name="Night">
+          <sound>sound\sd_surfaceNightNeutral1</sound>
+        </sounds>
+      </sounds>
+    </sounds>
+    <sounds name="Environment">
+      <sound>sound\sd_wind</sound>
+    </sounds>
+    <sounds name="Workers">
+      <sounds name="Pickaxe Hits">
+        <sound>sound\sd_pickaxe1</sound>
+        <sound>sound\sd_pickaxe2</sound>
+        <sound>sound\sd_pickaxe3</sound>
+        <sound>sound\sd_pickaxe4</sound>
+        <sound>sound\sd_pickaxe5</sound>
+        <sound>sound\sd_pickaxe6</sound>
+        <sound>sound\sd_pickaxe7</sound>
+      </sounds>
+    </sounds>
   </sounds>
   <sprites name="sprites">
     <sprites name="Charactors">
@@ -68,8 +86,30 @@
       </sprites>
     </sprites>
     <sprites name="Environmet">
-      <sprite>sprites\spr_gold</sprite>
-      <sprite>sprites\spr_stone</sprite>
+      <sprites name="ground">
+        <sprites name="surface">
+          <sprite>sprites\spr_surfaceTop1</sprite>
+          <sprite>sprites\spr_surfaceTop2</sprite>
+          <sprite>sprites\spr_surfaceTop3</sprite>
+          <sprite>sprites\spr_surfaceTop4</sprite>
+          <sprite>sprites\spr_surface2row1</sprite>
+          <sprite>sprites\spr_surface2Row2</sprite>
+          <sprite>sprites\spr_surface2Row3</sprite>
+          <sprite>sprites\spr_surface2Row4</sprite>
+          <sprite>sprites\spr_surface3Row1</sprite>
+          <sprite>sprites\spr_surface3Row2</sprite>
+          <sprite>sprites\spr_surface3Row3</sprite>
+          <sprite>sprites\spr_surface3Row4</sprite>
+          <sprite>sprites\spr_surface4Row1</sprite>
+          <sprite>sprites\spr_surface4Row2</sprite>
+          <sprite>sprites\spr_surface4Row3</sprite>
+          <sprite>sprites\spr_surface4Row4</sprite>
+        </sprites>
+      </sprites>
+      <sprites name="resources">
+        <sprite>sprites\spr_stone</sprite>
+        <sprite>sprites\spr_gold</sprite>
+      </sprites>
     </sprites>
     <sprites name="Ui">
       <sprite>sprites\spr_selectorP1</sprite>
@@ -112,20 +152,26 @@
   <paths name="paths"/>
   <scripts name="scripts">
     <scripts name="Ui">
-      <script>scripts\scr_ui_selected_placer.gml</script>
       <script>scripts\draw_flashing_text.gml</script>
+      <scripts name="Gamepad">
+        <script>scripts\scr_ui_selected_placer.gml</script>
+      </scripts>
     </scripts>
     <scripts name="Miners">
       <script>scripts\scr_make_miner_create.gml</script>
-      <script>scripts\scr_miner_rock_select_create.gml</script>
+      <scripts name="Gamepad">
+        <script>scripts\scr_miner_rock_select_create.gml</script>
+      </scripts>
     </scripts>
-    <scripts name="Gamepad">
+    <scripts name="Gamepad specific">
       <script>scripts\gamepad_movement.gml</script>
       <script>scripts\scr_gamepad_movement_building.gml</script>
       <script>scripts\scr_gamepad_camera.gml</script>
     </scripts>
     <scripts name="buildings">
-      <script>scripts\scr_build_structure.gml</script>
+      <scripts name="Gamepad">
+        <script>scripts\scr_gamepad_build_structure.gml</script>
+      </scripts>
     </scripts>
     <scripts name="Misc">
       <script>scripts\scr_pop_main.gml</script>
@@ -140,12 +186,12 @@
   </fonts>
   <objects name="objects">
     <objects name="NPC">
-      <objects name="miners">
-        <object>objects\obj_minerP2</object>
-        <object>objects\obj_minerP1</object>
-        <object>objects\obj_minerParentP1</object>
-        <objects name="miner controllers">
-          <object>objects\obj_minerNumDraw</object>
+      <objects name="workers">
+        <object>objects\obj_workerHumanP1</object>
+        <object>objects\obj_workerParent</object>
+        <objects name="worker controllers">
+          <object>objects\obj_workerDrawTimed</object>
+          <object>objects\obj_workerDraw</object>
         </objects>
       </objects>
       <objects name="enemies">
@@ -160,29 +206,46 @@
     <objects name="UI">
       <object>objects\obj_goldUi</object>
       <object>objects\obj_stoneUi</object>
-      <object>objects\obj_minerIconP1</object>
-      <object>objects\obj_minerIconP2</object>
-      <object>objects\obj_selectedP1</object>
-      <object>objects\obj_selectedP2</object>
-      <object>objects\obj_selectorP1</object>
-      <object>objects\obj_selectorP2</object>
+      <objects name="Mouse/Keyboard">
+        <object>objects\obj_workerIcon</object>
+      </objects>
+      <objects name="Gamepad">
+        <object>objects\obj_selectorP2</object>
+        <object>objects\obj_selectorP1</object>
+        <object>objects\obj_selectedP1</object>
+        <object>objects\obj_selectedP2</object>
+      </objects>
     </objects>
     <objects name="Controllers">
       <object>objects\obj_globalCon</object>
-      <object>objects\obj_globalConP2</object>
-      <object>objects\obj_soundCon</object>
       <object>objects\obj_cameraConP1</object>
       <object>objects\obj_cameraConP2</object>
-      <object>objects\obj_enemyPartCon</object>
     </objects>
     <objects name="Evironment">
       <objects name="Ground">
         <object>objects\obj_groundParent</object>
-        <object>objects\obj_surfaceGrass</object>
+        <objects name="surface">
+          <object>objects\obj_surfaceTop1</object>
+          <object>objects\obj_surfaceTop2</object>
+          <object>objects\obj_surfaceTop3</object>
+          <object>objects\obj_surfaceTop4</object>
+          <object>objects\obj_surface2Row1</object>
+          <object>objects\obj_surface2Row2</object>
+          <object>objects\obj_surface2Row3</object>
+          <object>objects\obj_surface2Row4</object>
+          <object>objects\obj_surface3Row1</object>
+          <object>objects\obj_surface3Row2</object>
+          <object>objects\obj_surface3Row3</object>
+          <object>objects\obj_surface3Row4</object>
+          <object>objects\obj_surface4Row1</object>
+          <object>objects\obj_surface4Row2</object>
+          <object>objects\obj_surface4Row3</object>
+          <object>objects\obj_surface4Row4</object>
+        </objects>
       </objects>
       <objects name="resources">
-        <object>objects\obj_stone</object>
         <object>objects\obj_resourceParent</object>
+        <object>objects\obj_stone</object>
         <object>objects\olj_gold</object>
       </objects>
     </objects>

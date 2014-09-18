@@ -72,11 +72,11 @@
     <instance objName="&lt;undefined&gt;" x="-136" y="709" name="inst_CE20A5CA" locked="0" code="" scaleX="319.742004394531" scaleY="1.74194002151489" colour="4294967295" rotation="0"/>
     <instance objName="olj_gold" x="1496" y="676" name="inst_0B5CD73E" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_stone" x="4360" y="675" name="inst_37CDD785" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_globalConP2" x="40" y="12" name="inst_73D9C222" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_soundCon" x="72" y="5" name="inst_5A77A057" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="&lt;undefined&gt;" x="40" y="12" name="inst_73D9C222" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="&lt;undefined&gt;" x="72" y="5" name="inst_5A77A057" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_cameraConP1" x="224" y="355" name="inst_0143B9A5" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_cameraConP2" x="1200" y="436" name="inst_11F56FE7" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_enemyPartCon" x="168" y="8" name="inst_37A8E5F5" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="&lt;undefined&gt;" x="168" y="8" name="inst_37A8E5F5" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_townCenter" x="2840" y="580" name="inst_24E044E0" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solidGround" x="-64" y="711" name="inst_9089492B" locked="0" code="" scaleX="318" scaleY="2.375" colour="4294967295" rotation="0"/>
     <instance objName="obj_globalCon" x="8" y="7" name="inst_243DB3A9" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>

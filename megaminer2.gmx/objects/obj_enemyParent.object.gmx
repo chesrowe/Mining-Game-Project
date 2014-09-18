@@ -88,8 +88,8 @@ spriteAttackingLeft = spr_wolfAttackingLeft; // sets the sprite for when the ene
 // Checks to see if the enemy is dying or not
 if (!dying){
     //sets nearestEnemy to the nearest miner
-    if (instance_exists(obj_minerParentP1)){
-        nearestTarget = instance_nearest(x,y,obj_minerParentP1);
+    if (instance_exists(obj_workerParent)){
+        nearestTarget = instance_nearest(x,y,obj_workerParent);
         minerDist = distance_to_point(nearestTarget.x,nearestTarget.y);
     }else{
         madeContact = 0;
@@ -262,7 +262,7 @@ if (hp &lt;= 0){
         </arguments>
       </action>
     </event>
-    <event eventtype="4" ename="obj_minerParentP1">
+    <event eventtype="4" ename="obj_workerParent">
       <action>
         <libid>1</libid>
         <id>603</id>

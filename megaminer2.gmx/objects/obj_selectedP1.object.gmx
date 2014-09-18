@@ -57,6 +57,10 @@ yadd = 0;
             <kind>1</kind>
             <string>scr_ui_selected_placer(global.selectedP1,0,0);
 
+if (!global.gamepad){
+    instance_destroy();
+}
+
 
 </string>
           </argument>
