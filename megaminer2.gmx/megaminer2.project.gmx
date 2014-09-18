@@ -107,6 +107,7 @@
     <background>background\bg_treesPara</background>
     <background>background\bg_close_trees</background>
     <background>background\background11</background>
+    <background>background\background12</background>
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
@@ -173,12 +174,17 @@
       <object>objects\obj_cameraConP1</object>
       <object>objects\obj_cameraConP2</object>
       <object>objects\obj_enemyPartCon</object>
-      <object>objects\obj_bgCon</object>
     </objects>
     <objects name="Evironment">
-      <object>objects\olj_gold</object>
-      <object>objects\obj_stone</object>
-      <object>objects\obj_resourceParent</object>
+      <objects name="Ground">
+        <object>objects\obj_groundParent</object>
+        <object>objects\obj_surfaceGrass</object>
+      </objects>
+      <objects name="resources">
+        <object>objects\obj_stone</object>
+        <object>objects\obj_resourceParent</object>
+        <object>objects\olj_gold</object>
+      </objects>
     </objects>
     <objects name="Structures">
       <object>objects\obj_townCenterP2</object>

@@ -55,9 +55,9 @@ background_x[2] = (view_xview[0]/2.2);
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_background_tiled_hor(bg_mountains,view_xview[0]/1.1,view_yview[0]+450);
-draw_background_tiled_hor(bg_longTrees,view_xview[0]/1.5,view_yview[0]+636);
-draw_background_tiled_hor(bg_close_trees,view_xview[0]/2.5,view_yview[0]+636);
+            <string>draw_background_tiled_hor(bg_mountains,view_xview[0]/1.1,view_yview[0]+400);
+draw_background_tiled_hor(bg_longTrees,view_xview[0]/1.5,view_yview[0]+500);
+draw_background_tiled_hor(bg_close_trees,view_xview[0]/2.5,view_yview[0]+318);
 </string>
           </argument>
         </arguments>

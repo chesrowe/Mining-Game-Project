@@ -41,6 +41,7 @@ refresh__ = 0;
 alpha = 1;
 countUp = 0;
 countDown = 1;
+global.gamepad = 0;
 global.localCoop = 0;
 global.goldP1 = 900000;
 global.stoneP1 = 0;
@@ -299,6 +300,30 @@ draw_text(42, 60, string(global.stoneP1));
 draw_text(968, 28, string(global.goldP2));
 draw_text(968, 60, string(global.stoneP2));
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Background
+draw_background_tiled_hor(bg_mountains,view_xview[0]/1.1,view_yview[0]+290);
+draw_background_tiled_hor(bg_longTrees,view_xview[0]/1.5,view_yview[0]+590);
+draw_background_tiled_hor(bg_close_trees,view_xview[0]/2.5,view_yview[0]+590);
 </string>
           </argument>
         </arguments>
