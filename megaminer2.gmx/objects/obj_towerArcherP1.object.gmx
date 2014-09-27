@@ -3,7 +3,7 @@
   <spriteName>spr_towerArcher</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>-1</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -26,13 +26,11 @@
           <argument>
             <kind>1</kind>
             <string>
-placed = 0;
+placed = 1;
 range = 100;
 dmg = 10;
 level = 1;
 rof = 200; // Rate of fire :)
-myArms = instance_create(x,y,obj_archerTowerArmsP1);
-myArms.tower = id;
 facingLeft = 1;
 facingRight = 0;
 attacking = 0;

@@ -26,6 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>///General
+dir = 0;
 state = 'idle';
 BloodColor = 'red';
 gold = 1;
@@ -45,6 +46,7 @@ selecting = 0;
 target = 0;
 myDraw = instance_create(x,y,obj_workerDraw);
 myDraw.myWorker = id;
+image_speed = 0;
 
 //Stats
 hp = 100;
@@ -83,6 +85,34 @@ spriteWalkingRightEmpty = spr_miner1RegRightWalkingEmpty;
 spriteWalkingRightFull = spr_miner1RegRightWalkingFull;
 spriteMiningLeft = spr_miner1RegLeftMining;
 spriteMiningRight = spr_miner1RegRightMining;
+
+//Sounds
+
+//variables
+soundPosition = 0;
+pickSoundTimer = 0;
+soundYDiff = 0;
+soundXDiff = 0;
+
+//8 round robins for pick sounds
+pickSound[0] = sd_pickaxe1; 
+pickSound[1] = sd_pickaxe2;
+pickSound[2] = sd_pickaxe3;
+pickSound[3] = sd_pickaxe4;
+pickSound[4] = sd_pickaxe5;
+pickSound[5] = sd_pickaxe6;
+pickSound[6] = sd_pickaxe7;
+pickSound[7] = sd_pickaxe1;
+
+//Footstep sounds
+
+//4 round robins for footsteps
+footStepSound[0] = 0;
+footStepSound[1] = 0;
+footStepSound[2] = 0;
+footStepSound[3] = 0;
+
+
 </string>
           </argument>
         </arguments>
@@ -105,8 +135,36 @@ spriteMiningRight = spr_miner1RegRightMining;
         <arguments>
           <argument>
             <kind>1</kind>
+            <string>///sound
+
+//sets the distance between the listener position and the workers
+/*
+soundXDiff = -((x - (view_xview[0]+640))*11);
+soundYDiff = (y - (view_yview[0]+360));
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
             <string>///Mining
 if (!dying){
+    //sets point direction to target resource
+    dir = point_direction(x,y,target.x,target.y);
     
     if (state == 'mining'){
         image_speed = .1;
@@ -121,12 +179,13 @@ if (!dying){
         //Starts the miner to mining
         if (mineStart){
             miningTimer ++;
-            //set the proper sprite
-            if (x &gt; target.x){
-                sprite_index = spriteMiningLeft;
-            }else{
-                sprite_index = spirteMiningRight;
+            pickSoundTimer ++;
+            if (pickSoundTimer &gt;= 40){
+                audio_play_sound_at(pickSound[irandom(7)],x,y,0,1000,200,1,0,100);
+                part_particles_create(global.partMining,x+lengthdir_x(20,dir),y,global.partStoneChips,10);
+                pickSoundTimer = 0;
             }
+            //Makes miner take the reousces to the stockpile
             if (miningTimer &gt;= miningTime){
                 goingTo = 0;
                 comingFrom = 1;
@@ -302,7 +361,14 @@ if (state == 'mining' &amp;&amp; comingFrom){
 if (state == 'mining' &amp;&amp; other.id == target &amp;&amp; goingTo){
     mineStart = 1; 
     goingTo = 0;
-    comingFrom = 0;   
+    comingFrom = 0; 
+    //set the proper sprite
+    if (x &gt; target.x){
+        sprite_index = spriteMiningLeft;
+    }else{
+        sprite_index = spriteMiningRight;
+    }  
+    image_index = 0;
 }
 </string>
           </argument>

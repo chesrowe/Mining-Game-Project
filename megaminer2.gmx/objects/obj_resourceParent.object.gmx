@@ -67,6 +67,8 @@ if (global.workerSelected != noone){
         target = other.id;
         state = 'mining';
         goingTo = 1;
+        mineStart = 0;
+        miningTimer = 0;
         global.workerSelected = noone;
     }
 }
