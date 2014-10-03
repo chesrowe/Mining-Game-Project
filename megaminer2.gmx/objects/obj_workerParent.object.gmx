@@ -5,7 +5,7 @@
   <visible>-1</visible>
   <depth>0</depth>
   <persistent>0</persistent>
-  <parentName>&lt;undefined&gt;</parentName>
+  <parentName>obj_parentMaster</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -47,6 +47,7 @@ target = 0;
 myDraw = instance_create(x,y,obj_workerDraw);
 myDraw.myWorker = id;
 image_speed = 0;
+image_alpha = 0;
 
 //Stats
 hp = 100;
@@ -73,10 +74,21 @@ maxCrystal = 20;
 mushroomHeld = 0;
 maxMushroom = 20;
 
+woodHeld = 0;
+maxWood = 40;
+
 //mining
 miningTime = 300;
 miningTimer = 0;
 mineStart = 0;
+
+//woodcutting
+cuttingTime = 200;
+falling = 0;
+cuttingTimer = 0;
+cutStart = 0;
+move = 0;
+moveTimer = 0;
 
 //Sprites
 spriteWalkingLeftEmpty = spr_miner1RegLeftWalkingEmpty;
@@ -85,6 +97,8 @@ spriteWalkingRightEmpty = spr_miner1RegRightWalkingEmpty;
 spriteWalkingRightFull = spr_miner1RegRightWalkingFull;
 spriteMiningLeft = spr_miner1RegLeftMining;
 spriteMiningRight = spr_miner1RegRightMining;
+spriteCuttingLeft = spr_miner1RegLeftMining;
+spriteCuttingRight = spr_miner1RegRightMining;
 
 //Sounds
 
@@ -119,6 +133,31 @@ footStepSound[3] = 0;
       </action>
     </event>
     <event eventtype="3" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///fade-in
+
+if(image_alpha &lt; 1){
+    image_alpha += .01;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -176,16 +215,17 @@ if (!dying){
             sprite_index = spriteWalkingLeftEmpty;
             x -= walkSpeed;
         }
-        //Starts the miner to mining
+        //Starts the worker to mining
         if (mineStart){
             miningTimer ++;
             pickSoundTimer ++;
             if (pickSoundTimer &gt;= 40){
-                audio_play_sound_at(pickSound[irandom(7)],x,y,0,1000,200,1,0,100);
+                randomize();
+                audio_play_sound_at(pickSound[irandom(7)],x,y,0,1000,200,1,0,9999900);
                 part_particles_create(global.partMining,x+lengthdir_x(20,dir),y,global.partStoneChips,10);
                 pickSoundTimer = 0;
             }
-            //Makes miner take the reousces to the stockpile
+            //Makes miner take the resousces to the stockpile
             if (miningTimer &gt;= miningTime){
                 goingTo = 0;
                 comingFrom = 1;
@@ -279,6 +319,92 @@ if (!dying){
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Woodcutting
+if (state == 'woodcutting'){
+     //makes the worker walk to the tree
+     if (target.x &gt; x &amp;&amp; !cutStart &amp;&amp; goingTo){
+        sprite_index = spriteWalkingRightEmpty;
+        x += walkSpeed;
+     }else if(!cutStart &amp;&amp; goingTo){
+        sprite_index = spriteWalkingLeftEmpty;
+        x -= walkSpeed;
+     }    
+    //starts the worker to woodcutting
+    if (cutStart){
+        cuttingTimer ++;
+        pickSoundTimer ++;
+        if (pickSoundTimer &gt;= 40){
+            randomize();
+            audio_play_sound_at(pickSound[irandom(7)],x,y,0,1000,200,1,0,100);
+            part_particles_create(global.partMining,x+lengthdir_x(20,dir),y,global.partStoneChips,10);
+            pickSoundTimer = 0;
+        }
+        //adds the resouces the worker and decements wood from the tree
+        if (cuttingTimer &gt;= cuttingTime &amp;&amp; !target.falling){
+            goingTo = 0;
+            comingFrom = 1;
+            cutStart = 0;
+            cuttingTimer = 0;
+            target.woodLeft -= 40;
+            target.fall -= 40;
+            switch(target.resource){
+                case 'tree_reg': woodHeld = maxWood; break;
+                
+            }
+        }
+    }
+    //Makes the worker take the reources to the stockpile
+    if (comingFrom &amp;&amp; x &lt; obj_townCenter.x){
+            sprite_index = spriteWalkingRightFull;
+            x += walkSpeed;    
+    }else if (comingFrom){
+            sprite_index = spriteWalkingLeftFull;
+            x -= walkSpeed;
+    }
+    //stops the worker from cutting when the tree is falling
+    if (target.falling){
+        cutStart = 0;
+        cuttingTimer = 0;
+        move = 1;
+    }
+    //makes the worker move out from away from the falling tree
+    if (move){
+        cutTimer = 0;
+        cutStart = 0;
+        moveTimer ++;
+        if (x &gt; target.x &amp;&amp; moveTimer &lt; 150 &amp;&amp; target.fallDir == 'right'){
+            x += (walkSpeed);
+        }
+        if (x &lt; target.x &amp;&amp; moveTimer &lt; 150 &amp;&amp; target.fallDir == 'left'){
+            x -= (walkSpeed);   
+        }
+        if (target.fell){
+            move = 0;
+            moveTimer = 0;
+            goingTo = 1;
+        }
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="4" ename="obj_townCenter">
       <action>
@@ -332,6 +458,58 @@ if (state == 'mining' &amp;&amp; comingFrom){
     comingFrom = 0;
     goingTo = 1;
     
+}
+// Adds the resources and sets the worker back to woodcutting
+if (state == 'woodcutting' &amp;&amp; comingFrom){
+    global.woodP1 += woodHeld;
+    
+    number = instance_create(x,y,obj_workerDrawTimed);
+    number.myWorker = id;
+    //sets the amount of resources to display
+    if (woodHeld &gt; 0){
+        number.amount = woodHeld;
+    }
+    
+    comingFrom = 0;
+    goingTo = 1;
+    
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_treeParent">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///mine
+//Starts the worker woodcutting
+
+if (state == 'woodcutting' &amp;&amp; other.id == target &amp;&amp; goingTo){
+    cutStart = 1; 
+    goingTo = 0;
+    comingFrom = 0; 
+    //set the proper sprite
+    if (x &gt; target.x){
+        sprite_index = spriteMiningLeft;
+    }else{
+        sprite_index = spriteMiningRight;
+    }  
+    image_index = 0;
 }
 </string>
           </argument>

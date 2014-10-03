@@ -77,8 +77,8 @@ placed = 0;
 
 if (!placed){
     image_alpha = .5;
-    x = obj_selectorP1.x;
-    y = obj_selectorP1.y-10;
+    x = mouse_x;
+    y = mouse_y-10;
 }else{
     scr_effects_fade_in();    
 }

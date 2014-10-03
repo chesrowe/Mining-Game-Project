@@ -59,6 +59,7 @@ startY = y;
           <argument>
             <kind>1</kind>
             <string>// Sets the drawing position for the dmg numbers
+randomize();
 x = ((startX+choose(.01,.02,.03,.04,.05,.06)) + xOffset);
 y = ((startY-35+(choose(.01,.02,.03,.04,.05))) - yOffset);
 // Increments the offsets to make the number drift off slightly

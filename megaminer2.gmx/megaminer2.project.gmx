@@ -120,26 +120,39 @@
       <sprites name="Scenery">
         <sprite>sprites\spr_surfaceGrass1</sprite>
       </sprites>
+      <sprite>sprites\spr_tree1Top</sprite>
+      <sprite>sprites\spr_tree1Bottom</sprite>
     </sprites>
     <sprites name="Ui">
-      <sprite>sprites\spr_selectorP1</sprite>
-      <sprite>sprites\spr_selectorP2</sprite>
-      <sprite>sprites\spr_selectedP1</sprite>
-      <sprite>sprites\spr_selectedP2</sprite>
-      <sprite>sprites\spr_stoneUi</sprite>
-      <sprite>sprites\spr_minerIcon</sprite>
-      <sprite>sprites\spr_buildIcon</sprite>
-      <sprite>sprites\spr_wheatIcon</sprite>
-      <sprite>sprites\spr_backUi</sprite>
-      <sprite>sprites\spr_goldUi</sprite>
-      <sprite>sprites\spr_uiIcons</sprite>
-      <sprite>sprites\spr_uiMinerIcon2</sprite>
-      <sprite>sprites\spr_uiTowerIcon</sprite>
-      <sprite>sprites\spr_uiUpgradeIcon</sprite>
-      <sprite>sprites\spr_uiGolemIcon</sprite>
-      <sprite>sprites\spr_uiLine</sprite>
-      <sprite>sprites\spr_gamepadA</sprite>
-      <sprite>sprites\spr_buttonBasic</sprite>
+      <sprites name="Mouse/keyboard">
+        <sprites name="build menu">
+          <sprite>sprites\spr_menuStripVir</sprite>
+          <sprite>sprites\spr_menuStripHor</sprite>
+          <sprite>sprites\spr_testButton</sprite>
+          <sprite>sprites\spr_testIcon</sprite>
+        </sprites>
+      </sprites>
+      <sprites name="Gamepad">
+        <sprite>sprites\spr_gamepadA</sprite>
+        <sprite>sprites\spr_selectorP1</sprite>
+        <sprite>sprites\spr_selectorP2</sprite>
+        <sprite>sprites\spr_selectedP1</sprite>
+        <sprite>sprites\spr_selectedP2</sprite>
+        <sprite>sprites\spr_uiIcons</sprite>
+        <sprite>sprites\spr_backUi</sprite>
+        <sprite>sprites\spr_uiTowerIcon</sprite>
+        <sprite>sprites\spr_uiUpgradeIcon</sprite>
+        <sprite>sprites\spr_uiGolemIcon</sprite>
+        <sprite>sprites\spr_uiMinerIcon2</sprite>
+        <sprite>sprites\spr_wheatIcon</sprite>
+        <sprite>sprites\spr_buildIcon</sprite>
+        <sprite>sprites\spr_minerIcon</sprite>
+      </sprites>
+      <sprites name="General">
+        <sprite>sprites\spr_stoneUi</sprite>
+        <sprite>sprites\spr_goldUi</sprite>
+        <sprite>sprites\spr_uiLine</sprite>
+      </sprites>
     </sprites>
     <sprites name="non-visible">
       <sprite>sprites\obj_solid</sprite>
@@ -171,9 +184,9 @@
       </scripts>
     </scripts>
     <scripts name="Miners">
-      <script>scripts\scr_make_miner_create.gml</script>
       <scripts name="Gamepad">
         <script>scripts\scr_miner_rock_select_create.gml</script>
+        <script>scripts\scr_make_miner_create.gml</script>
       </scripts>
     </scripts>
     <scripts name="Gamepad specific">
@@ -192,12 +205,16 @@
       <script>scripts\spr_part_blood_init.gml</script>
       <script>scripts\draw_background_tiled_hor.gml</script>
     </scripts>
+    <scripts name="Dev Tools">
+      <script>scripts\dev_tool_create_object.gml</script>
+    </scripts>
   </scripts>
   <fonts name="fonts">
     <font>fonts\ft_gameFont</font>
     <font>fonts\ft_uiFont</font>
   </fonts>
   <objects name="objects">
+    <object>objects\obj_parentMaster</object>
     <objects name="NPC">
       <objects name="workers">
         <object>objects\obj_workerHumanP1</object>
@@ -220,7 +237,18 @@
       <object>objects\obj_goldUi</object>
       <object>objects\obj_stoneUi</object>
       <objects name="Mouse/Keyboard">
-        <object>objects\obj_workerIcon</object>
+        <objects name="Build Menu">
+          <object>objects\obj_buildMenuHor</object>
+          <object>objects\obj_menuIcon</object>
+          <object>objects\obj_buildMenuWorkerIcon</object>
+          <object>objects\obj_buildMenuDefenseIcon</object>
+          <object>objects\obj_buildMenuBuildingIcon</object>
+          <object>objects\obj_buildMenuWorkersStrip</object>
+          <object>objects\obj_buildMenuDefenseStrip</object>
+          <object>objects\obj_buildMenuBuildingStrip</object>
+          <object>objects\obj_buildMenuHumanWorkerIcon</object>
+          <object>objects\obj_buildMenuArcherTowerIcon</object>
+        </objects>
       </objects>
       <objects name="Gamepad">
         <object>objects\obj_selectorP2</object>
@@ -257,9 +285,16 @@
         </objects>
       </objects>
       <objects name="resources">
-        <object>objects\obj_resourceParent</object>
-        <object>objects\obj_stone</object>
-        <object>objects\olj_gold</object>
+        <objects name="Mining">
+          <object>objects\olj_gold</object>
+          <object>objects\obj_stone</object>
+          <object>objects\obj_resourceParent</object>
+        </objects>
+        <objects name="Woodcutting">
+          <object>objects\obj_treeParent</object>
+          <object>objects\obj_treeBottom</object>
+          <object>objects\obj_tree1</object>
+        </objects>
       </objects>
       <objects name="Scenery">
         <object>objects\obj_surfaceGrass1</object>

@@ -16,8 +16,8 @@
   <clearDisplayBuffer>-1</clearDisplayBuffer>
   <makerSettings>
     <isSet>-1</isSet>
-    <w>2253</w>
-    <h>1146</h>
+    <w>2572</w>
+    <h>1416</h>
     <showGrid>0</showGrid>
     <showObjects>-1</showObjects>
     <showTiles>-1</showTiles>
@@ -27,8 +27,8 @@
     <deleteUnderlyingObj>0</deleteUnderlyingObj>
     <deleteUnderlyingTiles>0</deleteUnderlyingTiles>
     <page>0</page>
-    <xoffset>-160</xoffset>
-    <yoffset>155</yoffset>
+    <xoffset>-481</xoffset>
+    <yoffset>-484</yoffset>
   </makerSettings>
   <backgrounds>
     <background visible="0" foreground="0" name="bg_mountains" x="0" y="465" htiled="-1" vtiled="0" hspeed="0" vspeed="0" stretch="0"/>
@@ -1313,7 +1313,7 @@
     <instance objName="obj_surface2Row3" x="9904" y="712" name="inst_6FC91E1B" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_surface2Row3" x="9936" y="712" name="inst_2972E0E8" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_surface2Row3" x="9968" y="712" name="inst_E5C403FC" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_globalCon" x="128" y="48" name="inst_02065FE8" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_globalCon" x="768" y="16" name="inst_02065FE8" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_stone" x="1296" y="684" name="inst_414EC1BF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_stone" x="816" y="685" name="inst_29CE21F0" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_selectorP1" x="5024" y="430" name="inst_3CE9B726" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
@@ -1342,7 +1342,17 @@
     <instance objName="obj_surfaceGrass1" x="2848" y="682" name="inst_B5CEBF19" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_surfaceGrass1" x="3120" y="682" name="inst_BD5B5DDF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_surfaceGrass1" x="3024" y="682" name="inst_9E9B3F8C" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_workerHumanP1" x="752" y="672" name="inst_6D5D228A" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_buildMenuBuildingIcon" x="-144" y="78" name="inst_A54EE058" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_menuIcon" x="0" y="0" name="inst_1A199A19" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_buildMenuHor" x="0" y="2" name="inst_FB61978C" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_buildMenuWorkersStrip" x="176" y="-212" name="inst_776DC6CC" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_buildMenuWorkerIcon" x="-304" y="78" name="inst_9A540E0F" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_buildMenuHumanWorkerIcon" x="256" y="-212" name="inst_AA5D8166" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_buildMenuDefenseStrip" x="352" y="-212" name="inst_A6CAAC4C" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_buildMenuDefenseIcon" x="-224" y="78" name="inst_707846BF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_buildMenuArcherTowerIcon" x="432" y="-208" name="inst_1FAE70D5" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_buildMenuBuildingStrip" x="512" y="-210" name="inst_FC438B0A" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_tree1" x="560" y="676" name="inst_E586AAC6" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
   </instances>
   <tiles/>
   <PhysicsWorld>0</PhysicsWorld>

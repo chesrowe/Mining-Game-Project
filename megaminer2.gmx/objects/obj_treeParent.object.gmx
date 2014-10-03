@@ -5,7 +5,7 @@
   <visible>-1</visible>
   <depth>0</depth>
   <persistent>0</persistent>
-  <parentName>obj_parentMaster</parentName>
+  <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -25,16 +25,21 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///General
+            <string>
+//sets the sprites to use for the tree
+spriteTop = 0;
+spriteBottom = 0;
+resource = 'tree_reg';
+fall = 200;
+falling = 0;
+fallTimer = 80;
+fallDir = 'right';
+fell = 0;
+woodLeft = 2000;
+fallSpeed = 0;
+fallIncrement = 0;
 
-
-//Variables
-level = 0;
-resource = '';
-exhausted = 0;
-exhaustTimer = 0;
-amountLeft = 100;
-
+bottom = instance_create(x+2,y+18,obj_treeBottom);
 
 
 </string>
@@ -42,7 +47,7 @@ amountLeft = 100;
         </arguments>
       </action>
     </event>
-    <event eventtype="6" enumb="7">
+    <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -59,13 +64,58 @@ amountLeft = 100;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
-//Makes the selected worker mine this resource
+            <string>if (fall &lt;= 0 &amp;&amp; !fell){
+    falling = 1;
+}
+
+//Makes the tree fall
+if (falling){
+    fallIncrement += .001;
+    fallTimer --;
+    if (fallSpeed &lt; 5){
+        fallSpeed += fallIncrement;
+    }
+    if (fallTimer &lt;= 0){
+        falling = 0;
+        fell = 1;
+    }
+    if (fallDir = 'right'){
+        image_angle -= fallSpeed;  
+        x += .2;  
+    }else{
+        image_angle += fallSpeed;
+        x -= .2;
+    }
+
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="4">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>//Makes the selected worker mine this resource
 
 if (global.workerSelected != noone){
     with (global.workerSelected){
         target = other.id;
-        state = 'mining';
+        state = 'woodcutting';
         goingTo = 1;
         mineStart = 0;
         miningTimer = 0;

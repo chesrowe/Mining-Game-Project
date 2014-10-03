@@ -57,6 +57,7 @@ scrollIncrements = 0;
 global.state = 'neutral';
 global.weatherState = 'clear';
 global.battleLayer = noone;
+global.dev_mode_delete = 0;
 
 //layers
 global.currentLayer = 0;
@@ -84,6 +85,9 @@ global.brimstoneP2 = 0;
 
 global.mushroomP1 = 0;
 global.mushroomP2 = 0;
+
+global.woodP1 = 1000;
+global.woodP2 = 0;
 
 //Gamepad Specific
 global.controllerCount = 0;
@@ -160,6 +164,12 @@ global.buildingDefenceP2 = 0;
 //Mouse/keyboard Specific 
 global.building = 0;
 global.buildingDefense = 0;
+global.buildMenuOpen = 0;
+global.buildMenuPushOut = 0;
+global.buildMenuWorkerPushOut = 0;
+global.buildMenuDefensePushOut = 0;
+global.buildMenuBuildingPushOut = 0;
+
 
 </string>
           </argument>
@@ -185,7 +195,7 @@ global.buildingDefense = 0;
 
 //Sound Variables
 global.currentSong = 0;
-global.mute = 0;
+global.mute = 1;
 pickSoundTimer = 0;
 
 //set listener orientation 
@@ -297,12 +307,12 @@ audio_listener_position(view_xview[0]+640,view_yview[0]+360,0);
 
 //Surface layer
 if (global.currentLayer == 0){
-    // Battle music
-    if (global.state = 'battle'){
+    
+    if (global.state = 'battle' &amp;&amp; !global.mute){
     //battle music    
     }else{
         //play neutral music
-        if (!audio_is_playing(global.surfaceMusic[global.currentSong])){
+        if (!audio_is_playing(global.surfaceMusic[global.currentSong]) &amp;&amp; !global.mute){
             //changes the song when one is done playing
             if (global.currentSong = 0){
                 global.currentSong = 1;
@@ -491,7 +501,7 @@ if (scrolling){
         view_xview[0] = 0;
     }
 }else{
-    if (scrollSpeed != 0){
+    if (scrollSpeed != 0 &amp;&amp; scrollSpeed &lt;= 10){
         scrollSpeed -= scrollIncrements;
     }
     if (view_xview[0] &gt; 0){
