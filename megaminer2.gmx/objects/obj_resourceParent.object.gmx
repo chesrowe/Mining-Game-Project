@@ -62,8 +62,8 @@ amountLeft = 100;
             <string>
 //Makes the selected worker mine this resource
 
-if (global.workerSelected != noone){
-    with (global.workerSelected){
+if (global.selected != noone &amp;&amp; !global.building){
+    with (global.selected){
         target = other.id;
         state = 'mining';
         goingTo = 1;
@@ -71,7 +71,7 @@ if (global.workerSelected != noone){
         miningTimer = 0;
         cutStart = 0;
         cuttingTimer = 0;
-        global.workerSelected = noone;
+        global.selected = noone;
     }
 }
 </string>

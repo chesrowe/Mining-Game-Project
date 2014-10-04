@@ -601,7 +601,9 @@ numberTimer = 1;
           <argument>
             <kind>1</kind>
             <string>///select
-global.workerSelected = id;
+if (!global.building){
+    global.selected = id;
+}
 </string>
           </argument>
         </arguments>

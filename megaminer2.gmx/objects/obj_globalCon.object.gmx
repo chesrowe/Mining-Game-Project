@@ -58,13 +58,15 @@ global.state = 'neutral';
 global.weatherState = 'clear';
 global.battleLayer = noone;
 global.dev_mode_delete = 0;
+global.dev_mode = 0;
+global.selected = noone;
 
 //layers
 global.currentLayer = 0;
 global.layersDiscovered = 0;
 
 //workers
-global.workerSelected = noone;
+
 
 //Controls
 global.gamepad = 0;
@@ -86,7 +88,7 @@ global.brimstoneP2 = 0;
 global.mushroomP1 = 0;
 global.mushroomP2 = 0;
 
-global.woodP1 = 1000;
+global.woodP1 = 10000;
 global.woodP2 = 0;
 
 //Gamepad Specific
@@ -98,9 +100,6 @@ global.popP2 = 0;
 
 global.maxPopP1 = 10;
 global.maxPopP2 = 10;
- 
-global.farmLevelP1 = 1;
-global.farmLevelP2 = 1;
 
 //Fonts
 global.fontDmg = font_add_sprite(spr_dmgFont,ord('!'),1,1);
@@ -534,7 +533,38 @@ if (scrolling){
             <kind>1</kind>
             <string>///Deselect
 
-global.workerSelected = noone;
+global.selected = noone;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="56">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Place building
+
+if (global.building){
+    if ((global.selected).y == (global.selected).groundY){
+        (global.selected).placed = 1;
+        global.building = 0;
+        global.selected = noone;
+    }   
+}
 </string>
           </argument>
         </arguments>

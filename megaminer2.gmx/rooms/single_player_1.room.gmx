@@ -1353,6 +1353,7 @@
     <instance objName="obj_buildMenuArcherTowerIcon" x="432" y="-208" name="inst_1FAE70D5" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_buildMenuBuildingStrip" x="512" y="-210" name="inst_FC438B0A" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_tree1" x="560" y="676" name="inst_E586AAC6" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_buildMenuFarmIcon" x="592" y="-206" name="inst_A712B920" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
   </instances>
   <tiles/>
   <PhysicsWorld>0</PhysicsWorld>

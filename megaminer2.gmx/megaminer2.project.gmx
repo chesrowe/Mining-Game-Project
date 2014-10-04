@@ -247,6 +247,7 @@
           <object>objects\obj_buildMenuDefenseStrip</object>
           <object>objects\obj_buildMenuBuildingStrip</object>
           <object>objects\obj_buildMenuHumanWorkerIcon</object>
+          <object>objects\obj_buildMenuFarmIcon</object>
           <object>objects\obj_buildMenuArcherTowerIcon</object>
         </objects>
       </objects>
@@ -301,10 +302,9 @@
       </objects>
     </objects>
     <objects name="Buildings">
-      <object>objects\obj_townCenterP2</object>
       <object>objects\obj_townCenter</object>
-      <object>objects\obj_wheatFarmP1</object>
-      <object>objects\obj_wheatFarmP2</object>
+      <object>objects\obj_buildingParent</object>
+      <object>objects\obj_farm</object>
     </objects>
     <objects name="non-visibles">
       <object>objects\obj_solidGround</object>
