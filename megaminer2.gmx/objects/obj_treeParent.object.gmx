@@ -41,7 +41,13 @@ fallIncrement = 0;
 
 bottom = instance_create(x+2,y+18,obj_treeBottom);
 
+//Sound
+soundPlayed = 0;
 
+fallingSound[0] = sd_treeFalling1;
+fallingSound[1] = sd_treeFalling2;
+fallingSound[2] = sd_treeFalling3;
+fallingSound[3] = sd_treeFalling4;
 </string>
           </argument>
         </arguments>
@@ -70,6 +76,10 @@ bottom = instance_create(x+2,y+18,obj_treeBottom);
 
 //Makes the tree fall
 if (falling){
+    if (!soundPlayed){
+        audio_play_sound_at(fallingSound[irandom(3)],x,y,0,1000,200,1,0,9999900);    
+        soundPlayed = 1;
+    }
     fallIncrement += .001;
     fallTimer --;
     if (fallSpeed &lt; 5){
@@ -112,7 +122,7 @@ if (falling){
             <kind>1</kind>
             <string>//Makes the selected worker mine this resource
 
-if (global.selected != noone){
+/*if (global.selected != noone){
     with (global.selected){
         target = other.id;
         state = 'woodcutting';
@@ -122,6 +132,28 @@ if (global.selected != noone){
         cutStart = 0;
         cuttingTimer = 0;
         global.selected = noone;
+    }
+}
+*/
+//Set the selected workers to woodcutting
+if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
+    for(i = 0;i &lt; 20;i++){
+        if (global.unitSelected[i].object_index == obj_workerHumanP1){
+            with (global.unitSelected[i]){
+                target = other.id;
+                state = 'woodcutting';
+                goingTo = 1;
+                mineStart = 0;
+                miningTimer = 0;
+                cutStart = 0;
+                cuttingTimer = 0;
+                selected = 0;
+            }
+        }else{
+            //clear unit arry
+            scr_unit_array_clear();
+            break;
+        }
     }
 }
 </string>

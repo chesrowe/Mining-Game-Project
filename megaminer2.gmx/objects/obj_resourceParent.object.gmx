@@ -33,7 +33,17 @@ level = 0;
 resource = '';
 exhausted = 0;
 exhaustTimer = 0;
-amountLeft = 100;
+exhaustTime = 300;
+amountLeft = 400;
+maxAmountLeft = 400;
+levelReq = 1;
+
+//Dev mode
+showDebug = 0;
+
+//Create obj to handle debug drawing
+myDraw = instance_create(x,y,obj_resourceDrawCon);
+myDraw.myResource = id;
 
 
 
@@ -42,7 +52,7 @@ amountLeft = 100;
         </arguments>
       </action>
     </event>
-    <event eventtype="6" enumb="7">
+    <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -59,7 +69,42 @@ amountLeft = 100;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
+            <string>///Exhausted
+
+//starts the exhaust timer
+if (exhausted){
+    exhaustTimer ++;
+    
+    if (exhaustTimer &gt;= exhaustTime){
+        exhausted = 0;
+        amountLeft = maxAmountLeft;
+        exhaustTimer = 0;
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="4">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Mine
+
 //Makes the selected worker mine this resource
 
 if (global.selected != noone &amp;&amp; !global.building){
@@ -69,10 +114,41 @@ if (global.selected != noone &amp;&amp; !global.building){
         goingTo = 1;
         mineStart = 0;
         miningTimer = 0;
+        farmStart = 0;
+        farmingTimer = 0;
         cutStart = 0;
         cuttingTimer = 0;
         global.selected = noone;
     }
+}
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Dev mode
+
+//Shows the debug 
+if (global.dev_mode &amp;&amp; !showDebug){
+    showDebug = 1;
+}else{
+    showDebug = 0;
 }
 </string>
           </argument>

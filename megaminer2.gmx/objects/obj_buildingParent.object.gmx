@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>-5</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -25,7 +25,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
+            <string>//general variabels
 placed = 0;
 level = 1;
 surfaceOnly = 0;
@@ -34,7 +34,11 @@ placeX = 0;
 placeY = 0;
 originOffX = 0;
 originOffY = 0;
+menu = 0;
+myMenu = 0;
+menuObject = 0;
 
+//Sprites for the buildings
 spriteLevel[0] = 0;
 spriteLevel[1] = 0;
 spriteLevel[2] = 0;
@@ -48,6 +52,30 @@ spriteLevel[5] = 0;
       </action>
     </event>
     <event eventtype="3" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>117</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>1</exetype>
+        <functionname>action_snap</functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>0</kind>
+            <string>2</string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string>2</string>
+          </argument>
+        </arguments>
+      </action>
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -64,7 +92,8 @@ spriteLevel[5] = 0;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>sprite_index = spriteLevel[(level-1)];
+            <string>///General
+sprite_index = spriteLevel[(level-1)];
 
 //Makes the building follow the right curser
 if (!global.gamepad){
@@ -81,8 +110,48 @@ if (!placed){
         y = placeY-originOffY;
     }
 }else{
-    scr_effects_fade_in();
+    scr_effects_fade_in(.2);
+    if (global.selected != id &amp;&amp; menu &amp;&amp; myMenu != noone){
+        menu = 0;
+        with(myMenu){
+            instance_destroy();
+        }
+        myMenu = noone;
+    }
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="4">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>
+if (!global.building){
+    global.selected = id;
+    if (menuObject != noone){
+        if (!menu){ 
+            menu = 1;
+            myMenu = instance_create(x, y - 128, menuObject);
+            myMenu.myBuilding = id;
+        }
+    }
+} 
 </string>
           </argument>
         </arguments>

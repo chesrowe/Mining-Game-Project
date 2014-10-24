@@ -33,6 +33,31 @@ myWorker = 0;
         </arguments>
       </action>
     </event>
+    <event eventtype="3" enumb="2">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///snap to worker
+x = myWorker.x;
+y = myWorker.y;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="8" enumb="0">
       <action>
         <libid>1</libid>
@@ -52,8 +77,48 @@ myWorker = 0;
             <kind>1</kind>
             <string>
 //draws selected
-if (myWorker.id = global.selected){
+if (myWorker.selected){
     draw_sprite(spr_selectorP1,0,myWorker.x-32,myWorker.y-32);
+}
+//draw debug info
+if (global.dev_mode &amp;&amp; myWorker.showDebug){
+    draw_set_font(ft_gameFont);
+    draw_text(x-15,y-150,"State:_" + string(myWorker.state));
+    draw_text(x-15,y-140,"Selected" + string(myWorker.selected));
+    draw_text(x-15,y-130,"InsideSelectBox" + string(myWorker.insideSelectBox));
+    if (myWorker.state == 'mining'){
+        draw_text(x-15,y-140,"Resource_" + string((myWorker.target).resource));
+        draw_text(x-15,y-130,"goingTo_" + string(myWorker.goingTo));
+        draw_text(x-15,y-120,"comingFrom_" + string(myWorker.comingFrom));
+        switch((myWorker.target).resource){
+            case 'gold': draw_text(x-15,y-110,"maxGold/GoldHeld_" + string(myWorker.maxGold)+ "/" + string(myWorker.goldHeld));
+            break;
+            case 'stone': draw_text(x-15,y-110,"maxStone/StoneHeld_" + string(myWorker.maxStone)+ "/" + string(myWorker.stoneHeld));
+            break;
+        }
+        draw_text(x-15,y-100,"miningTime_" + string(myWorker.miningTime));
+        draw_text(x-15,y-90,"miningTimer_" + string(myWorker.miningTimer));
+        draw_text(x-15,y-80,"mineStart_" + string(myWorker.mineStart));
+        draw_text(x-15,y-70,"Waiting to mine_" + string(myWorker.waitingToMine));
+        draw_text(x-15,y-60,"mineAmount_" + string(myWorker.mineAmount));
+        draw_text(x-15,y-50,"miningLevel_" + string(myWorker.miningLevel));
+        draw_text(x-15,y-40,"animationSyncTimer_" + string(myWorker.animationSyncTimer));
+        draw_text(x-15,y-30,"pickSoundTimer_" + string(myWorker.pickSoundTimer));
+    }
+    if (myWorker.state == 'woodcutting'){
+        draw_text(x-15,y-140,"CuttingTime_" + string(myWorker.cuttingTime));   
+        draw_text(x-15,y-130,"CuttingTimer_" + string(myWorker.cuttingTimer));
+        draw_text(x-15,y-120,"CutStart_" + string(myWorker.cutStart));    
+        draw_text(x-15,y-110,"middleTimer_" + string(myWorker.middleTimer));  
+        draw_text(x-15,y-100,"AnimationSyncTimer_" + string(myWorker.animationSyncTimer));
+        draw_text(x-15,y-90,"Move_" + string(myWorker.move));   
+        draw_text(x-15,y-80,"moveTimer_" + string(myWorker.moveTimer));   
+        draw_text(x-15,y-70,"footstepTimer_" + string(myWorker.footstepTimer)); 
+        draw_text(x-15,y-60,"cutSound_" + string(myWorker.cutSound));  
+        draw_text(x-15,y-50,"image_index_" + string(myWorker.image_index));
+        
+        
+    }
 }
 </string>
           </argument>

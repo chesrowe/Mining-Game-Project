@@ -20,7 +20,3 @@ if (argument0 == 3){
      xx = 503 + xadd;
      yy = 120 + yadd;    
 }
-
-
-
-

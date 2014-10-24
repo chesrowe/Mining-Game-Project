@@ -18,6 +18,7 @@
         </sounds>
         <sounds name="Day">
           <sound>sound\sd_surfaceDayNeutral1</sound>
+          <sound>sound\sd_surfaceDayNeutral2</sound>
         </sounds>
       </sounds>
     </sounds>
@@ -27,6 +28,12 @@
           <sound>sound\sd_wind</sound>
         </sounds>
       </sounds>
+      <sounds name="Trees">
+        <sound>sound\sd_treeFalling1</sound>
+        <sound>sound\sd_treeFalling2</sound>
+        <sound>sound\sd_treeFalling3</sound>
+        <sound>sound\sd_treeFalling4</sound>
+      </sounds>
     </sounds>
     <sounds name="Workers">
       <sounds name="Pickaxe Hits">
@@ -34,28 +41,89 @@
         <sound>sound\sd_pickaxe2</sound>
         <sound>sound\sd_pickaxe3</sound>
         <sound>sound\sd_pickaxe4</sound>
-        <sound>sound\sd_pickaxe5</sound>
-        <sound>sound\sd_pickaxe6</sound>
-        <sound>sound\sd_pickaxe7</sound>
+      </sounds>
+      <sounds name="Woodcut hits">
+        <sound>sound\sd_woodcut1</sound>
+        <sound>sound\sd_woodcut2</sound>
+        <sound>sound\sd_woodcut3</sound>
+        <sound>sound\sd_woodcut4</sound>
+      </sounds>
+      <sounds name="Footsteps">
+        <sounds name="Grass">
+          <sound>sound\sd_footstepGrass1</sound>
+          <sound>sound\sd_footstepGrass2</sound>
+          <sound>sound\sd_footstepGrass3</sound>
+          <sound>sound\sd_footstepGrass4</sound>
+        </sounds>
+        <sounds name="ground">
+          <sound>sound\sd_footstepGround1</sound>
+          <sound>sound\sd_footstepGround2</sound>
+          <sound>sound\sd_footstepGround3</sound>
+          <sound>sound\sd_footstepGround4</sound>
+        </sounds>
+        <sounds name="Ice">
+          <sound>sound\sd_footstepIce1</sound>
+          <sound>sound\sd_footstepIce2</sound>
+          <sound>sound\sd_footstepIce3</sound>
+          <sound>sound\sd_footstepIce4</sound>
+        </sounds>
+      </sounds>
+      <sounds name="Farming">
+        <sound>sound\sd_farming1</sound>
+        <sound>sound\sd_farming2</sound>
+        <sound>sound\sd_farming3</sound>
+        <sound>sound\sd_farming4</sound>
+      </sounds>
+    </sounds>
+    <sounds name="Buildings">
+      <sounds name="Place building">
+        <sound>sound\sd_buildingPlace1</sound>
+        <sound>sound\sd_buildingPlace2</sound>
+        <sound>sound\sd_buildingPlace3</sound>
+        <sound>sound\sd_buildingPlace4</sound>
+      </sounds>
+    </sounds>
+    <sounds name="Ui">
+      <sounds name="Menu Nav">
+        <sound>sound\sd_menuNav4</sound>
+        <sound>sound\sd_menuNav3</sound>
+        <sound>sound\sd_menuNav2</sound>
+        <sound>sound\sd_menuNav1</sound>
+      </sounds>
+      <sounds name="Window Pop-up">
+        <sound>sound\sd_windowPopUp1</sound>
+        <sound>sound\sd_windowPopUp2</sound>
+        <sound>sound\sd_windowPopUp3</sound>
+        <sound>sound\sd_windowPopUp4</sound>
+      </sounds>
+      <sounds name="Button Click">
+        <sound>sound\sd_buttonClick1</sound>
+        <sound>sound\sd_buttonClick2</sound>
+        <sound>sound\sd_buttonClick3</sound>
+        <sound>sound\sd_buttonClick4</sound>
       </sounds>
     </sounds>
   </sounds>
   <sprites name="sprites">
+    <sprites name="fonts">
+      <sprite>sprites\spr_dmgFont</sprite>
+      <sprite>sprites\spr_ft_small</sprite>
+    </sprites>
     <sprites name="Charactors">
-      <sprites name="Miners">
-        <sprites name="Miner Regular Walking">
+      <sprites name="workers">
+        <sprites name="Worker Walk Regular">
           <sprite>sprites\spr_miner1RegLeftWalkingEmpty</sprite>
           <sprite>sprites\spr_miner1RegRightWalkingEmpty</sprite>
           <sprite>sprites\spr_miner1RegRightWalkingFull</sprite>
           <sprite>sprites\spr_miner1RegLeftWalkingFull</sprite>
         </sprites>
-        <sprites name="Miner Regular Mining">
+        <sprites name="Worker Mining REGULAR">
           <sprite>sprites\spr_miner1RegLeftMining</sprite>
           <sprite>sprites\spr_miner1RegRightMining</sprite>
         </sprites>
-        <sprites name="Golem">
-          <sprite>sprites\spr_golemWalkingLeft</sprite>
-          <sprite>sprites\spr_golemWalkingRight</sprite>
+        <sprites name="Worker Woodcut REGULAR">
+          <sprite>sprites\spr_workerWoodcutLeft1</sprite>
+          <sprite>sprites\spr_workerWoodcutRight1</sprite>
         </sprites>
       </sprites>
       <sprites name="enemies">
@@ -77,9 +145,6 @@
       </sprites>
       <sprite>sprites\spr_hpBack</sprite>
       <sprite>sprites\spr_hpFront</sprite>
-      <sprites name="fonts">
-        <sprite>sprites\spr_dmgFont</sprite>
-      </sprites>
     </sprites>
     <sprites name="Structures">
       <sprite>sprites\spr_townCenter</sprite>
@@ -91,6 +156,7 @@
         <sprite>sprites\spr_archerTowerArmsLeft</sprite>
         <sprite>sprites\spr_towerArcher</sprite>
       </sprites>
+      <sprite>sprites\spr_farmingPatch</sprite>
     </sprites>
     <sprites name="Environment">
       <sprites name="ground">
@@ -131,6 +197,11 @@
           <sprite>sprites\spr_testButton</sprite>
           <sprite>sprites\spr_testIcon</sprite>
         </sprites>
+        <sprite>sprites\spr_buildingPopUp</sprite>
+        <sprites name="buttons">
+          <sprite>sprites\spr_buttonLevelUp</sprite>
+          <sprite>sprites\spr_buttonFarmPatch</sprite>
+        </sprites>
       </sprites>
       <sprites name="Gamepad">
         <sprite>sprites\spr_gamepadA</sprite>
@@ -158,7 +229,8 @@
       <sprite>sprites\obj_solid</sprite>
     </sprites>
     <sprites name="Particles">
-      <sprite>sprites\spr_partResourceChips</sprite>
+      <sprite>sprites\spr_partStoneChips</sprite>
+      <sprite>sprites\spr_partWoodChips</sprite>
     </sprites>
   </sprites>
   <backgrounds name="background">
@@ -183,11 +255,12 @@
         <script>scripts\scr_ui_selected_placer.gml</script>
       </scripts>
     </scripts>
-    <scripts name="Miners">
+    <scripts name="Workers">
       <scripts name="Gamepad">
         <script>scripts\scr_miner_rock_select_create.gml</script>
         <script>scripts\scr_make_miner_create.gml</script>
       </scripts>
+      <script>scripts\scr_unit_array_clear.gml</script>
     </scripts>
     <scripts name="Gamepad specific">
       <script>scripts\gamepad_movement.gml</script>
@@ -209,12 +282,16 @@
       <script>scripts\dev_tool_create_object.gml</script>
     </scripts>
   </scripts>
+  <shaders name="shaders"/>
   <fonts name="fonts">
     <font>fonts\ft_gameFont</font>
     <font>fonts\ft_uiFont</font>
   </fonts>
   <objects name="objects">
-    <object>objects\obj_parentMaster</object>
+    <objects name="Global Parents">
+      <object>objects\obj_parentMaster</object>
+      <object>objects\obj_dupeParent</object>
+    </objects>
     <objects name="NPC">
       <objects name="workers">
         <object>objects\obj_workerHumanP1</object>
@@ -249,6 +326,14 @@
           <object>objects\obj_buildMenuHumanWorkerIcon</object>
           <object>objects\obj_buildMenuFarmIcon</object>
           <object>objects\obj_buildMenuArcherTowerIcon</object>
+        </objects>
+        <objects name="Building Pop up menus">
+          <objects name="Buttons">
+            <object>objects\obj_buttonFarmPatch</object>
+            <object>objects\obj_buttonParent</object>
+          </objects>
+          <object>objects\obj_buildingPopUpParent</object>
+          <object>objects\obj_buildingPopUpFarm</object>
         </objects>
       </objects>
       <objects name="Gamepad">
@@ -290,6 +375,7 @@
           <object>objects\olj_gold</object>
           <object>objects\obj_stone</object>
           <object>objects\obj_resourceParent</object>
+          <object>objects\obj_resourceDrawCon</object>
         </objects>
         <objects name="Woodcutting">
           <object>objects\obj_treeParent</object>
@@ -299,12 +385,14 @@
       </objects>
       <objects name="Scenery">
         <object>objects\obj_surfaceGrass1</object>
+        <object>objects\obj_smallSeneryParent</object>
       </objects>
     </objects>
     <objects name="Buildings">
-      <object>objects\obj_townCenter</object>
       <object>objects\obj_buildingParent</object>
+      <object>objects\obj_townCenter</object>
       <object>objects\obj_farm</object>
+      <object>objects\obj_farmingPatch</object>
     </objects>
     <objects name="non-visibles">
       <object>objects\obj_solidGround</object>
@@ -324,6 +412,10 @@
       <room>rooms\Local_Coop_1</room>
     </rooms>
   </rooms>
+  <constants number="2">
+    <constant name="GM_build_date">41936.1403702662</constant>
+    <constant name="GM_version">'1.0.0.2'</constant>
+  </constants>
   <help>
     <rtf>help.rtf</rtf>
   </help>

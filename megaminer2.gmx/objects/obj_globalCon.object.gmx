@@ -37,9 +37,6 @@ makeMinerP2 = 0;
 minerTimerP1 = 0;
 minerTimerP2 = 0;
 
-lastWheat = 0;
-lastWheatP2 = 0;
-
 timer = 0;
 created = 0;
 myStruc = 0;
@@ -52,6 +49,21 @@ scrollSpeed = 0;
 scrolling = 0;
 maxScroll = 0;
 scrollIncrements = 0;
+mouseOverPopUpMenu = 0;
+
+//Select box
+global.selectBoxStart = 0;
+global.selectTimer = 0;
+global.select = 0;
+global.selectStartX = 0;
+global.selectStartY = 0;
+global.selectedNumber = 0;
+//init array to hold selected units
+for (i = 0; i &lt; 20; i++){
+    global.unitSelected[i] = noone;
+}
+insideSelectBox = 0;
+
 
 //General
 global.state = 'neutral';
@@ -59,6 +71,8 @@ global.weatherState = 'clear';
 global.battleLayer = noone;
 global.dev_mode_delete = 0;
 global.dev_mode = 0;
+global.dev_mode_dupe = 0;
+global.dupeObject = noone;
 global.selected = noone;
 
 //layers
@@ -91,6 +105,7 @@ global.mushroomP2 = 0;
 global.woodP1 = 10000;
 global.woodP2 = 0;
 
+global.foodP1 = 0;
 //Gamepad Specific
 global.controllerCount = 0;
 
@@ -102,7 +117,7 @@ global.maxPopP1 = 10;
 global.maxPopP2 = 10;
 
 //Fonts
-global.fontDmg = font_add_sprite(spr_dmgFont,ord('!'),1,1);
+global.fontDmg = font_add_sprite(spr_ft_small,ord(' '),1,1);
 draw_set_font(global.fontDmg);
 
 // Checks to see if the game is co op or not
@@ -204,7 +219,7 @@ audio_listener_orientation(0,1,0,0,0,1);
 global.specialMusic[0] = sd_mainTheme; //Main theme for game
 
 global.surfaceMusic[0] = sd_surfaceDayNeutral1; //day neutral 1
-global.surfaceMusic[1] = sd_surfaceDayNeutral1; //day neutral 2
+global.surfaceMusic[1] = sd_surfaceDayNeutral2; //day neutral 2
 global.surfaceMusic[2] = 0; //day battle 1
 global.surfaceMusic[3] = 0; // day battle 2
 global.surfaceMusic[4] = sd_surfaceNightNeutral1; // night neutral 1
@@ -266,12 +281,21 @@ spr_part_blood_init();
 //Create particle system for miners
 global.partMining = part_system_create();
 global.partStoneChips = part_type_create();
+global.partWoodChips = part_type_create();
 
+//stone
 part_type_gravity(global.partStoneChips,.3,270);
-part_type_sprite(global.partStoneChips,spr_partResourceChips,0,0,1);
+part_type_sprite(global.partStoneChips,spr_partStoneChips,0,0,1);
 part_type_speed(global.partStoneChips,.5,2,.1,1);
 part_type_direction(global.partStoneChips,0,360,0,1);
 part_type_life(global.partStoneChips,1,10);
+
+//Wood
+part_type_gravity(global.partWoodChips,.3,270);
+part_type_sprite(global.partWoodChips,spr_partWoodChips,0,0,1);
+part_type_speed(global.partWoodChips,.5,2,.1,1);
+part_type_direction(global.partWoodChips,0,360,0,1);
+part_type_life(global.partWoodChips,1,10);
 
 
 
@@ -513,6 +537,62 @@ if (scrolling){
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///misc
+
+if (instance_exists(obj_buildingPopUpParent) &amp;&amp; instance_position(mouse_x,mouse_y,obj_buildingPopUpParent)){
+    mouseOverPopUpMenu = 1;
+}else{
+    mouseOverPopUpMenu = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// select box
+
+if (global.select){
+    global.selectTimer ++;
+    if (global.selectTimer &gt;= 2){
+        global.select = 0;
+        global.selectTimer = 0;
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="6" enumb="57">
       <action>
@@ -533,7 +613,14 @@ if (scrolling){
             <kind>1</kind>
             <string>///Deselect
 
+if (global.building){
+    with (global.selected){
+        instance_destroy();
+        global.building = 0;
+    }
+}
 global.selected = noone;
+
 </string>
           </argument>
         </arguments>
@@ -558,12 +645,106 @@ global.selected = noone;
             <kind>1</kind>
             <string>///Place building
 
-if (global.building){
+//Build selected buildings
+if (global.building &amp;&amp; place_free(mouse_x,mouse_y) &amp;&amp; global.selected != noone &amp;&amp; !global.dev_mode_dupe){
     if ((global.selected).y == (global.selected).groundY){
         (global.selected).placed = 1;
         global.building = 0;
         global.selected = noone;
     }   
+}
+
+//deselects the selected object if you click in an empty area
+if (!global.building &amp;&amp; global.selected != noone){
+    if (!instance_position(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !instance_position(mouse_x,mouse_y,obj_buildingParent) &amp;&amp; !mouseOverPopUpMenu){
+        global.selected = noone;
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Dev Mode
+
+if (global.dev_mode_dupe &amp;&amp; !global.building){
+    if (global.dupeObject != noone){
+        instance_create(mouse_x,mouse_y,global.dupeObject);
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Select box
+
+if (global.selectBoxStart){
+    global.selectBoxStart = 0;
+    global.select = 1;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="53">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Select box
+
+//if there is no selectable object underneath the mouse
+if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent)){
+    //Clear selected units
+    scr_unit_array_clear();
+    
+    global.selectBoxStart = 1;
+    global.selectStartX = mouse_x;
+    global.selectStartY = mouse_y;
 }
 </string>
           </argument>
@@ -660,6 +841,41 @@ if (global.gamepad){
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Dev mode 
+
+//Draw dev mode on the side of the screen
+if (global.dev_mode){
+    draw_set_colour(c_white);
+    draw_text(view_xport[0]+1130,view_yport[0]+695,"Dev mode on");
+    draw_text(view_xport[0]+1130,view_yport[0]+30,"Fps: " + string(floor(fps_real)));
+    
+    if (global.dev_mode_dupe){
+        draw_text(view_xport[0]+1060,view_yport[0]+670,"Object to create: "+string(global.dupeObject));
+        if (global.dupeObject != noone){
+            draw_text(view_xport[0]+1010,view_yport[0]+650,"Selected Object count: "+string(instance_number(global.dupeObject)));    
+        }
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="8" enumb="0">
       <action>
@@ -712,6 +928,164 @@ depth = 0;
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Select box
+
+if (global.selectBoxStart){
+    draw_rectangle(global.selectStartX, global.selectStartY,mouse_x,mouse_y,1);
+    draw_rectangle(global.selectStartX+1, global.selectStartY-1,mouse_x-1,mouse_y-1,1);
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Debug
+
+if (global.dev_mode){
+    draw_set_font(ft_gameFont);
+    draw_text(mouse_x-15,mouse_y-150,"SelectBoxStart_" + string(global.selectBoxStart));   
+    draw_text(mouse_x-15,mouse_y-140,"SelectStartX_" + string(global.selectStartX));   
+    draw_text(mouse_x-15,mouse_y-130,"SelectStartY_" + string(global.selectStartY)); 
+    draw_text(mouse_x-15,mouse_y-120,"SelectedNumber_" + string(global.selectedNumber)); 
+    draw_text(mouse_x-15,mouse_y-110,"Select_" + string(global.select));
+    //draw_text(mouse_x-15,mouse_y-100,"BoxColliding?_" + string(collision_rectangle(global.selectStartX,global.selectStartY,mouse_x,mouse_y,obj_workerParent,0,0)));
+    draw_text(mouse_x-100,mouse_y-240,"UnitSelected1_" + string(global.unitSelected[0]));
+    draw_text(mouse_x-100,mouse_y-230,"UnitSelected2_" + string(global.unitSelected[1]));
+    draw_text(mouse_x-100,mouse_y-220,"UnitSelected3_" + string(global.unitSelected[2]));
+    draw_text(mouse_x-100,mouse_y-210,"UnitSelected4_" + string(global.unitSelected[3]));
+    draw_text(mouse_x-100,mouse_y-200,"UnitSelected5_" + string(global.unitSelected[4]));
+    draw_text(mouse_x-100,mouse_y-190,"UnitSelected6_" + string(global.unitSelected[5]));
+    draw_text(mouse_x-100,mouse_y-180,"UnitSelected7_" + string(global.unitSelected[6]));
+    draw_text(mouse_x-100,mouse_y-170,"UnitSelected8_" + string(global.unitSelected[7]));
+    draw_text(mouse_x-100,mouse_y-160,"UnitSelected9_" + string(global.unitSelected[8]));
+    draw_text(mouse_x-100,mouse_y-150,"UnitSelected10_" + string(global.unitSelected[9]));
+    draw_text(mouse_x-100,mouse_y-140,"UnitSelected11_" + string(global.unitSelected[10]));
+    draw_text(mouse_x-100,mouse_y-130,"UnitSelected12_" + string(global.unitSelected[11]));
+    draw_text(mouse_x-100,mouse_y-120,"UnitSelected13_" + string(global.unitSelected[12]));
+    draw_text(mouse_x-100,mouse_y-110,"UnitSelected14_" + string(global.unitSelected[13]));
+    draw_text(mouse_x-100,mouse_y-100,"UnitSelected15_" + string(global.unitSelected[14]));
+    draw_text(mouse_x-100,mouse_y-90,"UnitSelected16_" + string(global.unitSelected[15]));
+    draw_text(mouse_x-100,mouse_y-80,"UnitSelected17_" + string(global.unitSelected[16]));
+    draw_text(mouse_x-100,mouse_y-70,"UnitSelected18_" + string(global.unitSelected[17]));
+    draw_text(mouse_x-100,mouse_y-60,"UnitSelected19_" + string(global.unitSelected[18]));
+    draw_text(mouse_x-100,mouse_y-50,"UnitSelected20_" + string(global.unitSelected[19]));
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="17">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Object Duplicate 
+
+if (global.dev_mode){
+    global.dev_mode_dupe = 1;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="16">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>//delete mode
+if (global.dev_mode){
+    global.dev_mode_delete = 1;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="10" enumb="36">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>
+if (global.dev_mode){
+    global.dev_mode = 0;
+}else{
+    global.dev_mode = 1;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="10" enumb="27">
       <action>
@@ -733,6 +1107,59 @@ depth = 0;
             <string>///End game
 
 game_end();
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="10" enumb="17">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Object Duplicate OFF
+
+if (global.dev_mode_dupe){
+    global.dev_mode_dupe = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="10" enumb="16">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///delete
+if (global.dev_mode &amp;&amp; global.dev_mode_delete){
+    global.dev_mode_delete = 0;
+}
 </string>
           </argument>
         </arguments>

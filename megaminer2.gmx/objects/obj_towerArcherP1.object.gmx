@@ -73,7 +73,7 @@ if (!placed){
     }
     
 }else{
-    scr_effects_fade_in(); 
+    scr_effects_fade_in(.2); 
     myArms.visible = 1;
 }
 //When the tower is placed
