@@ -50,6 +50,9 @@ scrolling = 0;
 maxScroll = 0;
 scrollIncrements = 0;
 mouseOverPopUpMenu = 0;
+moveTimer = 0;
+moveTimerStart = 0;
+unitMoveX = 0;
 
 //Select box
 global.selectBoxStart = 0;
@@ -59,7 +62,7 @@ global.selectStartX = 0;
 global.selectStartY = 0;
 global.selectedNumber = 0;
 //init array to hold selected units
-for (i = 0; i &lt; 20; i++){
+for (i = 0; i &lt; 100; i++){
     global.unitSelected[i] = noone;
 }
 insideSelectBox = 0;
@@ -74,6 +77,7 @@ global.dev_mode = 0;
 global.dev_mode_dupe = 0;
 global.dupeObject = noone;
 global.selected = noone;
+instance_create(x,y,obj_selectBoxDraw);
 
 //layers
 global.currentLayer = 0;
@@ -209,7 +213,7 @@ global.buildMenuBuildingPushOut = 0;
 
 //Sound Variables
 global.currentSong = 0;
-global.mute = 1;
+global.mute = 0;
 pickSoundTimer = 0;
 
 //set listener orientation 
@@ -611,6 +615,31 @@ if (global.select){
         <arguments>
           <argument>
             <kind>1</kind>
+            <string>///Move units
+
+if (!position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent))){ 
+    scr_unit_array_set_move_target(15);
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
             <string>///Deselect
 
 if (global.building){
@@ -619,6 +648,7 @@ if (global.building){
         global.building = 0;
     }
 }
+//scr_unit_array_clear();
 global.selected = noone;
 
 </string>
@@ -710,9 +740,35 @@ if (global.dev_mode_dupe &amp;&amp; !global.building){
             <string>///Select box
 
 if (global.selectBoxStart){
+   //Clear selected units
+    //scr_unit_array_clear();
     global.selectBoxStart = 0;
     global.select = 1;
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Move units
+
+moveTimerStart = 0;
+moveTimer = 0;
 </string>
           </argument>
         </arguments>
@@ -738,14 +794,38 @@ if (global.selectBoxStart){
             <string>/// Select box
 
 //if there is no selectable object underneath the mouse
-if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent)){
-    //Clear selected units
-    scr_unit_array_clear();
-    
+if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart){
     global.selectBoxStart = 1;
     global.selectStartX = mouse_x;
     global.selectStartY = mouse_y;
+    scr_unit_array_clear();
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="7" enumb="3">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Clean up
+
+font_delete(global.fontDmg);
+part_system_destroy(global.partMining);
 </string>
           </argument>
         </arguments>
@@ -841,6 +921,8 @@ if (global.gamepad){
           </argument>
         </arguments>
       </action>
+    </event>
+    <event eventtype="8" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -862,13 +944,14 @@ if (global.gamepad){
 //Draw dev mode on the side of the screen
 if (global.dev_mode){
     draw_set_colour(c_white);
-    draw_text(view_xport[0]+1130,view_yport[0]+695,"Dev mode on");
-    draw_text(view_xport[0]+1130,view_yport[0]+30,"Fps: " + string(floor(fps_real)));
+    draw_set_font(global.fontDmg);
+    draw_text(view_xview[0]+1130,view_yview[0]+695,"Dev mode on");
+    draw_text(view_xview[0]+1130,view_yview[0]+30,"Fps: " + string(floor(fps_real)));
     
     if (global.dev_mode_dupe){
-        draw_text(view_xport[0]+1060,view_yport[0]+670,"Object to create: "+string(global.dupeObject));
+        draw_text(view_xview[0]+1060,view_yview[0]+670,"Object to create: "+string(global.dupeObject));
         if (global.dupeObject != noone){
-            draw_text(view_xport[0]+1010,view_yport[0]+650,"Selected Object count: "+string(instance_number(global.dupeObject)));    
+            draw_text(view_xview[0]+1010,view_yview[0]+650,"Selected Object count: "+string(instance_number(global.dupeObject)));    
         }
     }
 }
@@ -876,8 +959,6 @@ if (global.dev_mode){
           </argument>
         </arguments>
       </action>
-    </event>
-    <event eventtype="8" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -897,7 +978,11 @@ if (global.dev_mode){
             <string>///General
 draw_set_color(c_white);
 draw_set_font(global.fontDmg);
-draw_text(5,20,"In VERY early development");
+draw_text(view_xview[0]+5,view_yview[0]+700,"In VERY early development");
+draw_text(view_xview[0]+150,view_yview[0]+100,"Stone: " + string(global.woodP1));
+draw_text(view_xview[0]+240,view_yview[0]+100,"Wood: " + string(global.stoneP1));
+draw_text(view_xview[0]+310,view_yview[0]+100,"Gold: " + string(global.goldP1));
+draw_text(view_xview[0]+410,view_yview[0]+100,"Food: " + string(global.foodP1));
 </string>
           </argument>
         </arguments>
@@ -924,32 +1009,6 @@ draw_background_tiled_hor(bg_mountains,view_xview[0]/1.1,view_yview[0]+250);
 draw_background_tiled_hor(bg_longTrees,view_xview[0]/1.5,view_yview[0]+580);
 draw_background_tiled_hor(bg_close_trees,view_xview[0]/2.5,view_yview[0]+570);
 depth = 0;
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Select box
-
-if (global.selectBoxStart){
-    draw_rectangle(global.selectStartX, global.selectStartY,mouse_x,mouse_y,1);
-    draw_rectangle(global.selectStartX+1, global.selectStartY-1,mouse_x-1,mouse_y-1,1);
-}
 </string>
           </argument>
         </arguments>

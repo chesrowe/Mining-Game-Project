@@ -125,14 +125,12 @@
           <sprite>sprites\spr_workerWoodcutLeft1</sprite>
           <sprite>sprites\spr_workerWoodcutRight1</sprite>
         </sprites>
+        <sprites name="Worker faming REGULAR1">
+          <sprite>sprites\spr_workerFarmingRight1</sprite>
+          <sprite>sprites\spr_workerFarmingLeft1</sprite>
+        </sprites>
       </sprites>
       <sprites name="enemies">
-        <sprites name="Goblin Archer">
-          <sprite>sprites\spr_goblinWalkingLeft</sprite>
-          <sprite>sprites\spr_goblinWalkingRight</sprite>
-          <sprite>sprites\spr_goblinAttackingLeft</sprite>
-          <sprite>sprites\spr_goblinAttackingRight</sprite>
-        </sprites>
         <sprites name="wolf">
           <sprite>sprites\spr_wolfWalkingLeft</sprite>
           <sprite>sprites\spr_wolfWalkingRight</sprite>
@@ -147,7 +145,7 @@
       <sprite>sprites\spr_hpFront</sprite>
     </sprites>
     <sprites name="Structures">
-      <sprite>sprites\spr_townCenter</sprite>
+      <sprite>sprites\spr_townCenter1</sprite>
       <sprite>sprites\spr_wheatFarm</sprite>
       <sprite>sprites\spr_townCenter2</sprite>
       <sprite>sprites\spr_blacksmith</sprite>
@@ -247,6 +245,7 @@
     <background>background\bg_close_trees</background>
     <background>background\background11</background>
     <background>background\background12</background>
+    <background>background\background13</background>
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
@@ -261,6 +260,8 @@
         <script>scripts\scr_make_miner_create.gml</script>
       </scripts>
       <script>scripts\scr_unit_array_clear.gml</script>
+      <script>scripts\scr_unit_array_set_move_target.gml</script>
+      <script>scripts\scr_unit_array_set_resource_target.gml</script>
     </scripts>
     <scripts name="Gamepad specific">
       <script>scripts\gamepad_movement.gml</script>
@@ -282,7 +283,6 @@
       <script>scripts\dev_tool_create_object.gml</script>
     </scripts>
   </scripts>
-  <shaders name="shaders"/>
   <fonts name="fonts">
     <font>fonts\ft_gameFont</font>
     <font>fonts\ft_uiFont</font>
@@ -347,6 +347,7 @@
       <object>objects\obj_globalCon</object>
       <object>objects\obj_cameraConP1</object>
       <object>objects\obj_cameraConP2</object>
+      <object>objects\obj_selectBoxDraw</object>
     </objects>
     <objects name="Evironment">
       <objects name="Ground">
@@ -413,7 +414,7 @@
     </rooms>
   </rooms>
   <constants number="2">
-    <constant name="GM_build_date">41936.1403702662</constant>
+    <constant name="GM_build_date">41949.4053481018</constant>
     <constant name="GM_version">'1.0.0.2'</constant>
   </constants>
   <help>

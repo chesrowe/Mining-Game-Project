@@ -28,6 +28,8 @@
             <string>///General
 
 myWorker = 0;
+
+
 </string>
           </argument>
         </arguments>
@@ -53,6 +55,10 @@ myWorker = 0;
             <string>///snap to worker
 x = myWorker.x;
 y = myWorker.y;
+
+with(myWorker){
+    other.targetDistance = point_distance(x,y,moveTargetX,moveTargetY)
+}
 </string>
           </argument>
         </arguments>
@@ -75,7 +81,8 @@ y = myWorker.y;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
+            <string>///debug stuff
+
 //draws selected
 if (myWorker.selected){
     draw_sprite(spr_selectorP1,0,myWorker.x-32,myWorker.y-32);
@@ -83,9 +90,13 @@ if (myWorker.selected){
 //draw debug info
 if (global.dev_mode &amp;&amp; myWorker.showDebug){
     draw_set_font(ft_gameFont);
+    draw_text(x-15,y-200,"level_" + string(myWorker.level));
     draw_text(x-15,y-150,"State:_" + string(myWorker.state));
-    draw_text(x-15,y-140,"Selected" + string(myWorker.selected));
-    draw_text(x-15,y-130,"InsideSelectBox" + string(myWorker.insideSelectBox));
+    if (myWorker.selected){    
+        draw_text(x-15,y-140,"Selected" + string(myWorker.selected));
+        draw_text(x-15,y-130,"InsideSelectBox" + string(myWorker.insideSelectBox));
+        draw_text(x-15,y-120,"DistanceToTarget_" + string(targetDistance));
+    }
     if (myWorker.state == 'mining'){
         draw_text(x-15,y-140,"Resource_" + string((myWorker.target).resource));
         draw_text(x-15,y-130,"goingTo_" + string(myWorker.goingTo));
@@ -102,22 +113,27 @@ if (global.dev_mode &amp;&amp; myWorker.showDebug){
         draw_text(x-15,y-70,"Waiting to mine_" + string(myWorker.waitingToMine));
         draw_text(x-15,y-60,"mineAmount_" + string(myWorker.mineAmount));
         draw_text(x-15,y-50,"miningLevel_" + string(myWorker.miningLevel));
-        draw_text(x-15,y-40,"animationSyncTimer_" + string(myWorker.animationSyncTimer));
+        draw_text(x-15,y-100,"moveToTime/timer" + string(myWorker.moveToTime)+ "/" + string(myWorker.moveToTimer));
         draw_text(x-15,y-30,"pickSoundTimer_" + string(myWorker.pickSoundTimer));
     }
     if (myWorker.state == 'woodcutting'){
+        draw_text(x-15,y-190,"woodcuttingLevel_" + string(myWorker.woodcuttingLevel));
+        draw_text(x-15,y-180,"woodcuttingXpNeeded_" + string(myWorker.xpNeededWoodcutting));
+        draw_text(x-15,y-160,"woodcuttingLevel_" + string(myWorker.woodcuttingLevel));
+        draw_text(x-15,y-170,"woodcuttingXp_" + string(myWorker.xpWoodcutting));
         draw_text(x-15,y-140,"CuttingTime_" + string(myWorker.cuttingTime));   
         draw_text(x-15,y-130,"CuttingTimer_" + string(myWorker.cuttingTimer));
         draw_text(x-15,y-120,"CutStart_" + string(myWorker.cutStart));    
         draw_text(x-15,y-110,"middleTimer_" + string(myWorker.middleTimer));  
-        draw_text(x-15,y-100,"AnimationSyncTimer_" + string(myWorker.animationSyncTimer));
+        draw_text(x-15,y-100,"moveToTime/timer" + string(myWorker.moveToTime)+ "/" + string(myWorker.moveToTimer));
         draw_text(x-15,y-90,"Move_" + string(myWorker.move));   
         draw_text(x-15,y-80,"moveTimer_" + string(myWorker.moveTimer));   
         draw_text(x-15,y-70,"footstepTimer_" + string(myWorker.footstepTimer)); 
         draw_text(x-15,y-60,"cutSound_" + string(myWorker.cutSound));  
         draw_text(x-15,y-50,"image_index_" + string(myWorker.image_index));
-        
-        
+    }
+    if (myWorker.state == 'moveToTarget'){
+        draw_text(x-15,y-120,"MoveTargetX" + string(myWorker.moveTargetX));   
     }
 }
 </string>

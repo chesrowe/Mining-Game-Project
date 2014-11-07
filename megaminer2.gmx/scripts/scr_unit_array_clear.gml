@@ -1,7 +1,7 @@
 
 ///scr_unit_arry_clear();
 
-for (i = 0;i < 20;i++){
+for (i = 0;i < 100;i++){
     if ((global.unitSelected[i]) != noone){
         (global.unitSelected[i]).selected = 0;
     }

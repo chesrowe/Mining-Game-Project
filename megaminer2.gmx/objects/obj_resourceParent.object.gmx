@@ -86,7 +86,7 @@ if (exhausted){
         </arguments>
       </action>
     </event>
-    <event eventtype="6" enumb="4">
+    <event eventtype="6" enumb="5">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -105,21 +105,12 @@ if (exhausted){
             <kind>1</kind>
             <string>///Mine
 
-//Makes the selected worker mine this resource
+//Makes the selected workers mine this resource
 
-if (global.selected != noone &amp;&amp; !global.building){
-    with (global.selected){
-        target = other.id;
-        state = 'mining';
-        goingTo = 1;
-        mineStart = 0;
-        miningTimer = 0;
-        farmStart = 0;
-        farmingTimer = 0;
-        cutStart = 0;
-        cuttingTimer = 0;
-        global.selected = noone;
-    }
+if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
+    scr_unit_array_set_resource_target('mining');   
+}else{
+    scr_unit_array_clear();
 }
 
 </string>

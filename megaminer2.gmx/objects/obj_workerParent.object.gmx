@@ -45,19 +45,38 @@ number = 0;
 dying = 0;
 selecting = 0;
 selected = 0;
+randomize();
+moveToTime = 2 + irandom(15);
+moveToTimer = 0;
 target = 0;
+moveTargetX = 0;
+moveTargetY = 0;
 myDraw = instance_create(x,y,obj_workerDraw);
 myDraw.myWorker = id;
 image_speed = 0;
 image_alpha = 0;
 
+
 //Stats
 hp = 100;
+hpMax = 100;
+level = 1;
+woodcuttingLevel = 1;
+miningLevel = 1;
+farmingLevel = 1;
+transportingLevel = 1;
+xpOverall = 0;
+xpNeededOverall = floor(level+300 * power(2,(level/7)));;
+xpNeededWoodcutting = floor(woodcuttingLevel+300 * power(2,(woodcuttingLevel/7)));;
+xpNeededMining = floor(miningLevel+300 * power(2,(miningLevel/7)));;
+xpNeededFarming = floor(farmingLevel+300 * power(2,(farmingLevel/7)));;
+xpWoodcutting = 0;
+xpMining = 0;
+xpFarming = 0;
 hpBar = instance_create(x,y,obj_enemyHpDraw);
 hpBar.myEnemy = id;
 hpBar.hp = hp;
 hpBar.hpMult = (hp/10);
-level = 1;
 walkSpeed = 1;
 
 //Dev mode
@@ -85,6 +104,10 @@ maxWood = 40;
 foodHeld = 0;
 maxFood = 50;
 
+// Working general
+workingLenDirX = lengthdir_x(40,point_direction(x,y,target.x,target.y));
+workingLenDirY = lengthdir_y(26,point_direction(x,y,target.x,target.y));
+
 //mining
 miningTime = 300;
 miningTimer = 0;
@@ -92,9 +115,12 @@ mineStart = 0;
 waitingToMine = 0;
 mineAmount = 40;
 miningLevel = 1;
+randomize();
+middleTimeMining = irandom(5);
 
 
 //woodcutting
+baseCuttingTime = 500;
 cuttingTime = 500;
 falling = 0;
 cuttingTimer = 0;
@@ -102,31 +128,40 @@ cutStart = 0;
 move = 0;
 moveTimer = 0;
 cutSound = 0;
+randomize();
+cutTimeAdd = irandom(round(baseCuttingTime/3));
+middleTimeWoodcutting =  (5 + irandom(10));
 
 
 //Farming
-farmingTime = 300;
+baseFarmingTime = 600;
+farmingTime = 600;
+farmTimeAdd = irandom(round(baseFarmingTime/3));
 farmingTimer = 0;
 farmStart = 0;
 middleTimer = 0;
 
-//Sprites
 
-animationSyncTimer = 0;
+//Sprites
 
 spriteWalkingLeftEmpty = spr_miner1RegLeftWalkingEmpty;
 spriteWalkingLeftFull = spr_miner1RegLeftWalkingFull;
+
 spriteWalkingRightEmpty = spr_miner1RegRightWalkingEmpty;
 spriteWalkingRightFull = spr_miner1RegRightWalkingFull;
+
 spriteMiningLeft = spr_miner1RegLeftMining;
 spriteMiningRight = spr_miner1RegRightMining;
+
 spriteIdleMiningRight = spr_miner1RegRightMining;
 spriteIdleMiningLeft = spr_miner1RegLeftMining;
+
 spriteCuttingLeft = spr_workerWoodcutLeft1;
 spriteCuttingRight = spr_workerWoodcutRight1;
 
+spriteFarmingRight = spr_workerFarmingRight1;
+spriteFarmingLeft = spr_workerFarmingLeft1;
 
-//Sounds
 
 //variables
 soundPosition = 0;
@@ -196,6 +231,13 @@ footstepIceSound[0] = sd_footstepIce1;
 footstepIceSound[1] = sd_footstepIce2; 
 footstepIceSound[2] = sd_footstepIce3; 
 footstepIceSound[3] = sd_footstepIce4; 
+
+//4 RR for farming
+farmingSound[0] = sd_farming1; 
+farmingSound[1] = sd_farming2; 
+farmingSound[2] = sd_farming3; 
+farmingSound[3] = sd_farming4; 
+ 
 
 </string>
           </argument>
@@ -326,23 +368,33 @@ if (!dying){
     
     if (state == 'mining'){
         image_speed = .1;
+        moveToTimer ++;
         //Miner walks to the resource to mine it
-        if (target.x &gt; x &amp;&amp; !mineStart &amp;&amp; goingTo){
-            sprite_index = spriteWalkingRightEmpty;
-            x += walkSpeed;
-        }else if(!mineStart &amp;&amp; goingTo){
-            sprite_index = spriteWalkingLeftEmpty;
-            x -= walkSpeed;
+        if (moveToTimer &gt; moveToTime){
+            if (target.x &gt; x &amp;&amp; !mineStart &amp;&amp; goingTo){
+                sprite_index = spriteWalkingRightEmpty;
+                x += walkSpeed;
+            }else if(!mineStart &amp;&amp; goingTo){
+                sprite_index = spriteWalkingLeftEmpty;
+                x -= walkSpeed;
+            }
         }
         //Starts worker to mining
         if (mineStart){
             miningTimer ++;
-            pickSoundTimer ++;
-            if (pickSoundTimer &gt;= 40){
-                randomize();
-                audio_play_sound_at(pickSound[irandom(3)],x,y,0,1000,200,1,0,9999900);
-                part_particles_create(global.partMining,x+lengthdir_x(20,dir),y,global.partStoneChips,10);
-                pickSoundTimer = 0;
+            //Plays mining sound
+            if (round(image_index) == 5 &amp;&amp; cutSound == 0){
+                audio_play_sound_at(pickSound[workRRPosition],x,y,0,1000,200,1,0,999999);  
+                //part_particles_create(global.partMining,x+lengthdir_x(32,dir),y,global.partWoodChips,10);
+                workRRPosition ++;
+                if (workRRPosition &gt; 3){
+                    randomize();
+                    workRRPosition = irandom(2);
+                }
+                cutSound = 1; 
+            } 
+            if (round(image_index) != 5){
+                cutSound = 0;
             }
             //take the resources to the stockpile
             if (miningTimer &gt;= miningTime){
@@ -352,10 +404,19 @@ if (!dying){
                 mineStart = 0;
                 miningTimer = 0;
                 switch(target.resource){
-                    case 'gold': goldHeld = maxGold; break;
-                    case 'stone': stoneHeld = maxStone; break;
+                    case 'gold': goldHeld = maxGold; 
+                        xpMining += 25;
+                    break;
+                    case 'stone': stoneHeld = maxStone; 
+                        xpMining += 20;
+                    break;
                     case 'crystal': crystalHeld = maxCrystal; break;
                     case 'brimstone': brimstoneHeld = maxBrimstone; break;
+                }
+                if (xpMining &gt;= xpNeededMining){
+                    miningLevel ++;
+                    xpNeededMining += floor(miningLevel+300 * power(2,(miningLevel/7)));
+                    //baseMiningTime -= (10 + irandom(5));
                 }
             }
         }
@@ -429,28 +490,36 @@ if (!dying){
             <kind>1</kind>
             <string>///Farming
 if (!dying){
-    //sets point direction to target resource
-    dir = point_direction(x,y,target.x,target.y);
     
     if (state == 'farming'){
+        moveToTimer ++;
         image_speed = .1;
-        //Miners walks to the resource to mine it
-        if (target.x &gt; x &amp;&amp; !farmStart &amp;&amp; goingTo){
-            sprite_index = spriteWalkingRightEmpty;
-            x += walkSpeed;
-        }else if(!farmStart &amp;&amp; goingTo){
-            sprite_index = spriteWalkingLeftEmpty;
-            x -= walkSpeed;
+        //Workers walks to the resource to mine it
+        if (moveToTimer &gt; moveToTime){
+            if (target.x &gt; x &amp;&amp; !farmStart &amp;&amp; goingTo){
+                sprite_index = spriteWalkingRightEmpty;
+                x += walkSpeed;
+            }else if(!farmStart &amp;&amp; goingTo){
+                sprite_index = spriteWalkingLeftEmpty;
+                x -= walkSpeed;
+            }
         }
         //Starts the worker to mining
         if (farmStart){
             farmingTimer ++;
-            pickSoundTimer ++;
-            if (pickSoundTimer &gt;= 40){
-                randomize();
-                audio_play_sound_at(pickSound[irandom(3)],x,y,0,1000,200,1,0,9999900);
-                part_particles_create(global.partMining,x+lengthdir_x(20,dir),y,global.partStoneChips,10);
-                pickSoundTimer = 0;
+            //Triggers sound and particles
+            if (round(image_index) == 5 &amp;&amp; cutSound == 0){
+                audio_play_sound_at(farmingSound[workRRPosition],x,y,0,1000,200,1,0,999999);  
+                part_particles_create(global.partMining,x+workingLenDirX,y+workingLenDirY,global.partWoodChips,10);
+                workRRPosition ++;
+                if (workRRPosition &gt; 3){
+                    randomize();
+                    workRRPosition = irandom(2);
+                }
+                cutSound = 1; 
+            } 
+            if (round(image_index) != 5){
+                cutSound = 0;
             }
             //Makes miner take the resousces to the stockpile
             if (farmingTimer &gt;= farmingTime){
@@ -566,13 +635,16 @@ if (!dying){
             <string>///Woodcutting
 if (state == 'woodcutting'){
     image_speed = .1;
+    moveToTimer ++;
      //makes the worker walk to the tree
-     if (target.x &gt; x &amp;&amp; !cutStart &amp;&amp; goingTo){
-        sprite_index = spriteWalkingRightEmpty;
-        x += walkSpeed;
-     }else if(!cutStart &amp;&amp; goingTo){
-        sprite_index = spriteWalkingLeftEmpty;
-        x -= walkSpeed;
+     if (moveToTimer &gt; moveToTime){
+         if (target.x &gt; x &amp;&amp; !cutStart &amp;&amp; goingTo){
+            sprite_index = spriteWalkingRightEmpty;
+            x += walkSpeed;
+         }else if(!cutStart &amp;&amp; goingTo){
+            sprite_index = spriteWalkingLeftEmpty;
+            x -= walkSpeed;
+         }
      }
     //starts the worker to woodcutting
     if (cutStart){
@@ -605,19 +677,35 @@ if (state == 'woodcutting'){
             cuttingTimer = 0;
             target.woodLeft -= 40;
             target.fall -= 40;
+            middleTimeWoodcutting =  (5 + irandom(10));
+            moveToTime = 2 + irandom(15);
+            moveToTimer = 0;
             switch(target.resource){
-                case 'tree_reg': woodHeld = maxWood; break;
+                case 'tree_reg': woodHeld = maxWood; 
+                    xpWoodcutting += 25;
+                break;
                 
+            }
+            if (xpWoodcutting &gt;= xpNeededWoodcutting){
+                woodcuttingLevel ++;
+                xpNeededWoodcutting += floor(woodcuttingLevel+300 * power(2,(woodcuttingLevel/7)));
+                baseCuttingTime -= (10 + irandom(5));
             }
         }
     }
     //Makes the worker take the reources to the stockpile
     if (comingFrom &amp;&amp; x &lt; obj_townCenter.x){
-        sprite_index = spriteWalkingRightFull;
-        x += walkSpeed;    
+        moveToTimer ++;
+            if (moveToTimer &gt; moveToTime){
+                sprite_index = spriteWalkingRightFull;
+                x += walkSpeed;    
+        }
     }else if (comingFrom){
-        sprite_index = spriteWalkingLeftFull;
-        x -= walkSpeed;
+        moveToTimer ++;
+        if (moveToTimer &gt; moveToTime){
+            sprite_index = spriteWalkingLeftFull;
+            x -= walkSpeed;
+        }
     }
 
     //stops the worker from cutting when the tree is falling
@@ -640,6 +728,7 @@ if (state == 'woodcutting'){
         if (target.fell){
             move = 0;
             moveTimer = 0;
+            moveToTimer = 0;
             goingTo = 1;
             comingFrom = 0;
         }
@@ -666,10 +755,13 @@ if (state == 'woodcutting'){
           <argument>
             <kind>1</kind>
             <string>///select box
-insideSelectBox = point_in_rectangle(x,y,global.selectStartX,global.selectStartY,mouse_x,mouse_y);
+
+
 
 if (global.select &amp;&amp; selected == 0){
-    if (insideSelectBox){
+    insideSelectBox = point_in_rectangle(x,y,global.selectStartX,global.selectStartY,mouse_x,mouse_y);
+    insideSelectBoxAlt = point_in_rectangle(x,y,mouse_x,mouse_y,global.selectStartX,global.selectStartY);
+    if (insideSelectBox || insideSelectBoxAlt){
         global.selectedNumber ++;
         global.unitSelected[global.selectedNumber - 1] = id;
         selected = 1;
@@ -677,9 +769,53 @@ if (global.select &amp;&amp; selected == 0){
 }
 
 if (global.select &amp;&amp; selected == 1){
-    if (!insideSelectBox){
+    if (!insideSelectBox &amp;&amp; !insideSelectBoxAlt){
         selected = 0;
     }    
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Move to target
+if (state == 'moveToTarget'){
+    moveToTimer ++;
+    image_speed = .1;
+}
+//move towards target
+if (moveToTimer &gt; moveToTime){
+    if (state == "moveToTarget" &amp;&amp; moveTargetX &gt;= x &amp;&amp; moveToTimer &gt; moveToTime){
+        sprite_index = spriteWalkingRightEmpty;
+        x += walkSpeed;
+    }else if (state = 'moveToTarget' &amp;&amp; moveTargetX &lt;= x){
+        sprite_index = spriteWalkingLeftEmpty;
+        x -= walkSpeed;
+    }
+}else if (state == 'moveToTarget'){
+    image_index = 0;
+}
+//Stop when the target is reached
+if (state == 'moveToTarget' &amp;&amp; ceil(point_distance(x,y,moveTargetX,moveTargetY)) &lt;= 2 &amp;&amp; moveToTimer &gt; moveToTime){
+    state = 'idle';
+    //set idle sprite
+    /*TEMP */ image_index = 0 image_speed = 0;
+    moveToTimer = 0;
 }
 </string>
           </argument>
@@ -715,11 +851,16 @@ if (state == 'farming' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&am
     goingTo = 0;
     comingFrom = 0; 
     middleTimer = 0;
+    randomize();
+    farmTimeAdd = irandom(round(baseFarmingTime/3));
+    farmingTime = (baseFarmingTime + cutTimeAdd);
+    workingLenDirX = lengthdir_x(40,point_direction(x,y,target.x,target.y));
+    workingLenDirY = lengthdir_y(26,point_direction(x,y,target.x,target.y));
     //set the proper sprite
     if (x &gt; target.x){
-        sprite_index = spriteMiningLeft;
+        sprite_index = spriteFarmingLeft;
     }else{
-        sprite_index = spriteMiningRight;
+        sprite_index = spriteFarmingRight;
     }  
     image_index = 0;
 }
@@ -795,7 +936,6 @@ if (state == 'woodcutting' &amp;&amp; comingFrom){
     
     comingFrom = 0;
     goingTo = 1;
-    animationSyncTimer = 0;
     
 }
 if (state == 'farming' &amp;&amp; comingFrom){
@@ -842,16 +982,18 @@ if (other.id == target &amp;&amp; goingTo){
     middleTimer ++;
 }
 
-if (state == 'woodcutting' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; middleTimer &gt;= 25){
+if (state == 'woodcutting' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; middleTimer &gt;= (25+middleTimeWoodcutting)){
     cutStart = 1;
-    animationSyncTimer = 0;
+    randomize();
+    cutTimeAdd = irandom(round(baseCuttingTime/3));
+    cuttingTime = (baseCuttingTime + cutTimeAdd);
+    moveToTimer = 0;
     image_index = 0; 
     goingTo = 0;
     comingFrom = 0; 
     middleTimer = 0;
-    //TEMP
-    //set the proper sprite 
-    image_index = 0;
+    workingLenDirX = lengthdir_x(40,point_direction(x,y,target.x,target.y));
+    workingLenDirY = lengthdir_y(26,point_direction(x,y,target.x,target.y));
 }
 </string>
           </argument>
@@ -878,10 +1020,16 @@ if (state == 'woodcutting' &amp;&amp; other.id == target &amp;&amp; goingTo &amp
             <string>///mine
 //Starts the worker mining
 
-if (state == 'mining' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; other.exhausted = 0 &amp;&amp; miningLevel &gt;= other.levelReq){
+if (other.id == target &amp;&amp; goingTo){
+    middleTimer ++;
+}
+
+if (state == 'mining' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; other.exhausted = 0 &amp;&amp; miningLevel &gt;= other.levelReq &amp;&amp; middleTimer &gt; middleTimeMining){
     mineStart = 1; 
     goingTo = 0;
     comingFrom = 0; 
+    workingLenDirX = lengthdir_x(40,point_direction(x,y,target.x,target.y));
+    workingLenDirY = lengthdir_y(26,point_direction(x,y,target.x,target.y));
     //set the proper sprite
     if (x &gt; target.x){
         sprite_index = spriteMiningLeft;

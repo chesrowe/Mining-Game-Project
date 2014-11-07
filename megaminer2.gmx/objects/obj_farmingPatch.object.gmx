@@ -76,7 +76,7 @@ if (resources &lt; maxResources){
         </arguments>
       </action>
     </event>
-    <event eventtype="6" enumb="4">
+    <event eventtype="6" enumb="5">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -93,22 +93,16 @@ if (resources &lt; maxResources){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Start farming
+            <string>///Start working
+//Makes the selected worker mine this resource
 
-if (global.selected != noone &amp;&amp; !global.building){
-    with (global.selected){
-        target = other.id;
-        state = 'farming';
-        goingTo = 1;
-        mineStart = 0;
-        miningTimer = 0;
-        farmStart = 0;
-        farmingTimer = 0;
-        cutStart = 0;
-        cuttingTimer = 0;
-        global.selected = noone;
-    }
+//Set the selected workers to woodcutting
+if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
+    scr_unit_array_set_resource_target('farming');   
+}else{
+    scr_unit_array_clear();
 }
+    
 </string>
           </argument>
         </arguments>

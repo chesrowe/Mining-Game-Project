@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>-1</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -103,7 +103,7 @@ if (falling){
         </arguments>
       </action>
     </event>
-    <event eventtype="6" enumb="4">
+    <event eventtype="6" enumb="5">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -120,42 +120,17 @@ if (falling){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//Makes the selected worker mine this resource
+            <string>///Start working
+//Makes the selected worker mine this resource
 
-/*if (global.selected != noone){
-    with (global.selected){
-        target = other.id;
-        state = 'woodcutting';
-        goingTo = 1;
-        mineStart = 0;
-        miningTimer = 0;
-        cutStart = 0;
-        cuttingTimer = 0;
-        global.selected = noone;
-    }
-}
-*/
 //Set the selected workers to woodcutting
 if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
-    for(i = 0;i &lt; 20;i++){
-        if (global.unitSelected[i].object_index == obj_workerHumanP1){
-            with (global.unitSelected[i]){
-                target = other.id;
-                state = 'woodcutting';
-                goingTo = 1;
-                mineStart = 0;
-                miningTimer = 0;
-                cutStart = 0;
-                cuttingTimer = 0;
-                selected = 0;
-            }
-        }else{
-            //clear unit arry
-            scr_unit_array_clear();
-            break;
-        }
-    }
+    scr_unit_array_set_resource_target('woodcutting');   
+}else{
+    scr_unit_array_clear();
 }
+    
+
 </string>
           </argument>
         </arguments>
