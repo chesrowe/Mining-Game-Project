@@ -133,7 +133,7 @@ if (global.dev_mode &amp;&amp; myWorker.showDebug){
         draw_text(x-15,y-50,"image_index_" + string(myWorker.image_index));
     }
     if (myWorker.state == 'moveToTarget'){
-        draw_text(x-15,y-120,"MoveTargetX" + string(myWorker.moveTargetX));   
+        draw_text(x-15,y-110,"MoveTargetX" + string(myWorker.moveTargetX));   
     }
 }
 </string>

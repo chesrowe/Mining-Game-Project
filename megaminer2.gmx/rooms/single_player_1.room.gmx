@@ -1314,10 +1314,10 @@
     <instance objName="obj_surface2Row3" x="9936" y="712" name="inst_2972E0E8" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_surface2Row3" x="9968" y="712" name="inst_E5C403FC" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_globalCon" x="768" y="16" name="inst_02065FE8" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_stone" x="1296" y="688" name="inst_414EC1BF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_stone" x="816" y="689" name="inst_29CE21F0" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_buildMenuBuildingStrip" x="512" y="-210" name="inst_FC438B0A" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_stone" x="784" y="688" name="inst_29CE21F0" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_buildMenuFarmIcon" x="592" y="-206" name="inst_A712B920" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_tree1" x="560" y="682" name="inst_E586AAC6" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_tree1" x="352" y="670" name="inst_E586AAC6" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_surfaceGrass1" x="144" y="682" name="inst_179CC8D0" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_surfaceGrass1" x="176" y="682" name="inst_6C982FE7" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_surfaceGrass1" x="256" y="682" name="inst_70E4616C" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
@@ -1351,7 +1351,11 @@
     <instance objName="obj_buildMenuDefenseStrip" x="352" y="-212" name="inst_A6CAAC4C" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_buildMenuDefenseIcon" x="-224" y="78" name="inst_707846BF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_buildMenuArcherTowerIcon" x="432" y="-208" name="inst_1FAE70D5" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_buildMenuBuildingStrip" x="512" y="-210" name="inst_FC438B0A" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_parentMaster" x="736" y="810" name="inst_BFFA4F79" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_parentMaster" x="752" y="786" name="inst_01C34CC7" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_tree1" x="1456" y="672" name="inst_935EAB98" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_tree1" x="1936" y="672" name="inst_08D9DE94" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_parentMaster" x="1392" y="988" name="inst_7001457C" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
   </instances>
   <tiles>
     <tile bgName="background13" x="112" y="686" w="32" h="32" xo="0" yo="0" id="10002706" name="inst_7A215280" depth="0" locked="0" colour="4294967295" scaleX="1" scaleY="1"/>

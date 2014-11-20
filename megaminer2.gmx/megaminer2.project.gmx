@@ -120,14 +120,24 @@
         <sprites name="Worker Mining REGULAR">
           <sprite>sprites\spr_miner1RegLeftMining</sprite>
           <sprite>sprites\spr_miner1RegRightMining</sprite>
+          <sprite>sprites\spr_workerDrawToolMiningLeft1</sprite>
+          <sprite>sprites\spr_workerDrawToolMiningRight1</sprite>
         </sprites>
         <sprites name="Worker Woodcut REGULAR">
           <sprite>sprites\spr_workerWoodcutLeft1</sprite>
           <sprite>sprites\spr_workerWoodcutRight1</sprite>
+          <sprite>sprites\spr_workerDrawToolWoodcutRight1</sprite>
+          <sprite>sprites\spr_workerDrawToolWoodcutLeft1</sprite>
         </sprites>
-        <sprites name="Worker faming REGULAR1">
+        <sprites name="Worker farming REGULAR1">
           <sprite>sprites\spr_workerFarmingRight1</sprite>
           <sprite>sprites\spr_workerFarmingLeft1</sprite>
+          <sprite>sprites\spr_workerDrawToolFarmingLeft1</sprite>
+          <sprite>sprites\spr_workerDrawToolFarmingRight1</sprite>
+        </sprites>
+        <sprites name="Worker idle regular 1">
+          <sprite>sprites\spr_workerIdleRight1</sprite>
+          <sprite>sprites\spr_workerIdleLeft1</sprite>
         </sprites>
       </sprites>
       <sprites name="enemies">
@@ -193,6 +203,7 @@
           <sprite>sprites\spr_menuStripVir</sprite>
           <sprite>sprites\spr_menuStripHor</sprite>
           <sprite>sprites\spr_testButton</sprite>
+          <sprite>sprites\sprite84</sprite>
           <sprite>sprites\spr_testIcon</sprite>
         </sprites>
         <sprite>sprites\spr_buildingPopUp</sprite>
@@ -230,6 +241,7 @@
       <sprite>sprites\spr_partStoneChips</sprite>
       <sprite>sprites\spr_partWoodChips</sprite>
     </sprites>
+    <sprite>sprites\spr_gameFade</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_ground</background>
@@ -262,6 +274,7 @@
       <script>scripts\scr_unit_array_clear.gml</script>
       <script>scripts\scr_unit_array_set_move_target.gml</script>
       <script>scripts\scr_unit_array_set_resource_target.gml</script>
+      <script>scripts\scr_unit_array_add.gml</script>
     </scripts>
     <scripts name="Gamepad specific">
       <script>scripts\gamepad_movement.gml</script>
@@ -331,9 +344,11 @@
           <objects name="Buttons">
             <object>objects\obj_buttonFarmPatch</object>
             <object>objects\obj_buttonParent</object>
+            <object>objects\obj_buttonUpgradeTC</object>
           </objects>
           <object>objects\obj_buildingPopUpParent</object>
           <object>objects\obj_buildingPopUpFarm</object>
+          <object>objects\obj_buildingPopUpTownCenter</object>
         </objects>
       </objects>
       <objects name="Gamepad">
@@ -344,6 +359,7 @@
       </objects>
     </objects>
     <objects name="Controllers">
+      <object>objects\obj_gameFadeIn</object>
       <object>objects\obj_globalCon</object>
       <object>objects\obj_cameraConP1</object>
       <object>objects\obj_cameraConP2</object>
@@ -377,6 +393,7 @@
           <object>objects\obj_stone</object>
           <object>objects\obj_resourceParent</object>
           <object>objects\obj_resourceDrawCon</object>
+          <object>objects\obj_treeDrawCon</object>
         </objects>
         <objects name="Woodcutting">
           <object>objects\obj_treeParent</object>

@@ -65,55 +65,21 @@ nearestEnemy = 0;
             <string>//fades the object in, when it is first placed
 if (!placed){
     image_alpha = .5;
-    myArms.visible = 0;
-    myArms.x = x + 10;
-    myArms.y = y;
+
     if (!global.buildingDefenceP1){
         instance_destroy();
     }
     
 }else{
     scr_effects_fade_in(.2); 
-    myArms.visible = 1;
+    
 }
 //When the tower is placed
 if (placed){
     //Changes the position and sprite of the archer based on which way the tower is facing
-    if (facingLeft &amp;&amp; attacking &amp;&amp; !comingOut){
-        myArms.x = x;
-        myArms.y = y;
-        myArms.sprite_index = spr_archerTowerArmsLeft; 
-    }else if (facingRight &amp;&amp; attacking &amp;&amp; !comingOut){
-        myArms.x = x + 34;
-        myArms.y = y;
-        myArms.sprite_index = spr_archerTowerArmsRight; 
-    }
     // if there is an enemy in range, make the archer arms come out of the tower
-    if (comingOut &amp;&amp; facingLeft){
-        if (myArms.x &gt; x ){
-            myArms.x -= .5;
-            myArms.sprite_index = spr_archerTowerArmsLeft;
-        }else{
-            comingOut = 0;
-        }
-    }else if(comingOut &amp;&amp; facingRight){
-        if (myArms.x &lt; x + 34){
-            myArms.x += .5;
-            myArms.sprite_index = spr_archerTowerArmsRight; 
-        }else{
-            comingOut = 0;
-        }
-    }
     //When there is no enemy in range, make the archer arms go back in the tower
-    if (!attacking &amp;&amp; !comingOut){
-        if (myArms.x &lt; x -2 &amp;&amp; facingLeft){
-            myArms.x -=.5;
-        }else if (!attacking &amp;&amp; !comingOut){
-            if (myArms.x &gt; x + 5 &amp;&amp; facingRight){
-                myArms.x -= .5;    
-            }
-        }
-    }
+   
     //sets the target to the nearest enemy(if there is one), if there is not enemy, it sets the target to -1
     if (instance_exists(obj_wolf)){
         if (distance_to_object(instance_nearest(x+10,y,obj_wolf) &lt; range)){
@@ -140,13 +106,6 @@ if (placed){
     }
     target = nearestEnemy;
     //makes the archer pointToward the target
-    if (attacking &amp;&amp; !comingOut){
-        if (facingRight){
-            myArms.image_angle = point_direction(myArms.x,myArms.y,target.x,target.y);
-        }else{
-            myArms.image_angle = (point_direction(myArms.x,myArms.y,target.x,target.y)-180);       
-        }
-    }
     //makes the tower attack
     if (attacking &amp;&amp; !comingOut){
         image_speed = .1;

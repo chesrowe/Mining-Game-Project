@@ -3,7 +3,7 @@
   <spriteName>spr_tree1Top</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>-1</depth>
   <persistent>0</persistent>
   <parentName>obj_treeParent</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -29,10 +29,9 @@
 event_inherited();
 
 spriteTop = spr_tree1Top;
-spriteBottom = spr_tree1Bottom;
 
-bottom.sprite_index = spriteBottom;
-sprite_index = spriteTop;
+
+
 </string>
           </argument>
         </arguments>

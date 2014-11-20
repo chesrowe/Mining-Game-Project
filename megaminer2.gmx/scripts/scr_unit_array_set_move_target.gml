@@ -12,6 +12,11 @@ for(i = 0;i < 100;i++;){
         (global.unitSelected[i]).state = 'moveToTarget';
         (global.unitSelected[i]).moveToTime = (2 + irandom(15));
         (global.unitSelected[i]).moveToTimer = 0;
+        if((global.unitSelected[i]).x > unitMoveX){
+            (global.unitSelected[i]).moveXStart = 'greater';
+        }else{
+            (global.unitSelected[i]).moveXStart = 'less';    
+        }
         unitMoveX -= 32 + (choose(-irandom(irandom(argument0)),irandom(argument0)));
     }else{
         break;

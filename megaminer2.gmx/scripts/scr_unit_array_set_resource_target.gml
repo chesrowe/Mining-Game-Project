@@ -10,6 +10,7 @@ for(i = 0;i < 100;i++){
             target = other.id;
             state = argument0;
             goingTo = 1;
+            comingFrom = 0;
             mineStart = 0;
             miningTimer = 0;
             cutStart = 0;

@@ -53,9 +53,9 @@ froze = 1;
             <string>
 
 if (keyboard_check(vk_shift)){
-    dev_mode_delete = 1;
+    //dev_mode_delete = 1;
 }else{
-    dev_mode_delete = 0;
+    //dev_mode_delete = 0;
 }
 </string>
           </argument>

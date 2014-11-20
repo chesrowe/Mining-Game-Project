@@ -37,6 +37,7 @@ originOffY = 0;
 menu = 0;
 myMenu = 0;
 menuObject = 0;
+menuY = y - 300;
 
 //Sprites for the buildings
 spriteLevel[0] = 0;
@@ -147,7 +148,7 @@ if (!global.building){
     if (menuObject != noone){
         if (!menu){ 
             menu = 1;
-            myMenu = instance_create(x, y - 128, menuObject);
+            myMenu = instance_create(x, menuY, menuObject);
             myMenu.myBuilding = id;
         }
     }

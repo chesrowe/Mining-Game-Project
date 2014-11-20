@@ -31,6 +31,7 @@ button[0] = instance_create(x,y+32,obj_buttonFarmPatch);
 button[0].building = myBuilding;
 button[0].myMenu = id;
 button[0].building = myBuilding;
+menuY = y - 128;
 //button[1] = instance_create(x+64,y+32,obj_buttonLevelUp);
 </string>
           </argument>

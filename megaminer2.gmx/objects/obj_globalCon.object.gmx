@@ -52,7 +52,13 @@ scrollIncrements = 0;
 mouseOverPopUpMenu = 0;
 moveTimer = 0;
 moveTimerStart = 0;
+instance_create(x,y,obj_gameFadeIn);
+
+
+
+//Workers/guardians
 unitMoveX = 0;
+
 
 //Select box
 global.selectBoxStart = 0;
@@ -77,14 +83,17 @@ global.dev_mode = 0;
 global.dev_mode_dupe = 0;
 global.dupeObject = noone;
 global.selected = noone;
+global.shiftSelect = 0;
+global.multiClickSelect = 0;
+global.clickTimer = 0;
+global.workerSelectAll = 0;
+global.workerSelectState = 'idle';
+global.workerStateSelect = 0;
 instance_create(x,y,obj_selectBoxDraw);
 
 //layers
 global.currentLayer = 0;
 global.layersDiscovered = 0;
-
-//workers
-
 
 //Controls
 global.gamepad = 0;
@@ -325,6 +334,37 @@ part_type_life(global.partWoodChips,1,10);
         <arguments>
           <argument>
             <kind>1</kind>
+            <string>///Multi-click select
+
+if (global.clickTimer &gt;= 1){
+    global.clickTimer ++;
+    if (global.clickTimer &gt;= 25){
+        global.clickTimer = 0;
+        global.multiClickSelect = 0;
+        global.workerSelectAll = 0;
+        global.workerStateSelect = 0;
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
             <string>///Sound
 
 //Set listener position
@@ -434,7 +474,7 @@ if (global.gamepad){
     if (global.buildingP1){
         switch(global.selectedP1){
             case 0: 
-                scr_gamepad_build_structure(obj_wheatFarmP1,500,1);
+                //scr_gamepad_build_structure(obj_wheatFarmP1,500,1);
             break;
         }  
     }
@@ -591,6 +631,8 @@ if (global.select){
     if (global.selectTimer &gt;= 2){
         global.select = 0;
         global.selectTimer = 0;
+        global.workerSelectAll = 0;
+        global.workerStateSelect = 0;
     }
 }
 </string>
@@ -617,7 +659,7 @@ if (global.select){
             <kind>1</kind>
             <string>///Move units
 
-if (!position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent))){ 
+if (!position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_farmingPatch) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){ 
     scr_unit_array_set_move_target(15);
 }
 </string>
@@ -765,7 +807,8 @@ if (global.selectBoxStart){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Move units
+            <string>///deselect
+
 
 moveTimerStart = 0;
 moveTimer = 0;
@@ -794,11 +837,55 @@ moveTimer = 0;
             <string>/// Select box
 
 //if there is no selectable object underneath the mouse
-if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart){
+if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect){
     global.selectBoxStart = 1;
     global.selectStartX = mouse_x;
     global.selectStartY = mouse_y;
     scr_unit_array_clear();
+
+    global.workerStateSelect = 0;
+    with(obj_workerParent){
+        selected = 0;
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Multi-click select
+var cleared = 0;
+//double click and triple click selects workers
+if (position_meeting(mouse_x,mouse_y,obj_workerParent)){
+    if (!global.building &amp;&amp; !global.dev_mode_dupe &amp;&amp; !global.shiftSelect){
+        global.multiClickSelect ++;
+        global.clickTimer = 1;
+        if (global.multiClickSelect == 2 &amp;&amp; !cleared){
+            scr_unit_array_clear();
+            cleared = 1;
+            global.workerSelectState = (instance_position(mouse_x,mouse_y,obj_workerParent)).state;
+            global.workerStateSelect = 1;
+        }
+        if (global.multiClickSelect == 3){
+            global.workerStateSelect = 0;
+            global.workerSelectAll = 1;
+        }
+    }
 }
 </string>
           </argument>
@@ -947,6 +1034,7 @@ if (global.dev_mode){
     draw_set_font(global.fontDmg);
     draw_text(view_xview[0]+1130,view_yview[0]+695,"Dev mode on");
     draw_text(view_xview[0]+1130,view_yview[0]+30,"Fps: " + string(floor(fps_real)));
+    draw_text(view_xview[0]+1130,view_yview[0]+50,"Workers: " + string(instance_number(obj_workerParent)));
     
     if (global.dev_mode_dupe){
         draw_text(view_xview[0]+1060,view_yview[0]+670,"Object to create: "+string(global.dupeObject));
@@ -1033,6 +1121,11 @@ depth = 0;
 
 if (global.dev_mode){
     draw_set_font(ft_gameFont);
+    draw_text(mouse_x-15,mouse_y-200,"WorkerSelectAll_" + string(global.workerSelectAll));
+    draw_text(mouse_x-15,mouse_y-190,"workerSelectState" + string(global.workerSelectState));
+    draw_text(mouse_x-15,mouse_y-180,"ClickTimer_" + string(global.clickTimer));
+    draw_text(mouse_x-15,mouse_y-170,"MultiClickSelect_" + string(global.multiClickSelect));
+    draw_text(mouse_x-15,mouse_y-160,"shiftSelect_" + string(global.shiftSelect));
     draw_text(mouse_x-15,mouse_y-150,"SelectBoxStart_" + string(global.selectBoxStart));   
     draw_text(mouse_x-15,mouse_y-140,"SelectStartX_" + string(global.selectStartX));   
     draw_text(mouse_x-15,mouse_y-130,"SelectStartY_" + string(global.selectStartY)); 
@@ -1109,10 +1202,15 @@ if (global.dev_mode){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//delete mode
+            <string>///delete mode
 if (global.dev_mode){
-    global.dev_mode_delete = 1;
+    //global.dev_mode_delete = 1; 
+    
+}else{
+    global.shiftSelect = 1;   
 }
+
+
 </string>
           </argument>
         </arguments>
@@ -1218,7 +1316,10 @@ if (global.dev_mode_dupe){
             <string>///delete
 if (global.dev_mode &amp;&amp; global.dev_mode_delete){
     global.dev_mode_delete = 0;
+}else{
+    global.shiftSelect = 0;
 }
+
 </string>
           </argument>
         </arguments>

@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-1</depth>
+  <depth>-2</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -29,7 +29,8 @@
 //sets the sprites to use for the tree
 spriteTop = 0;
 spriteBottom = 0;
-resource = 'tree_reg';
+resource = 'common';
+levelReq = 1;
 fall = 200;
 falling = 0;
 fallTimer = 80;
@@ -38,8 +39,16 @@ fell = 0;
 woodLeft = 2000;
 fallSpeed = 0;
 fallIncrement = 0;
+image_speed = 0;
+beingCut = 0;
+animationTimer = 0;
+showDebug = 0;
+//Create obj to handle debug drawing
+myDraw = instance_create(x,y,obj_treeDrawCon);
+myDraw.myResource = id;
 
-bottom = instance_create(x+2,y+18,obj_treeBottom);
+
+//bottom = instance_create(x+2,y+18,obj_treeBottom);
 
 //Sound
 soundPlayed = 0;
@@ -98,12 +107,55 @@ if (falling){
     }
 
 }
+if (!fell){
+    animationTimer ++;
+}
+
+if (animationTimer &gt;= 30){
+    beingCut = 0;
+}else{
+    beingCut = 1;
+}
+
+if (beingCut){
+    image_speed = .09;
+}else{
+    image_speed = 0;
+}
 </string>
           </argument>
         </arguments>
       </action>
     </event>
     <event eventtype="6" enumb="5">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Dev mode
+
+//Shows the debug 
+if (global.dev_mode &amp;&amp; !showDebug){
+    showDebug = 1;
+}else{
+    showDebug = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
       <action>
         <libid>1</libid>
         <id>603</id>
