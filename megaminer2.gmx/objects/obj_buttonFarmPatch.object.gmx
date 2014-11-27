@@ -51,10 +51,11 @@
           <argument>
             <kind>1</kind>
             <string>
-if (global.woodP1 &gt;= 150){
+if (global.woodP1 &gt;= 100){
     global.building = 1;
     global.selected = instance_create(mouse_x,mouse_y,obj_farmingPatch);
-    global.woodP1 -= 150;
+    global.woodP1 -= 100;
+    myBuilding.patches ++;
 }
 </string>
           </argument>

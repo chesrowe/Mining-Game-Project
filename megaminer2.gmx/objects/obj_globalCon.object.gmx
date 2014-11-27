@@ -100,7 +100,7 @@ global.gamepad = 0;
 global.localCoop = 0;
 
 //Resources
-global.goldP1 = 900000;
+global.goldP1 = 0;
 global.stoneP1 = 0;
 
 global.goldP2 = 400;
@@ -115,10 +115,10 @@ global.brimstoneP2 = 0;
 global.mushroomP1 = 0;
 global.mushroomP2 = 0;
 
-global.woodP1 = 10000;
+global.woodP1 = 650;
 global.woodP2 = 0;
 
-global.foodP1 = 0;
+global.foodP1 = 400;
 //Gamepad Specific
 global.controllerCount = 0;
 
@@ -221,7 +221,7 @@ global.buildMenuBuildingPushOut = 0;
             <string>///Sound
 
 //Sound Variables
-global.currentSong = 0;
+global.currentSong = irandom(1);
 global.mute = 0;
 pickSoundTimer = 0;
 
@@ -718,7 +718,7 @@ global.selected = noone;
             <string>///Place building
 
 //Build selected buildings
-if (global.building &amp;&amp; place_free(mouse_x,mouse_y) &amp;&amp; global.selected != noone &amp;&amp; !global.dev_mode_dupe){
+if (global.building &amp;&amp; global.selected != noone &amp;&amp; !global.dev_mode_dupe){
     if ((global.selected).y == (global.selected).groundY){
         (global.selected).placed = 1;
         global.building = 0;
@@ -1067,8 +1067,8 @@ if (global.dev_mode){
 draw_set_color(c_white);
 draw_set_font(global.fontDmg);
 draw_text(view_xview[0]+5,view_yview[0]+700,"In VERY early development");
-draw_text(view_xview[0]+150,view_yview[0]+100,"Stone: " + string(global.woodP1));
-draw_text(view_xview[0]+240,view_yview[0]+100,"Wood: " + string(global.stoneP1));
+draw_text(view_xview[0]+150,view_yview[0]+100,"Stone: " + string(global.stoneP1));
+draw_text(view_xview[0]+240,view_yview[0]+100,"Wood: " + string(global.woodP1));
 draw_text(view_xview[0]+310,view_yview[0]+100,"Gold: " + string(global.goldP1));
 draw_text(view_xview[0]+410,view_yview[0]+100,"Food: " + string(global.foodP1));
 </string>

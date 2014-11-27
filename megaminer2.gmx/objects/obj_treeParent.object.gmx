@@ -109,6 +109,9 @@ if (falling){
 }
 if (!fell){
     animationTimer ++;
+}else{
+    animationTimer = 31;
+    image_speed = 0;
 }
 
 if (animationTimer &gt;= 30){

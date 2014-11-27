@@ -51,10 +51,10 @@ y = obj_buildMenuBuildingStrip.y+20;
           <argument>
             <kind>1</kind>
             <string>
-if (global.buildMenuBuildingPushOut &amp;&amp; global.woodP1 &gt;= 800 &amp;&amp; !global.building){
+if (global.buildMenuBuildingPushOut &amp;&amp; global.woodP1 &gt;= 500 &amp;&amp; !global.building){
     global.selected = instance_create(mouse_x,mouse_y,obj_farm).id;
     global.building = 1;
-    global.woodP1 -= 800;   
+    global.woodP1 -= 500;   
 }
 </string>
           </argument>

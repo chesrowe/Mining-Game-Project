@@ -783,7 +783,7 @@ if (state == 'woodcutting'){
                 moveToTime = 2 + irandom(20);
                 moveToTimer = 0;
                 switch(target.resource){
-                    case 'tree_reg': woodHeld = maxWood; 
+                    case 'common': woodHeld = maxWood; 
                         xpWoodcutting += 25;
                     break;
                     

@@ -33,6 +33,8 @@ originOffX = 32;
 originOffY = 32;
 menuObject = obj_buildingPopUpFarm;
 menuY = myBuilding.y - 128;
+patches = 0;
+maxPatches = 2;
 
 spriteLevel[0] = spr_wheatFarm;
 spriteLevel[1] = spr_wheatFarm;
