@@ -51,7 +51,7 @@ y = obj_buildMenuWorkersStrip.y+20;
           <argument>
             <kind>1</kind>
             <string>
-if (global.buildMenuWorkerPushOut &amp;&amp; global.foodP1 &gt;= 200){
+if (global.buildMenuWorkerPushOut &amp;&amp; global.foodP1 &gt;= 200 &amp;&amp; global.pop &lt; global.maxPop){
     randomize();
     instance_create((obj_townCenter.x+choose(irandom_range(-100,0),irandom_range(0,100))),672,obj_workerHumanP1);
     global.foodP1 -= 200;

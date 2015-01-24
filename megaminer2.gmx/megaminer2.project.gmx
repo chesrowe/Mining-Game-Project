@@ -25,7 +25,7 @@
     <sounds name="Environment">
       <sounds name="Ambiences">
         <sounds name="Surface">
-          <sound>sound\sd_wind</sound>
+          <sound>sound\sd_surfaceAmbience</sound>
         </sounds>
       </sounds>
       <sounds name="Trees">
@@ -73,6 +73,12 @@
         <sound>sound\sd_farming2</sound>
         <sound>sound\sd_farming3</sound>
         <sound>sound\sd_farming4</sound>
+      </sounds>
+      <sounds name="Pulling Out Tool">
+        <sound>sound\sd_toolPullOut1</sound>
+        <sound>sound\sd_toolPullOut2</sound>
+        <sound>sound\sd_toolPullOut3</sound>
+        <sound>sound\sd_toolPullOut4</sound>
       </sounds>
     </sounds>
     <sounds name="Buildings">
@@ -165,6 +171,8 @@
         <sprite>sprites\spr_towerArcher</sprite>
       </sprites>
       <sprite>sprites\spr_farmingPatch</sprite>
+      <sprite>sprites\spr_warehouse1</sprite>
+      <sprite>sprites\spr_house1</sprite>
     </sprites>
     <sprites name="Environment">
       <sprites name="ground">
@@ -190,12 +198,14 @@
       <sprites name="resources">
         <sprite>sprites\spr_stone</sprite>
         <sprite>sprites\spr_gold</sprite>
+        <sprite>sprites\spr_oakTree</sprite>
       </sprites>
       <sprites name="Scenery">
         <sprite>sprites\spr_surfaceGrass1</sprite>
       </sprites>
       <sprite>sprites\spr_tree1Top</sprite>
       <sprite>sprites\spr_tree1Bottom</sprite>
+      <sprite>sprites\spr_gameFade</sprite>
     </sprites>
     <sprites name="Ui">
       <sprites name="Mouse/keyboard">
@@ -241,7 +251,18 @@
       <sprite>sprites\spr_partStoneChips</sprite>
       <sprite>sprites\spr_partWoodChips</sprite>
     </sprites>
-    <sprite>sprites\spr_gameFade</sprite>
+    <sprites name="Gems">
+      <sprite>sprites\spr_ruby</sprite>
+    </sprites>
+    <sprites name="Dev">
+      <sprite>sprites\spr_devModeSound</sprite>
+    </sprites>
+    <sprite>sprites\spr_surface1</sprite>
+    <sprite>sprites\spr_surfaceHillUp</sprite>
+    <sprite>sprites\spr_surfaceHillDown</sprite>
+    <sprite>sprites\spr_surface2</sprite>
+    <sprite>sprites\spr_surface3</sprite>
+    <sprite>sprites\spr_surface4</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_ground</background>
@@ -256,8 +277,7 @@
     <background>background\bg_treesPara</background>
     <background>background\bg_close_trees</background>
     <background>background\background11</background>
-    <background>background\background12</background>
-    <background>background\background13</background>
+    <background>background\tiles</background>
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
@@ -338,6 +358,7 @@
           <object>objects\obj_buildMenuBuildingStrip</object>
           <object>objects\obj_buildMenuHumanWorkerIcon</object>
           <object>objects\obj_buildMenuFarmIcon</object>
+          <object>objects\obj_warehouseIcon</object>
           <object>objects\obj_buildMenuArcherTowerIcon</object>
         </objects>
         <objects name="Building Pop up menus">
@@ -357,34 +378,28 @@
         <object>objects\obj_selectedP1</object>
         <object>objects\obj_selectedP2</object>
       </objects>
+      <objects name="Dev mode">
+        <object>objects\obj_devModeSound</object>
+      </objects>
     </objects>
     <objects name="Controllers">
-      <object>objects\obj_gameFadeIn</object>
       <object>objects\obj_globalCon</object>
+      <object>objects\obj_gameFadeIn</object>
       <object>objects\obj_cameraConP1</object>
       <object>objects\obj_cameraConP2</object>
       <object>objects\obj_selectBoxDraw</object>
+      <object>objects\obj_drawMessage</object>
     </objects>
     <objects name="Evironment">
       <objects name="Ground">
         <object>objects\obj_groundParent</object>
         <objects name="surface">
-          <object>objects\obj_surfaceTop1</object>
-          <object>objects\obj_surfaceTop2</object>
-          <object>objects\obj_surfaceTop3</object>
-          <object>objects\obj_surfaceTop4</object>
-          <object>objects\obj_surface2Row1</object>
-          <object>objects\obj_surface2Row2</object>
-          <object>objects\obj_surface2Row3</object>
-          <object>objects\obj_surface2Row4</object>
-          <object>objects\obj_surface3Row1</object>
-          <object>objects\obj_surface3Row2</object>
-          <object>objects\obj_surface3Row3</object>
-          <object>objects\obj_surface3Row4</object>
-          <object>objects\obj_surface4Row1</object>
-          <object>objects\obj_surface4Row2</object>
-          <object>objects\obj_surface4Row3</object>
-          <object>objects\obj_surface4Row4</object>
+          <object>objects\obj_tileSurfaceFlat1</object>
+          <object>objects\obj_tileSurfaceFlat2</object>
+          <object>objects\obj_tileSurfaceFlat3</object>
+          <object>objects\obj_tileSurfaceFlat4</object>
+          <object>objects\obj_tileSurfaceHillUp</object>
+          <object>objects\obj_tileSurfaceHillDown</object>
         </objects>
       </objects>
       <objects name="resources">
@@ -399,11 +414,16 @@
           <object>objects\obj_treeParent</object>
           <object>objects\obj_treeBottom</object>
           <object>objects\obj_tree1</object>
+          <object>objects\obj_oakTree</object>
         </objects>
       </objects>
       <objects name="Scenery">
         <object>objects\obj_surfaceGrass1</object>
         <object>objects\obj_smallSeneryParent</object>
+      </objects>
+      <objects name="Gems">
+        <object>objects\obj_gemParent</object>
+        <object>objects\obj_ruby</object>
       </objects>
     </objects>
     <objects name="Buildings">
@@ -411,6 +431,7 @@
       <object>objects\obj_townCenter</object>
       <object>objects\obj_farm</object>
       <object>objects\obj_farmingPatch</object>
+      <object>objects\obj_warehouse</object>
     </objects>
     <objects name="non-visibles">
       <object>objects\obj_solidGround</object>
@@ -437,6 +458,11 @@
   <help>
     <rtf>help.rtf</rtf>
   </help>
+  <audiogroups name="audiogroups">
+    <audiogroup name="audiogroup_default"/>
+    <audiogroup name="sfx"/>
+    <audiogroup name="Ambience"/>
+  </audiogroups>
   <TutorialState>
     <IsTutorial>0</IsTutorial>
     <TutorialName></TutorialName>

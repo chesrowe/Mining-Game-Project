@@ -38,6 +38,9 @@ menu = 0;
 myMenu = 0;
 menuObject = 0;
 menuY = y - 300;
+placeSoundPlayed = 0;
+costWoodCommon = 500;
+costStone = 0;
 
 //Sprites for the buildings
 spriteLevel[0] = 0;
@@ -47,6 +50,11 @@ spriteLevel[3] = 0;
 spriteLevel[4] = 0;
 spriteLevel[5] = 0;
 
+//sounds for building
+placeSound[0] = sd_buildingPlace1;
+placeSound[1] = sd_buildingPlace2;
+placeSound[2] = sd_buildingPlace3;
+placeSound[3] = sd_buildingPlace4;
 </string>
           </argument>
         </arguments>
@@ -111,6 +119,7 @@ if (!placed){
         y = placeY-originOffY;
     }
 }else{
+    //place the building (fade in)
     scr_effects_fade_in(.2);
     if (global.selected != id &amp;&amp; menu &amp;&amp; myMenu != noone){
         menu = 0;
@@ -118,6 +127,12 @@ if (!placed){
             instance_destroy();
         }
         myMenu = noone;
+    }
+    //play the place sound
+    if (!placeSoundPlayed){
+        var sound = audio_play_sound_at(placeSound[irandom(3)],x,y,0,1000,200,1,0,999);
+        audio_sound_gain(sound,global.sfxVol,0);
+        placeSoundPlayed = 1;
     }
 }
 </string>

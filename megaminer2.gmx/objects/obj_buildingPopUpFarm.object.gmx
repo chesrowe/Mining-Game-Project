@@ -3,7 +3,7 @@
   <spriteName>spr_buildingPopUp</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-9</depth>
+  <depth>-5</depth>
   <persistent>0</persistent>
   <parentName>obj_buildingPopUpParent</parentName>
   <maskName>&lt;undefined&gt;</maskName>

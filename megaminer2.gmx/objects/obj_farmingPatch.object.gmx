@@ -33,11 +33,23 @@ groundY = 695;
 originOffX = 0;
 originOffY = 0;
 menuObject = noone;
-
-resources = 0;
-resourceRate = .5;
-maxResources = 100;
+costWoodCommon = 150;
+costStone = 0;
+xp = 25;
 resource = 'food';
+
+
+exhausted = 0;
+exhaustTimer = 0;
+exhaustTime = 600;
+amountLeft = 400;
+maxAmountLeft = 500;
+resource = 'food';
+exhausted = 0;
+
+//Create obj to handle debug drawing
+myDraw = instance_create(x,y,obj_resourceDrawCon);
+myDraw.myResource = id;
 
 //Sprites for the buildings
 spriteLevel[0] = spr_farmingPatch;
@@ -68,8 +80,16 @@ spriteLevel[0] = spr_farmingPatch;
             <kind>1</kind>
             <string>event_inherited();
 
-if (resources &lt; maxResources){
-    resources += resourceRate;
+
+if (exhausted){
+    exhaustTimer ++;
+    image_alpha = .6;    
+    if (exhaustTimer &gt;= exhaustTime){
+        exhausted = 0;
+        exPopUp = 0;
+        amountLeft = maxAmountLeft;
+        exhaustTimer = 0;
+    }
 }
 </string>
           </argument>
@@ -98,11 +118,42 @@ if (resources &lt; maxResources){
 
 //Set the selected workers to woodcutting
 if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
-    scr_unit_array_set_resource_target('farming');   
+    scr_unit_array_set_resource_target('farming'); 
+    scr_unit_array_clear();  
 }else{
     scr_unit_array_clear();
 }
     
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="4">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Dev mode
+
+//Shows the debug 
+if (global.dev_mode &amp;&amp; !showDebug){
+    showDebug = 1;
+}else{
+    showDebug = 0;
+}
 </string>
           </argument>
         </arguments>

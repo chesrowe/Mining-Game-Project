@@ -36,6 +36,9 @@ xOffset += choose(0,-5,5,-9,9);
 yOffset -= choose(0,-3,-4,-5,-6);
 startX = x;
 startY = y;
+col = c_white;
+xScale = 1;
+yScale = 1;
 </string>
           </argument>
         </arguments>
@@ -101,7 +104,7 @@ timer ++;
 
 draw_set_font(global.fontDmg);
 draw_set_alpha(alpha);
-draw_text(x,y,"+" + string(amount));
+draw_text_transformed_colour(x,y,string(amount),xScale,yScale,0,col,col,col,col,alpha);
 draw_set_alpha(1);
 draw_set_color(c_white);
 

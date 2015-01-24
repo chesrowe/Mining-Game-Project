@@ -86,10 +86,21 @@ with(myWorker){
 //draws selected
 if (myWorker.selected){
     draw_sprite(spr_selectorP1,0,myWorker.x-32,myWorker.y-32);
+    
 }
 //draw debug info
 if (global.dev_mode &amp;&amp; myWorker.showDebug){
     draw_set_font(ft_gameFont);
+    draw_text(x-15,y-300,"inv[3,0]" + string(myWorker.inv[3,0]));
+    draw_text(x-15,y-290,"inv[3,1]" + string(myWorker.inv[3,1]));
+    draw_text(x-15,y-280,"inv[3,2]" + string(myWorker.inv[3,2]));
+    draw_text(x-15,y-270,"inv[3,3]" + string(myWorker.inv[3,3]));
+    draw_text(x-15,y-260,"inv[3,4]" + string(myWorker.inv[3,4]));
+    draw_text(x-15,y-250,"inv[3,5]" + string(myWorker.inv[3,5]));
+    draw_text(x-15,y-240,"inv[3,6]" + string(myWorker.inv[3,6]));
+    draw_text(x-15,y-230,"middleTimer_" + string(myWorker.middleTimer));
+    draw_text(x-15,y-220,"resourcePosition_" + string(myWorker.resourcePosition));
+    draw_text(x-15,y-210,"PositionTimer_" + string(myWorker.positionTimer));
     draw_text(x-15,y-200,"level_" + string(myWorker.level));
     draw_text(x-15,y-150,"State:_" + string(myWorker.state));
     if (myWorker.selected){    
@@ -98,6 +109,7 @@ if (global.dev_mode &amp;&amp; myWorker.showDebug){
         draw_text(x-15,y-120,"DistanceToTarget_" + string(targetDistance));
     }
     if (myWorker.state == 'mining'){
+        draw_line_width_colour(myWorker.x,myWorker.y,(myWorker.target).x,(myWorker.target).y,4,c_green,c_green);
         draw_text(x-15,y-140,"Resource_" + string((myWorker.target).resource));
         draw_text(x-15,y-130,"goingTo_" + string(myWorker.goingTo));
         draw_text(x-15,y-120,"comingFrom_" + string(myWorker.comingFrom));
@@ -114,9 +126,10 @@ if (global.dev_mode &amp;&amp; myWorker.showDebug){
         draw_text(x-15,y-60,"mineAmount_" + string(myWorker.mineAmount));
         draw_text(x-15,y-50,"miningLevel_" + string(myWorker.miningLevel));
         draw_text(x-15,y-100,"moveToTime/timer" + string(myWorker.moveToTime)+ "/" + string(myWorker.moveToTimer));
-        draw_text(x-15,y-30,"pickSoundTimer_" + string(myWorker.pickSoundTimer));
+        
     }
     if (myWorker.state == 'woodcutting'){
+        draw_line_width_colour(myWorker.x,myWorker.y,(myWorker.target).x,(myWorker.target).y,4,c_green,c_green);
         draw_text(x-15,y-190,"woodcuttingLevel_" + string(myWorker.woodcuttingLevel));
         draw_text(x-15,y-180,"woodcuttingXpNeeded_" + string(myWorker.xpNeededWoodcutting));
         draw_text(x-15,y-160,"woodcuttingLevel_" + string(myWorker.woodcuttingLevel));
@@ -133,6 +146,7 @@ if (global.dev_mode &amp;&amp; myWorker.showDebug){
         draw_text(x-15,y-50,"image_index_" + string(myWorker.image_index));
     }
     if (myWorker.state == 'moveToTarget'){
+        draw_line_width_colour(myWorker.x,myWorker.y,myWorker.moveTargetX,myWorker.moveTargetY,4,c_green,c_green);
         draw_text(x-15,y-110,"MoveTargetX" + string(myWorker.moveTargetX));   
     }
 }

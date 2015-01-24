@@ -30,6 +30,7 @@
 event_inherited();
 
 resource = 'stone';
+xp = 25;
 </string>
           </argument>
         </arguments>

@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-1</depth>
+  <depth>1</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -103,7 +103,7 @@ global.localCoop = 0;
 global.goldP1 = 0;
 global.stoneP1 = 0;
 
-global.goldP2 = 400;
+global.goldP2 = 0;
 global.stoneP2 = 0;
 
 global.crystalP1 = 0;
@@ -115,7 +115,7 @@ global.brimstoneP2 = 0;
 global.mushroomP1 = 0;
 global.mushroomP2 = 0;
 
-global.woodP1 = 650;
+global.woodP1 = 1150;
 global.woodP2 = 0;
 
 global.foodP1 = 400;
@@ -123,10 +123,10 @@ global.foodP1 = 400;
 global.controllerCount = 0;
 
 //Farming/Population
-global.popP1 = 0;
+global.pop = 0;
 global.popP2 = 0;
 
-global.maxPopP1 = 10;
+global.maxPop = 10;
 global.maxPopP2 = 10;
 
 //Fonts
@@ -224,9 +224,24 @@ global.buildMenuBuildingPushOut = 0;
 global.currentSong = irandom(1);
 global.mute = 0;
 pickSoundTimer = 0;
+global.songPlaying[0] = 0;
+//audio_master_gain(0);
+global.sfxVol = .6;
+global.musicVol = 0;
+global.ambienceVol = .4;
+global.ambience[0] = audio_play_sound(sd_surfaceAmbience,9,1);
+audio_sound_gain(global.ambience[0],global.ambienceVol,0);
+//audio_channel_num(20);
+//set sfx volume
+if (!audio_group_is_loaded(sfx)){
+    audio_group_load(sfx);
+}
+//audio_group_set_gain(sfx,global.sfxVol,30);
 
 //set listener orientation 
 audio_listener_orientation(0,1,0,0,0,1);
+
+
 
 //Putting sounds into arrays
 global.specialMusic[0] = sd_mainTheme; //Main theme for game
@@ -316,6 +331,112 @@ part_type_life(global.partWoodChips,1,10);
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// world gen
+
+//vars
+global.surfaceHeight = 696;
+xPos = 0;
+tileIndex = 0;
+
+//Put tiles into arrays
+surfaceFlatTile[0] = obj_tileSurfaceFlat1;
+surfaceFlatTile[1] = obj_tileSurfaceFlat2;
+surfaceFlatTile[2] = obj_tileSurfaceFlat3;
+surfaceFlatTile[3] = obj_tileSurfaceFlat4;
+
+///Surface world gen
+randomize();
+var tc = instance_create((room_width/2)+irandom_range(-32,32),global.surfaceHeight,obj_townCenter);
+view_xview[0] = (tc.x - (view_wview[0]/2)); 
+for (i = 0; i &lt;= 300; i++){ 
+    //create ground tile
+    instance_create(xPos, global.surfaceHeight,surfaceFlatTile[tileIndex]);
+    tileIndex ++;
+    if (tileIndex == 4){
+        tileIndex = 0;
+    }
+    //1 and 6 chance of spawning resource
+    if (irandom(6) == 1){
+        var resource = choose('tree','tree','tree','ore');
+        if (resource == 'tree'){
+            //1 and 20 chance of the tree being an oak tree
+            if (irandom(20) == 1){
+                var t = instance_create(xPos+irandom(8),global.surfaceHeight-20,obj_oakTree);
+                with (t){
+                    if (place_meeting(x,y,obj_treeParent)){
+                        x += choose(32,48,64);
+                    }
+                }
+            }else{
+                //If an oak tree wasn't made, spawn a common tree
+                var tree = instance_create(xPos+irandom(10),global.surfaceHeight-20,obj_tree1);
+                with (tree){
+                    if (place_meeting(x,y,obj_treeParent)){
+                        x += choose(32,48,64);
+                    }
+                }
+            }
+        //Else spawn a mining resource
+        }else if (resource == 'ore' &amp;&amp; irandom(4) == 1){
+            var ore = instance_create(xPos,global.surfaceHeight-12,obj_stone);   
+            with (ore){
+                if (place_meeting(x,y,obj_resourceParent)||place_meeting(x,y,obj_treeParent)||place_meeting(x,y,obj_buildingParent)){
+                    instance_destroy();
+                }
+            }
+        //else their is a chance a hill will spawn
+        }else if (irandom(3) == 1){
+            //hill height in pixels
+            var hillHeight = (global.surfaceHeight + choose(32, 64, 128));
+            //Hill width in tiles
+            var hillWidth = choose (6, 10, 20);
+        }
+    }
+    //Update xPos for world gen
+    xPos += 32;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="3" enumb="1">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string></string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="3" enumb="0">
       <action>
@@ -386,7 +507,8 @@ if (global.currentLayer == 0){
             }else{
                 global.currentSong = 0;
             }
-            audio_play_sound(global.surfaceMusic[global.currentSong],100,0);
+            global.songPlaying[0] = audio_play_sound(global.surfaceMusic[global.currentSong],100,0);
+            audio_sound_gain(global.songPlaying[0],global.musicVol,10);
         }
     }
 }
@@ -598,12 +720,16 @@ if (scrolling){
           <argument>
             <kind>1</kind>
             <string>///misc
-
+//checks to see if the mouse is over a menu
 if (instance_exists(obj_buildingPopUpParent) &amp;&amp; instance_position(mouse_x,mouse_y,obj_buildingPopUpParent)){
     mouseOverPopUpMenu = 1;
 }else{
     mouseOverPopUpMenu = 0;
 }
+
+// Sets the current population
+
+global.pop = instance_number(obj_workerParent);
 </string>
           </argument>
         </arguments>
@@ -686,6 +812,8 @@ if (!position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !position_m
 
 if (global.building){
     with (global.selected){
+        global.woodP1 += costWoodCommon;
+        global.stoneP1 += costStone;
         instance_destroy();
         global.building = 0;
     }
@@ -720,9 +848,19 @@ global.selected = noone;
 //Build selected buildings
 if (global.building &amp;&amp; global.selected != noone &amp;&amp; !global.dev_mode_dupe){
     if ((global.selected).y == (global.selected).groundY){
-        (global.selected).placed = 1;
-        global.building = 0;
-        global.selected = noone;
+        with(global.selected){
+            if (!place_meeting(x,y,obj_treeParent) &amp;&amp; !place_meeting(x,y,obj_buildingParent) &amp;&amp; !place_meeting(x,y,obj_resourceParent)){
+                placed = 1;
+                global.building = 0;
+                global.selected = noone;
+            }else{
+                show_debug_message("created");
+                with(instance_create(mouse_x,mouse_y,obj_drawMessage)){
+                    message = "Can't place that there."
+                    duration = 30;
+                }
+            }
+        }
     }   
 }
 
@@ -913,6 +1051,7 @@ if (position_meeting(mouse_x,mouse_y,obj_workerParent)){
 
 font_delete(global.fontDmg);
 part_system_destroy(global.partMining);
+
 </string>
           </argument>
         </arguments>
@@ -1071,6 +1210,7 @@ draw_text(view_xview[0]+150,view_yview[0]+100,"Stone: " + string(global.stoneP1)
 draw_text(view_xview[0]+240,view_yview[0]+100,"Wood: " + string(global.woodP1));
 draw_text(view_xview[0]+310,view_yview[0]+100,"Gold: " + string(global.goldP1));
 draw_text(view_xview[0]+410,view_yview[0]+100,"Food: " + string(global.foodP1));
+draw_text(view_xview[0]+150,view_yview[0]+(string_height("W")+100),"Population: " + string(global.pop)+ "/" + string(global.maxPop));
 </string>
           </argument>
         </arguments>
@@ -1211,6 +1351,31 @@ if (global.dev_mode){
 }
 
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="10" enumb="82">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///restart game
+
+game_restart();
 </string>
           </argument>
         </arguments>

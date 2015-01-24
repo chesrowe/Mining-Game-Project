@@ -32,9 +32,12 @@ surfaceOnly = 1;
 originOffX = 32;
 originOffY = 32;
 menuObject = obj_buildingPopUpFarm;
-menuY = myBuilding.y - 128;
+menuY = y+300;
 patches = 0;
 maxPatches = 2;
+costWoodCommon = 500;
+costStone = 0;
+
 
 spriteLevel[0] = spr_wheatFarm;
 spriteLevel[1] = spr_wheatFarm;

@@ -17,6 +17,16 @@ for(i = 0;i < 100;i++){
             cuttingTimer = 0;
             selected = 0;
             moveToTimer = 0;
+            if (point_distance(x,y,target.x,target.y) < 24){
+                if (x > target.x){
+                    resourcePosition = 2;
+                    sprite_index = spriteWalkingRightFull;
+                }else{
+                    resourcePosition = 1;
+                    sprite_index = spriteWalkingLeftFull;
+                }
+                goingTo = 0;
+            }
         }
     }else if global.unitSelected[i] = noone{
             //clear unit array

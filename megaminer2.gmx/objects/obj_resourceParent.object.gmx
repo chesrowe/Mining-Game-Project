@@ -37,6 +37,9 @@ exhaustTime = 300;
 amountLeft = 400;
 maxAmountLeft = 400;
 levelReq = 1;
+exPopUp = 0;
+xp = 25;
+gemChance = 10;
 
 //Dev mode
 showDebug = 0;
@@ -46,6 +49,174 @@ myDraw = instance_create(x,y,obj_resourceDrawCon);
 myDraw.myResource = id;
 
 
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/*///Mining
+if (!dying){
+    
+    if (state == 'mining'){
+        image_speed = walkingImageSpeed;
+        moveToTimer ++;
+        //Miner walks to the resource to mine it
+        if (moveToTimer &gt; moveToTime){
+            if (target.x &gt; x &amp;&amp; !mineStart &amp;&amp; goingTo){
+                sprite_index = spriteWalkingRightEmpty;
+                x += walkSpeed;
+            }else if(!mineStart &amp;&amp; goingTo){
+                sprite_index = spriteWalkingLeftEmpty;
+                x -= walkSpeed;
+            }
+        }
+        //Starts worker to mining
+        if (mineStart){
+            image_speed = miningImageSpeed;
+            if (!drawTool){
+                miningTimer ++;
+                //set the sprite
+                if (x &gt; target.x){
+                    sprite_index = spriteMiningLeft;
+                }else{
+                    sprite_index = spriteMiningRight;
+                } 
+                //Plays mining sound
+                if (round(image_index) == 5 &amp;&amp; cutSound == 0){
+                    audio_play_sound_at(pickSound[workRRPosition],x,y,0,1000,200,1,0,999999);  
+                    part_particles_create(global.partMining,x+lengthdir_x(32,dir),y+5,global.partStoneChips,10);
+                    workRRPosition ++;
+                    if (workRRPosition &gt; 3){
+                        randomize();
+                        workRRPosition = irandom(2);
+                    }
+                    cutSound = 1; 
+                } 
+                if (round(image_index) != 5){
+                    cutSound = 0;
+                }
+                //take the resources to the stockpile
+                if (miningTimer &gt;= miningTime){
+                    image_speed = walkingImageSpeed;
+                    target.amountLeft -= mineAmount;
+                    goingTo = 0;
+                    drawTool = 0;
+                    middleTimeMining = (5 + irandom(15));
+                    moveToTimer = 0;
+                    moveToTime = (2 + irandom(10));
+                    comingFrom = 1;
+                    mineStart = 0;
+                    miningTimer = 0;
+                    middleTimer = 0;
+                    switch(target.resource){
+                        case 'gold': goldHeld = maxGold; 
+                            xpMining += 25;
+                        break;
+                        case 'stone': stoneHeld = maxStone; 
+                            xpMining += 20;
+                        break;
+                        case 'crystal': crystalHeld = maxCrystal; break;
+                        case 'brimstone': brimstoneHeld = maxBrimstone; break;
+                    }
+                    if (xpMining &gt;= xpNeededMining){
+                        miningLevel ++;
+                        xpNeededMining += floor(miningLevel+300 * power(2,(miningLevel/7)));
+                        baseMiningTime -= (10 + irandom(5));
+                    }
+                }
+            }else{
+                //starts the pulling out tool animation
+                if (target.x &gt; x){
+                    sprite_index = spriteDrawToolMiningRight;
+                }else{
+                    sprite_index = spriteDrawToolMiningLeft;    
+                }
+                drawToolTimer ++;
+                if (drawToolTimer &gt;= drawToolTimeMining){
+                    drawTool = 0;
+                    drawToolTimer = 0;
+                    dir = point_direction(x,y,target.x,target.y);
+                }
+            }
+        }
+        //Wait for resource to not be exhausted
+        with(target){
+            if (amountLeft &lt;= 0){
+                if (!exPopUp){
+                    moveToTimer = 0;
+                    exPopUp = 1;
+                    with(instance_create(x,y,obj_workerDrawTimed)){
+                        col = c_red;
+                        amount = "!";
+                        xScale = 2;
+                        yScale = 2;
+                    }
+                }
+                amountLeft = 0;
+                exhausted = 1;
+                other.mineStart = 0;
+                other.miningTimer = 0;
+                other.pickSoundTimer = 0;
+            }
+        }
+        if (comingFrom &amp;&amp; x &lt; dropOffTarget.x){
+            moveToTimer ++;
+            if (moveToTimer &gt; moveToTime){
+                sprite_index = spriteWalkingRightFull;
+                x += walkSpeed;    
+            }
+        }else if (comingFrom){
+            moveToTimer ++;
+            if (moveToTimer &gt; moveToTime){
+                sprite_index = spriteWalkingLeftFull;
+                x -= walkSpeed;
+            }
+        }
+        //Starts the worker back to mining
+        if (waitingToMine &amp;&amp; target.exhausted == 0){
+            moveToTimer ++;
+            if (moveToTimer &gt; moveToTime){
+                mineStart = 1;
+                miningTimer = 0;
+                pickSoundTimer = 0;
+                comingFrom = 0;
+                gointTo = 1;
+                waitingToMine = 0;
+                if (target.x &gt; x){
+                    sprite_index = spriteMiningRight;
+                }else{
+                    sprite_index = spriteMiningLeft;
+                }
+            }
+        //set idle animation
+        }else if (waitingToMine){
+            if (target.x &gt; x){
+                sprite_index = spriteIdleRight;
+                image_speed = idleImageSpeed;
+            }else{
+                sprite_index = spriteIdleLeft;
+                image_speed = idleImageSpeed;
+               
+            }   
+        }
+    }    
+}
 
 </string>
           </argument>
@@ -74,12 +245,15 @@ myDraw.myResource = id;
 //starts the exhaust timer
 if (exhausted){
     exhaustTimer ++;
-    
+    image_alpha = .6;    
     if (exhaustTimer &gt;= exhaustTime){
         exhausted = 0;
+        exPopUp = 0;
         amountLeft = maxAmountLeft;
         exhaustTimer = 0;
     }
+}else{
+    image_alpha = 1;
 }
 </string>
           </argument>
@@ -109,6 +283,7 @@ if (exhausted){
 
 if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
     scr_unit_array_set_resource_target('mining');   
+    scr_unit_array_clear();
 }else{
     scr_unit_array_clear();
 }
@@ -117,6 +292,8 @@ if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerPare
           </argument>
         </arguments>
       </action>
+    </event>
+    <event eventtype="6" enumb="4">
       <action>
         <libid>1</libid>
         <id>603</id>
