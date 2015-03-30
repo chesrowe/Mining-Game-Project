@@ -28,13 +28,14 @@
             <string>
 event_inherited();
 placed = 1;
-menuObject = obj_buildingPopUpTownCenter;
-menuObject.myBuilding = id;
+//menuObject = instance_create(x,y,obj_buildingPopUpTownCenter);
+//menuObject.myBuilding = id;
 
 spriteLevel[0] = spr_townCenter1;
-spriteLevel[1] = spr_townCenter2;
+//spriteLevel[1] = spr_townCenter2;
 
-sprite_index = spriteLevel[0];
+sprite_index = spr_townCenter1;
+
 </string>
           </argument>
         </arguments>

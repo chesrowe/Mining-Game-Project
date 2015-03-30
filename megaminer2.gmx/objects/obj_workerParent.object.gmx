@@ -59,6 +59,9 @@ image_alpha = 0;
 resourcePosition = 0; //1 = move left , 2 = move right
 positionTimer = 0;
 positionTime = 20;
+idleTimer = 0;
+insideSelectBox = 0;
+insideSelectBoxAlt = 0;
 
 
 //Stats
@@ -82,6 +85,8 @@ hpBar.myEnemy = id;
 hpBar.hp = hp;
 hpBar.hpMult = (hp/10);
 walkSpeed = 1;
+walkSpeedHill = .8;
+leveled = 0;
 
 //Dev mode
 showDebug = 0; 
@@ -117,6 +122,10 @@ drawToolTimer = 0;
 toolOut = 0;
 dropOffTarget = obj_warehouse;
 pickupLoad = 40;
+supplyDropOff = 0;
+dropOffTimer = 0;
+dropX = 0;
+dropY = 0;
 
 //mining
 baseMiningTime = 400;
@@ -267,7 +276,7 @@ pullOutToolSound[3] = sd_toolPullOut4;
             <kind>1</kind>
             <string>///spirtes
 
-//Sprites
+//Putting sprite indexes into variables so that we can change the sprites on the go without changing the code that changes the sprites
 
 spriteIdleRight = spr_workerIdleRight1;
 spriteIdleLeft = spr_workerIdleLeft1;
@@ -297,8 +306,48 @@ spriteFarmingLeft = spr_workerFarmingLeft1;
 spriteDrawToolFarmingRight = spr_workerDrawToolFarmingRight1;
 spriteDrawToolFarmingLeft = spr_workerDrawToolFarmingLeft1;
 
+spriteSittingDownRight = spr_workerSittingDownRightReg1;
+spriteSittingDownLeft = spr_workerSittingDownLeftReg1;
+
+spriteRunningRight = spr_workerRunningRightReg1;
+spriteRunningLeft = spr_workerRunningLeftReg1; 
+
+spriteSupplyCarryRight = spr_workerSupplyCarryRightReg1;
+spriteSupplyCarryLeft = spr_workerSupplyCarryLeftReg1;
+
+spriteSupplyDropRight = spr_workerSupplyDropRightReg1; 
+spriteSupplyDropLeft = spr_workerSupplyDropLeftReg1; 
+
+spriteDyingRight = spr_workerDyingRightReg1;
+spriteDyingLeft = spr_workerDyingLeftReg1;
+
+spriteBuildingRight = spr_workerBuildingRightReg1;
+spriteBuildingLeft = spr_workerBuildingLeftReg1;
+
+spriteDamageFrameRight = spr_workerDamageFrameRightReg1;
+spriteDamageFrameLeft = spr_workerDamageFrameLeftReg1;
+
+spritePickUpRight = spr_workerPickupRightReg1;
+spritePickUpLeft = spr_workerPickupLeftReg1;
+
+
+
+
+
 sprite_index = spriteIdleLeft;
 image_speed = idleImageSpeed;
+
+
+
+
+
+
+
+
+
+
+
+
 
 </string>
           </argument>
@@ -659,13 +708,13 @@ if (!dying){
         if (comingFrom &amp;&amp; x &lt; dropOffTarget.x){
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalkingRightFull;
+                sprite_index = spriteSupplyCarryRight;
                 x += walkSpeed;    
         }
         }else if (comingFrom){
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalkingLeftFull;
+                sprite_index = spriteSupplyCarryLeft;
                 x -= walkSpeed;
             }
         }
@@ -846,13 +895,13 @@ if (!dying){
         if (comingFrom &amp;&amp; x &lt; dropOffTarget.x){
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalkingRightFull;
+                sprite_index = spriteSupplyCarryRight;
                 x += walkSpeed;    
         }
         }else if (comingFrom){
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalkingLeftFull;
+                sprite_index = spriteSupplyCarryLeft;
                 x -= walkSpeed;
             }
         }
@@ -1067,13 +1116,13 @@ if (state == 'woodcutting'){
     if (comingFrom &amp;&amp; x &lt; dropOffTarget.x &amp;&amp; instance_exists(dropOffTarget)){
         moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalkingRightFull;
+                sprite_index = spriteSupplyCarryRight;
                 x += walkSpeed;    
         }
     }else if (comingFrom){
         moveToTimer ++;
         if (moveToTimer &gt; moveToTime){
-            sprite_index = spriteWalkingLeftFull;
+            sprite_index = spriteSupplyCarryLeft;
             x -= walkSpeed;
         }
     }
@@ -1173,15 +1222,29 @@ if (moveToTimer &gt; moveToTime){
     if (state == "moveToTarget" &amp;&amp; moveTargetX &gt;= x &amp;&amp; moveToTimer &gt; moveToTime){
         sprite_index = spriteWalkingRightEmpty;
         x += walkSpeed;
+        //Make the worker go up or down a hill
+        if ( (place_meeting(x,y,obj_tileSurfaceHillUp) || place_meeting(x,y,obj_tileSurfaceHillUpUnder) ) &amp;&amp; !position_meeting(x+4,y+24,obj_tileSurfaceFlatParent) ){
+            y -= walkSpeedHill+.3;
+            leveled = 0;
+        }else if (place_meeting(x,y,obj_tileSurfaceHillDown) &amp;&amp; !position_meeting(x-4,y+24,obj_tileSurfaceFlatParent)){
+            y += walkSpeedHill+.2;
+        }
     }else if (state = 'moveToTarget' &amp;&amp; moveTargetX &lt;= x){
         sprite_index = spriteWalkingLeftEmpty;
         x -= walkSpeed;
+        //Make the worker go up or down a hill
+        if ( (place_meeting(x,y,obj_tileSurfaceHillDown) || place_meeting(x,y,obj_tileSurfaceHillDownUnder) ) &amp;&amp; !position_meeting(x-4,y+24,obj_tileSurfaceFlatParent) ){
+            y -= walkSpeedHill+.3;
+            leveled = 0;
+        }else if (place_meeting(x,y,obj_tileSurfaceHillUp) &amp;&amp; !position_meeting(x-4,y+24,obj_tileSurfaceFlatParent)){
+            y += walkSpeedHill+.2;
+        }
     }
 }else if (state == 'moveToTarget'){
     image_index = 0;
 }
 //Stop when the target is reached
-if (state == 'moveToTarget' &amp;&amp; ceil(point_distance(x,y,moveTargetX,moveTargetY)) == 0 &amp;&amp; moveToTimer &gt; moveToTime){
+if (state == 'moveToTarget' &amp;&amp; ceil(point_distance(x,y,moveTargetX,y)) == 0 &amp;&amp; moveToTimer &gt; moveToTime){
     state = 'idle';
     moveToTimer = 0;
     image_speed = idleImageSpeed;
@@ -1240,6 +1303,7 @@ if (positionTimer &gt;= positionTime &amp;&amp; (resourcePosition == 1 || resour
         
     }
 }
+
 </string>
           </argument>
         </arguments>
@@ -1279,6 +1343,103 @@ if (global.workerSelectAll &amp;&amp; distance_to_point((view_wview[0]/2),(view_
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Idle/Sitting
+
+//Make the worker sit down after they have stayed idle for while
+if (state == 'idle'){
+    
+    idleTimer ++;
+    if (idleTimer &gt;= 600){
+        state = 'sitting';   
+        image_index = 0;
+        idleTimer = 0;     
+    }   
+
+}
+
+//Sitting
+
+if (state == 'sitting'){
+    image_speed = .10
+    idleTimer = 0;
+    //Make the worker face the right way
+    switch(sprite_index){
+    
+        case spr_workerIdleRight1:
+            sprite_index = spr_workerSittingDownRightReg1;
+        break;
+        
+        case spr_workerIdleLeft1:
+            sprite_index = spr_workerSittingDownLeftReg1;
+        break;
+    
+    } 
+    //Make sure the animation stops on the sitting frame    
+    if (image_index &gt;= 5){
+        image_speed = 0;
+        image_index = 5;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_tileSurfaceFlatParent">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>//Put the worker at the right y pos, when they are on flat ground
+
+if (!place_meeting(x,y,obj_tileSurfaceHillParent)){
+    y = (other.y-24);
+}
+    
+
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="4" ename="obj_warehouse">
       <action>
@@ -1299,44 +1460,75 @@ if (global.workerSelectAll &amp;&amp; distance_to_point((view_wview[0]/2),(view_
             <kind>1</kind>
             <string>///Give resources
 
-//Starts middletimer
+//Starts middletimer/changes dropoff var
 if (comingFrom){
     middleTimer ++;
+    if (middleTimer == 60){
+        supplyDropOff = 1;
+        dropX = x;
+        dropY = y;
+        image_index = 0;
+    }
 }
 
 // Adds the resources and sets the worker back to working
 if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60){
     if ((state == 'mining' || state == 'woodcutting' || state == 'farming') &amp;&amp; comingFrom){
-        //loop through the inv slots and add any resources found to the warehouse
-        for (i = 3;i&lt;=6;i++){
-            if (inv[i,0] != -1 &amp;&amp; (inv[i,1] == 'resource' || inv[i,1] == 'gem')){
-                var yy = 0;
-                (instance_create(x,y+yy,obj_workerDrawTimed)).amount = ("+" + string(inv[i,6]) + " " + string(inv[i,0])); 
-                yy += 32;
-                switch(inv[i,0]){
-                    case 'stone': global.stoneP1 += inv[i,6];   
-                    break;
-                    case 'wood': global.woodP1 += inv[i,6];
-                    break;
-                    case 'food': global.foodP1 += inv[i,6];
+        
+        if (!supplyDropOff){
+            //loop through the inv slots and add any resources found to the warehouse
+            for (i = 3;i&lt;=6;i++){
+                if (inv[i,0] != -1 &amp;&amp; (inv[i,1] == 'resource' || inv[i,1] == 'gem')){
+                    var yy = 0;
+                    (instance_create(x,y+yy,obj_workerDrawTimed)).amount = ("+" + string(inv[i,6]) + " " + string(inv[i,0])); 
+                    yy += 32;
+                    switch(inv[i,0]){
+                        case 'stone': global.stoneP1 += inv[i,6];   
+                        break;
+                        case 'wood': global.woodP1 += inv[i,6];
+                        break;
+                        case 'food': global.foodP1 += inv[i,6];
+                        break;
+                    }
+                    //clear the slot
+                    inv[i,0] = -1;
+                    inv[i,1] = -1;
+                    inv[i,2] = -1;
+                    inv[i,3] = -1;
+                    inv[i,4] = -1;
+                    inv[i,5] = -1;
+                    inv[i,6] = -1;
+                }else{
                     break;
                 }
-                //clear the slot
-                inv[i,0] = -1;
-                inv[i,1] = -1;
-                inv[i,2] = -1;
-                inv[i,3] = -1;
-                inv[i,4] = -1;
-                inv[i,5] = -1;
-                inv[i,6] = -1;
-            }else{
-                break;
             }
+            //set the worker going back
+            comingFrom = 0;
+            goingTo = 1;
+            middleTimer = 0;
+        }else{
+            //Chnage to the proper sprite
+            x = dropX;
+            y = dropY;
+            image_speed = .10;
+            switch(sprite_index){
+            
+                case spr_workerSupplyCarryRightReg1:
+                    sprite_index = spriteSupplyDropRight;   
+                    //image_index = 0;
+                break;
+                
+                case spr_workerSupplyCarryLeftReg1:
+                    sprite_index = spriteSupplyDropLeft;
+                    //image_index = 0;
+                break; 
+            
+            }
+            if (image_index &gt;= 6){
+                supplyDropOff = 0;
+            }
+            
         }
-        //set the worker going back
-        comingFrom = 0;
-        goingTo = 1;
-        middleTimer = 0;
         
         
     }

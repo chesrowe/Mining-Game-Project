@@ -145,6 +145,38 @@
           <sprite>sprites\spr_workerIdleRight1</sprite>
           <sprite>sprites\spr_workerIdleLeft1</sprite>
         </sprites>
+        <sprites name="Worker Dying REGULAR 1">
+          <sprite>sprites\spr_workerDyingRightReg1</sprite>
+          <sprite>sprites\spr_workerDyingLeftReg1</sprite>
+        </sprites>
+        <sprites name="Worker supply carry REGULAR 1">
+          <sprite>sprites\spr_workerSupplyCarryRightReg1</sprite>
+          <sprite>sprites\spr_workerSupplyCarryLeftReg1</sprite>
+        </sprites>
+        <sprites name="Worker building REGULAR 1">
+          <sprite>sprites\spr_workerBuildingRightReg1</sprite>
+          <sprite>sprites\spr_workerBuildingLeftReg1</sprite>
+        </sprites>
+        <sprites name="Worker Pickup REGULAR 1">
+          <sprite>sprites\spr_workerPickupRightReg1</sprite>
+          <sprite>sprites\spr_workerPickupLeftReg1</sprite>
+        </sprites>
+        <sprites name="Worker Supply drop REGULAR 1">
+          <sprite>sprites\spr_workerSupplyDropRightReg1</sprite>
+          <sprite>sprites\spr_workerSupplyDropLeftReg1</sprite>
+        </sprites>
+        <sprites name="Worker sitting down REGULAR 1">
+          <sprite>sprites\spr_workerSittingDownRightReg1</sprite>
+          <sprite>sprites\spr_workerSittingDownLeftReg1</sprite>
+        </sprites>
+        <sprites name="Worker running REGULAR 1">
+          <sprite>sprites\spr_workerRunningRightReg1</sprite>
+          <sprite>sprites\spr_workerRunningLeftReg1</sprite>
+        </sprites>
+        <sprites name="Worker damage frame REGULAR 1">
+          <sprite>sprites\spr_workerDamageFrameRightReg1</sprite>
+          <sprite>sprites\spr_workerDamageFrameLeftReg1</sprite>
+        </sprites>
       </sprites>
       <sprites name="enemies">
         <sprites name="wolf">
@@ -259,10 +291,13 @@
     </sprites>
     <sprite>sprites\spr_surface1</sprite>
     <sprite>sprites\spr_surfaceHillUp</sprite>
+    <sprite>sprites\spr_surfaceHillUpUnder</sprite>
+    <sprite>sprites\spr_surfaceHillDownUnder</sprite>
     <sprite>sprites\spr_surfaceHillDown</sprite>
     <sprite>sprites\spr_surface2</sprite>
     <sprite>sprites\spr_surface3</sprite>
     <sprite>sprites\spr_surface4</sprite>
+    <sprite>sprites\spr_tileBlack</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_ground</background>
@@ -392,6 +427,9 @@
     </objects>
     <objects name="Evironment">
       <objects name="Ground">
+        <object>objects\obj_tileSurfaceParent</object>
+        <object>objects\obj_tileSurfaceHillParent</object>
+        <object>objects\obj_tileSurfaceFlatParent</object>
         <object>objects\obj_groundParent</object>
         <objects name="surface">
           <object>objects\obj_tileSurfaceFlat1</object>
@@ -399,7 +437,11 @@
           <object>objects\obj_tileSurfaceFlat3</object>
           <object>objects\obj_tileSurfaceFlat4</object>
           <object>objects\obj_tileSurfaceHillUp</object>
+          <object>objects\obj_tileSurfaceHillUpUnder</object>
           <object>objects\obj_tileSurfaceHillDown</object>
+          <object>objects\obj_tileSurfaceHillDownUnder</object>
+          <object>objects\obj_tileBlackMaster</object>
+          <object>objects\obj_tileBlackSlave</object>
         </objects>
       </objects>
       <objects name="resources">

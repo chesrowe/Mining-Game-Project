@@ -10,4 +10,3 @@ popVar = minerCount;
 
 
 
-

@@ -10,4 +10,3 @@ if (image_alpha < 1){
 
 
 
-

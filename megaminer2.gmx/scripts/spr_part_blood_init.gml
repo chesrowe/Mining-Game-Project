@@ -12,4 +12,3 @@ part_type_scale(global.partBloodRed,.5,.5);
 part_type_speed(global.partBloodRed,1,2,0,0);
 part_type_shape(global.partBloodRed,pt_shape_pixel);
 part_type_gravity(global.partBloodRed,.2,270);
-

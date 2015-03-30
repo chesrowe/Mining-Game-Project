@@ -146,9 +146,16 @@ if (global.dev_mode &amp;&amp; myWorker.showDebug){
         draw_text(x-15,y-50,"image_index_" + string(myWorker.image_index));
     }
     if (myWorker.state == 'moveToTarget'){
-        draw_line_width_colour(myWorker.x,myWorker.y,myWorker.moveTargetX,myWorker.moveTargetY,4,c_green,c_green);
-        draw_text(x-15,y-110,"MoveTargetX" + string(myWorker.moveTargetX));   
+        draw_line_width_colour(myWorker.x,myWorker.y,myWorker.moveTargetX,myWorker.y,4,c_green,c_green);
+        draw_text(x-15,y-110,"MoveTargetX" + string(myWorker.moveTargetX)); 
+        
     }
+    if (myWorker.state == 'idle'){
+        draw_text(x-15,y-110,"idleTimer" + string(myWorker.idleTimer));     
+    }
+    draw_set_colour(c_purple); 
+    draw_point(x,y+24); 
+    draw_set_colour(c_white);
 }
 </string>
           </argument>

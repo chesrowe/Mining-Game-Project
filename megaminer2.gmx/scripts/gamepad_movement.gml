@@ -48,4 +48,3 @@ if (refresh >= 1){
         refresh = 0;
     }
 }
-
