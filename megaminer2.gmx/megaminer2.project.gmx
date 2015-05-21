@@ -196,46 +196,28 @@
       <sprite>sprites\spr_townCenter1</sprite>
       <sprite>sprites\spr_wheatFarm</sprite>
       <sprite>sprites\spr_townCenter2</sprite>
-      <sprite>sprites\spr_blacksmith</sprite>
       <sprites name="towers">
-        <sprite>sprites\spr_archerTowerArmsRight</sprite>
-        <sprite>sprites\spr_archerTowerArmsLeft</sprite>
         <sprite>sprites\spr_towerArcher</sprite>
       </sprites>
       <sprite>sprites\spr_farmingPatch</sprite>
       <sprite>sprites\spr_warehouse1</sprite>
-      <sprite>sprites\spr_house1</sprite>
     </sprites>
     <sprites name="Environment">
-      <sprites name="ground">
-        <sprites name="surface">
-          <sprite>sprites\spr_surfaceTop1</sprite>
-          <sprite>sprites\spr_surfaceTop2</sprite>
-          <sprite>sprites\spr_surfaceTop3</sprite>
-          <sprite>sprites\spr_surfaceTop4</sprite>
-          <sprite>sprites\spr_surface2row1</sprite>
-          <sprite>sprites\spr_surface2Row2</sprite>
-          <sprite>sprites\spr_surface2Row3</sprite>
-          <sprite>sprites\spr_surface2Row4</sprite>
-          <sprite>sprites\spr_surface3Row1</sprite>
-          <sprite>sprites\spr_surface3Row2</sprite>
-          <sprite>sprites\spr_surface3Row3</sprite>
-          <sprite>sprites\spr_surface3Row4</sprite>
-          <sprite>sprites\spr_surface4Row1</sprite>
-          <sprite>sprites\spr_surface4Row2</sprite>
-          <sprite>sprites\spr_surface4Row3</sprite>
-          <sprite>sprites\spr_surface4Row4</sprite>
+      <sprites name="resources">
+        <sprite>sprites\spr_oreGold</sprite>
+        <sprite>sprites\spr_stone</sprite>
+        <sprite>sprites\spr_oreStone</sprite>
+        <sprites name="Woodcutting">
+          <sprite>sprites\spr_treeBirch1</sprite>
+          <sprite>sprites\spr_tree1Top</sprite>
+          <sprite>sprites\spr_treeCommon2</sprite>
+          <sprite>sprites\spr_oakTree</sprite>
         </sprites>
       </sprites>
-      <sprites name="resources">
-        <sprite>sprites\spr_stone</sprite>
-        <sprite>sprites\spr_gold</sprite>
-        <sprite>sprites\spr_oakTree</sprite>
-      </sprites>
       <sprites name="Scenery">
-        <sprite>sprites\spr_surfaceGrass1</sprite>
+        <sprite>sprites\spr_bush</sprite>
+        <sprite>sprites\spr_flowers</sprite>
       </sprites>
-      <sprite>sprites\spr_tree1Top</sprite>
       <sprite>sprites\spr_tree1Bottom</sprite>
       <sprite>sprites\spr_gameFade</sprite>
     </sprites>
@@ -255,25 +237,7 @@
         </sprites>
       </sprites>
       <sprites name="Gamepad">
-        <sprite>sprites\spr_gamepadA</sprite>
         <sprite>sprites\spr_selectorP1</sprite>
-        <sprite>sprites\spr_selectorP2</sprite>
-        <sprite>sprites\spr_selectedP1</sprite>
-        <sprite>sprites\spr_selectedP2</sprite>
-        <sprite>sprites\spr_uiIcons</sprite>
-        <sprite>sprites\spr_backUi</sprite>
-        <sprite>sprites\spr_uiTowerIcon</sprite>
-        <sprite>sprites\spr_uiUpgradeIcon</sprite>
-        <sprite>sprites\spr_uiGolemIcon</sprite>
-        <sprite>sprites\spr_uiMinerIcon2</sprite>
-        <sprite>sprites\spr_wheatIcon</sprite>
-        <sprite>sprites\spr_buildIcon</sprite>
-        <sprite>sprites\spr_minerIcon</sprite>
-      </sprites>
-      <sprites name="General">
-        <sprite>sprites\spr_stoneUi</sprite>
-        <sprite>sprites\spr_goldUi</sprite>
-        <sprite>sprites\spr_uiLine</sprite>
       </sprites>
     </sprites>
     <sprites name="non-visible">
@@ -300,19 +264,12 @@
     <sprite>sprites\spr_tileBlack</sprite>
   </sprites>
   <backgrounds name="background">
-    <background>background\bg_ground</background>
     <background>background\bg_trees</background>
-    <background>background\bg_trees2</background>
-    <background>background\bg_ui</background>
-    <background>background\bg_uiFill</background>
     <background>background\bg_sky</background>
     <background>background\bg_mountains</background>
-    <background>background\background9</background>
     <background>background\bg_longTrees</background>
-    <background>background\bg_treesPara</background>
     <background>background\bg_close_trees</background>
-    <background>background\background11</background>
-    <background>background\tiles</background>
+    <background>background\bg_bushClose</background>
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
@@ -322,24 +279,12 @@
       </scripts>
     </scripts>
     <scripts name="Workers">
-      <scripts name="Gamepad">
-        <script>scripts\scr_miner_rock_select_create.gml</script>
-        <script>scripts\scr_make_miner_create.gml</script>
-      </scripts>
       <script>scripts\scr_unit_array_clear.gml</script>
       <script>scripts\scr_unit_array_set_move_target.gml</script>
       <script>scripts\scr_unit_array_set_resource_target.gml</script>
       <script>scripts\scr_unit_array_add.gml</script>
-    </scripts>
-    <scripts name="Gamepad specific">
-      <script>scripts\gamepad_movement.gml</script>
-      <script>scripts\scr_gamepad_movement_building.gml</script>
-      <script>scripts\scr_gamepad_camera.gml</script>
-    </scripts>
-    <scripts name="buildings">
-      <scripts name="Gamepad">
-        <script>scripts\scr_gamepad_build_structure.gml</script>
-      </scripts>
+      <script>scripts\scr_unit_move_avoiding_right.gml</script>
+      <script>scripts\scr_unit_move_avoiding_left.gml</script>
     </scripts>
     <scripts name="Misc">
       <script>scripts\scr_pop_main.gml</script>
@@ -359,6 +304,12 @@
     <objects name="Global Parents">
       <object>objects\obj_parentMaster</object>
       <object>objects\obj_dupeParent</object>
+    </objects>
+    <objects name="Controllers">
+      <object>objects\obj_globalCon</object>
+      <object>objects\obj_gameFadeIn</object>
+      <object>objects\obj_selectBoxDraw</object>
+      <object>objects\obj_drawMessage</object>
     </objects>
     <objects name="NPC">
       <objects name="workers">
@@ -407,23 +358,9 @@
           <object>objects\obj_buildingPopUpTownCenter</object>
         </objects>
       </objects>
-      <objects name="Gamepad">
-        <object>objects\obj_selectorP2</object>
-        <object>objects\obj_selectorP1</object>
-        <object>objects\obj_selectedP1</object>
-        <object>objects\obj_selectedP2</object>
-      </objects>
       <objects name="Dev mode">
         <object>objects\obj_devModeSound</object>
       </objects>
-    </objects>
-    <objects name="Controllers">
-      <object>objects\obj_globalCon</object>
-      <object>objects\obj_gameFadeIn</object>
-      <object>objects\obj_cameraConP1</object>
-      <object>objects\obj_cameraConP2</object>
-      <object>objects\obj_selectBoxDraw</object>
-      <object>objects\obj_drawMessage</object>
     </objects>
     <objects name="Evironment">
       <objects name="Ground">
@@ -446,7 +383,7 @@
       </objects>
       <objects name="resources">
         <objects name="Mining">
-          <object>objects\olj_gold</object>
+          <object>objects\obj_gold</object>
           <object>objects\obj_stone</object>
           <object>objects\obj_resourceParent</object>
           <object>objects\obj_resourceDrawCon</object>
@@ -457,11 +394,13 @@
           <object>objects\obj_treeBottom</object>
           <object>objects\obj_tree1</object>
           <object>objects\obj_oakTree</object>
+          <object>objects\obj_treeBirch</object>
         </objects>
       </objects>
       <objects name="Scenery">
-        <object>objects\obj_surfaceGrass1</object>
         <object>objects\obj_smallSeneryParent</object>
+        <object>objects\obj_flowers</object>
+        <object>objects\obj_bush</object>
       </objects>
       <objects name="Gems">
         <object>objects\obj_gemParent</object>

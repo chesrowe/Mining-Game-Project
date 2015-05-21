@@ -573,10 +573,10 @@ if (!dying){
         if (moveToTimer &gt; moveToTime){
             if (target.x &gt; x &amp;&amp; !farmStart &amp;&amp; goingTo){
                 sprite_index = spriteWalkingRightEmpty;
-                x += walkSpeed;
+                scr_unit_move_avoiding_right();
             }else if(!farmStart &amp;&amp; goingTo){
                 sprite_index = spriteWalkingLeftEmpty;
-                x -= walkSpeed;
+                scr_unit_move_avoiding_left();
             }
         }
         //Starts the worker to mining
@@ -709,13 +709,13 @@ if (!dying){
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteSupplyCarryRight;
-                x += walkSpeed;    
+                scr_unit_move_avoiding_right();   
         }
         }else if (comingFrom){
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteSupplyCarryLeft;
-                x -= walkSpeed;
+                scr_unit_move_avoiding_left();
             }
         }
     
@@ -753,10 +753,10 @@ if (!dying){
         if (moveToTimer &gt; moveToTime){
             if (target.x &gt; x &amp;&amp; !mineStart &amp;&amp; goingTo){
                 sprite_index = spriteWalkingRightEmpty;
-                x += walkSpeed;
+                scr_unit_move_avoiding_right();  
             }else if(!mineStart &amp;&amp; goingTo){
                 sprite_index = spriteWalkingLeftEmpty;
-                x -= walkSpeed;
+                scr_unit_move_avoiding_left();  
             }
         }
         //Starts the worker to mining
@@ -896,13 +896,13 @@ if (!dying){
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteSupplyCarryRight;
-                x += walkSpeed;    
+                scr_unit_move_avoiding_right();     
         }
         }else if (comingFrom){
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteSupplyCarryLeft;
-                x -= walkSpeed;
+                scr_unit_move_avoiding_left();  
             }
         }
     
@@ -1001,10 +1001,10 @@ if (state == 'woodcutting'){
      if (moveToTimer &gt; moveToTime){
          if (target.x &gt; x &amp;&amp; !cutStart &amp;&amp; goingTo){
             sprite_index = spriteWalkingRightEmpty;
-            x += walkSpeed;
+            scr_unit_move_avoiding_right();
          }else if(!cutStart &amp;&amp; goingTo){
             sprite_index = spriteWalkingLeftEmpty;
-            x -= walkSpeed;
+            scr_unit_move_avoiding_left();
          }
      }
     //starts the worker to woodcutting
@@ -1117,13 +1117,13 @@ if (state == 'woodcutting'){
         moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteSupplyCarryRight;
-                x += walkSpeed;    
+                scr_unit_move_avoiding_right();    
         }
     }else if (comingFrom){
         moveToTimer ++;
         if (moveToTimer &gt; moveToTime){
             sprite_index = spriteSupplyCarryLeft;
-            x -= walkSpeed;
+            scr_unit_move_avoiding_left();
         }
     }
 
@@ -1139,10 +1139,10 @@ if (state == 'woodcutting'){
         cutStart = 0;
         moveTimer ++;
         if (x &gt; target.x &amp;&amp; moveTimer &lt; 150 &amp;&amp; target.fallDir == 'right'){
-            x += (walkSpeed);
+            scr_unit_move_avoiding_right();
         }
         if (x &lt; target.x &amp;&amp; moveTimer &lt; 150 &amp;&amp; target.fallDir == 'left'){
-            x -= (walkSpeed);   
+            scr_unit_move_avoiding_left();   
         }
         if (target.fell){
             move = 0;
@@ -1412,35 +1412,6 @@ if (state == 'sitting'){
         </arguments>
       </action>
     </event>
-    <event eventtype="4" ename="obj_tileSurfaceFlatParent">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>//Put the worker at the right y pos, when they are on flat ground
-
-if (!place_meeting(x,y,obj_tileSurfaceHillParent)){
-    y = (other.y-24);
-}
-    
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
     <event eventtype="4" ename="obj_warehouse">
       <action>
         <libid>1</libid>
@@ -1685,6 +1656,35 @@ if (state == 'mining' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp
     goingTo = 0;
     comingFrom = 0;    
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_tileSurfaceFlatParent">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>//Put the worker at the right y pos, when they are on flat ground
+
+if (!place_meeting(x,y,obj_tileSurfaceHillParent)){
+    y = (other.y-24);
+}
+    
+
 </string>
           </argument>
         </arguments>

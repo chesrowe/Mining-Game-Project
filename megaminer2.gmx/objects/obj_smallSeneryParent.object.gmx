@@ -8,7 +8,7 @@
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
-    <event eventtype="4" ename="obj_buildingParent">
+    <event eventtype="0" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -25,9 +25,12 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (other.placed){
-    instance_destroy();
-}
+            <string>///set up spawn
+image_speed = 0; 
+
+image_index = irandom(image_number);
+
+x += choose(irandom(16),-(irandom(16)));
 </string>
           </argument>
         </arguments>

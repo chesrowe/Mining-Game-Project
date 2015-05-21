@@ -30,7 +30,7 @@
 groundY = 700;
 surfaceOnly = 1;
 originOffX = 100;
-originOffY = -50;
+originOffY = 0;
 menuObject = obj_buildingPopUpFarm;
 menuY = myBuilding.y - 200;
 costWoodCommon = 500;

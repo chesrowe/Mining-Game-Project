@@ -350,6 +350,7 @@ part_type_life(global.partWoodChips,1,10);
             <string>/// World gen
 
 //vars
+global.surfaceHeightGrid = ds_grid_create(50000,1000);
 global.worldGenSurface = surface_create(room_width,room_height);
 global.tileCount = 0;
 surfaceHeight = 696;
@@ -368,7 +369,7 @@ surfaceFlatTile[3] = obj_tileSurfaceFlat4;
 //Randomize seed 
 randomize();
 
-//Generate land 
+//Generate surface land 
 for (i = 0; i &lt;= worldWidth; i++;){
     //Chance to start creating a hill
     if (irandom(hillChance) == 1){
@@ -385,9 +386,11 @@ for (i = 0; i &lt;= worldWidth; i++;){
         switch(hillHeight){
             //Add one slope if the height is 32
             case 32:
+                ds_grid_add(global.surfaceHeightGrid,xPos,0,surfaceHeight);
                 instance_create(xPos,surfaceHeight,obj_tileSurfaceHillUp);
                 instance_create(xPos,surfaceHeight+32,obj_tileSurfaceHillUpUnder);
                 //Create one flat tile after slope
+                ds_grid_add(global.surfaceHeightGrid,xPos+32,0,surfaceHeight);
                 instance_create(xPos+32,surfaceHeight,surfaceFlatTile[tileIndex]);
                 tileIndex ++;
                 if (tileIndex &gt; 3){
@@ -399,11 +402,14 @@ for (i = 0; i &lt;= worldWidth; i++;){
             
             //Add 2 if the height is 64
             case 64:
+                ds_grid_add(global.surfaceHeightGrid,xPos,0,surfaceHeight+32);
                 instance_create(xPos,surfaceHeight+32,obj_tileSurfaceHillUp);
                 instance_create(xPos,surfaceHeight+64,obj_tileSurfaceHillUpUnder);
+                ds_grid_add(global.surfaceHeightGrid,xPos+32,0,surfaceHeight);
                 instance_create(xPos+32,surfaceHeight,obj_tileSurfaceHillUp);
                 instance_create(xPos+32,surfaceHeight+32,obj_tileSurfaceHillUpUnder);
                 //Create one flat tile after slope
+                ds_grid_add(global.surfaceHeightGrid,xPos+64,0,surfaceHeight);
                 instance_create(xPos+64,surfaceHeight,surfaceFlatTile[tileIndex]);
                 tileIndex ++;
                 if (tileIndex &gt; 3){
@@ -415,9 +421,11 @@ for (i = 0; i &lt;= worldWidth; i++;){
             
             //Add one slope if the height is -32
             case -32:
+                ds_grid_add(global.surfaceHeightGrid,xPos,0,surfaceHeight-32);
                 instance_create(xPos,surfaceHeight-32,obj_tileSurfaceHillDown);
                 instance_create(xPos,surfaceHeight,obj_tileSurfaceHillDownUnder);
                 //Create one flat tile after slope
+                ds_grid_add(global.surfaceHeightGrid,xPos+32,0,surfaceHeight);
                 instance_create(xPos+32,surfaceHeight,surfaceFlatTile[tileIndex]);
                 tileIndex ++;
                 if (tileIndex &gt; 3){
@@ -429,11 +437,14 @@ for (i = 0; i &lt;= worldWidth; i++;){
             
             //Add 2 if the height is -64
             case -64:
+                ds_grid_add(global.surfaceHeightGrid,xPos,0,surfaceHeight-64);
                 instance_create(xPos,surfaceHeight-64,obj_tileSurfaceHillDown);
                 instance_create(xPos,surfaceHeight-32,obj_tileSurfaceHillDownUnder);
+                ds_grid_add(global.surfaceHeightGrid,xPos+32,0,surfaceHeight-32);
                 instance_create(xPos+32,surfaceHeight-32,obj_tileSurfaceHillDown);
                 instance_create(xPos+32,surfaceHeight,obj_tileSurfaceHillDownUnder);
                 //Create one flat tile after slope
+                ds_grid_add(global.surfaceHeightGrid,xPos+64,0,surfaceHeight);
                 instance_create(xPos+64,surfaceHeight,surfaceFlatTile[tileIndex]);
                 tileIndex ++;
                 if (tileIndex &gt; 3){
@@ -446,41 +457,85 @@ for (i = 0; i &lt;= worldWidth; i++;){
     }else{
         //Keep creating land
         instance_create(xPos,surfaceHeight,surfaceFlatTile[tileIndex]);
+        ds_grid_add(global.surfaceHeightGrid,xPos,0,surfaceHeight);
         global.tileCount += 1;
         xPos += 32;
         tileIndex ++;
         if (tileIndex &gt; 3){
             tileIndex = choose(0,1,2);
         }
+        
     }   
+
+}
+
+//Generate Foliage/resources
+foliageSpawnList = ds_list_create();
+//add foliage/resources to ds list
+repeat(15){
+    ds_list_add(foliageSpawnList,obj_tree1);
+}
+repeat(2){
+    ds_list_add(foliageSpawnList,obj_stone);
+}
+repeat(3){
+    ds_list_add(foliageSpawnList,obj_oakTree);
+}
+repeat(1){
+    ds_list_add(foliageSpawnList,obj_gold);
+}
+repeat(5){
+    ds_list_add(foliageSpawnList,obj_treeBirch);
+}
+xPos = 0;
+var spawnChance = 2;
+//Generate foliage/resources
+for (i = 0; i &lt;= worldWidth; i++;){
+
+    //Chance to spawn foliage/resource
+    if (irandom(spawnChance) == 1){
+        ds_list_shuffle(foliageSpawnList);
+        var foliage = ds_list_find_value(foliageSpawnList,0);
+        var folY = ds_grid_get(global.surfaceHeightGrid,xPos,0);
+        //Place the foliage based on what type it is 
+        switch(foliage){
+            //spawn common tree
+            case obj_tree1: 
+                instance_create(xPos,folY-16,foliage);
+                xPos += 96;
+            break;
+            //spawn oak tree
+            case obj_oakTree:
+                instance_create(xPos+96,folY-16,foliage);
+                xPos += 192;
+            break;
+            //Spawn stone 
+            case obj_stone:
+                instance_create(xPos,folY-32,foliage);
+                xPos += 96;
+            break;
+            //Spawn gold 
+            case obj_gold:
+                instance_create(xPos,folY-32,foliage);
+                xPos += 96;
+            break;
+            //Spawn birch tree 
+            case obj_treeBirch:
+                instance_create(xPos,folY-32,foliage);
+                xPos += 96;
+            break;
+        }
+        
+    }else{
+        xPos += 32;
+    }
 
 }
 
 
 
+
 </string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="3" enumb="1">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string></string>
           </argument>
         </arguments>
       </action>
@@ -559,112 +614,6 @@ if (global.currentLayer == 0){
         }
     }
 }
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Gamepad
-if (global.gamepad){
-    //Deals with main game mechcanics!! MIXED PLAYERS!! not just player1
-    global.controllerCount = gamepad_get_device_count(); //
-    //Sloppy jumbled code below --&gt;
-    if (gamepad_is_connected(0)){ // &lt;-- Checks to see if the gamepad is connected
-        if (gamepad_button_check_released(0, gp_face1)){// &lt;-- Checks for the 'A' button to be released!! 
-          
-              if (global.buildingMenuP1){
-                global.buildingP1 = 1;
-              }
-             if (global.selectedP1 == 1 &amp;&amp; !global.minersP1 &amp;&amp; !global.defenceMenuP1){
-                global.buildingMenuP1 = 1;
-                global.minersP1 = 0;
-            }
-           if (global.selectedP1 == 0 &amp;&amp; !global.buildingMenuP1 &amp;&amp; !global.minerSelectP1 &amp;&amp; global.minersP1 &amp;&amp; !global.defenceMenuP1){    
-                if (global.goldP1 &gt;= 400){ 
-                    if (global.popP1 &lt;= (global.maxPopP1-1)){ //&lt;-- Checks to make sure you still have population space left
-                        global.minerSelectP1 = 1;
-                        
-                    }
-                }    
-            }
-             if (global.selectedP1 == 0 &amp;&amp; !global.buildingMenuP1 &amp;&amp; !global.minersP1 &amp;&amp; !global.defenceMenuP1){ // &lt;-- If the miner icon is selected, this makes the miner menu show up! 
-                global.minersP1 = 1;
-                global.buildingMenuP1 = 0;
-            }
-             if (global.defenceMenuP1 &amp;&amp; !global.minersP1 &amp;&amp; !global.buildingMenuP1){
-                global.buildingDefenceP1 = 1;    
-            }
-            if (global.selectedP1 == 2 &amp;&amp; !global.buildingMenuP1 &amp;&amp; !global.minersP1){
-                global.defenceMenuP1 = 1;
-            }
-           
-            
-        } // &lt;-- End of 'A' button check :D \\
-        
-        //Exits out of base menus when the 'B' button is pressed 
-        if (gamepad_button_check_released(0, gp_face2)){
-            if (global.minersP1 || global.buildingMenuP1 || global.defenceMenuP1){
-                global.minersP1  = 0;
-                global.buildingMenuP1 = 0;
-                global.defenceMenuP1 = 0;
-                global.buildingDefence = 0;
-                global.building = 0;
-            }    
-        }
-    
-    
-        //Controls D-pad menu movement for menus
-        if (gamepad_button_check_released(0, gp_padr)){ 
-            if(global.selectedP1 &lt;= 2 &amp;&amp; !global.buildingP1 &amp;&amp; !global.buildingDefenceP1){
-                global.selectedP1 += 1;
-            }
-        }
-        if (gamepad_button_check_released(0, gp_padl)){
-            if(global.selectedP1 &gt;= 1 &amp;&amp; !global.buildingP1 &amp;&amp; !global.buildingDefenceP1){
-                global.selectedP1 -= 1;
-            }
-        }
-    } 
-    if (global.buildingP1){
-        switch(global.selectedP1){
-            case 0: 
-                //scr_gamepad_build_structure(obj_wheatFarmP1,500,1);
-            break;
-        }  
-    }
-    if (global.buildingDefenceP1){
-        switch(global.selectedP1){
-            case 0: 
-                scr_gamepad_build_structure(obj_towerArcherP1,1000,1);
-            break;
-        }
-    }   
-    if (global.minerSelectP1){  
-        scr_miner_rock_select_create(1,2496,670,6880,670,2496,6880,400,obj_workerHumanP1);
-    }
-}
-
-
-
-
-
-
-
 </string>
           </argument>
         </arguments>
@@ -914,9 +863,9 @@ global.selected = noone;
 
 //Build selected buildings
 if (global.building &amp;&amp; global.selected != noone &amp;&amp; !global.dev_mode_dupe){
-    if ((global.selected).y == (global.selected).groundY){
+    if ((global.selected).y == ((global.selected).groundY - (global.selected).originOffY)){
         with(global.selected){
-            if (!place_meeting(x,y,obj_treeParent) &amp;&amp; !place_meeting(x,y,obj_buildingParent) &amp;&amp; !place_meeting(x,y,obj_resourceParent)){
+            if (!place_meeting(x,y,obj_buildingParent)){
                 placed = 1;
                 global.building = 0;
                 global.selected = noone;
@@ -1119,6 +1068,7 @@ if (position_meeting(mouse_x,mouse_y,obj_workerParent)){
 font_delete(global.fontDmg);
 part_system_destroy(global.partMining);
 surface_free(global.worldGenSurface);
+ds_grid_destroy(global.surfaceHeightGrid);
 
 </string>
           </argument>
@@ -1126,74 +1076,6 @@ surface_free(global.worldGenSurface);
       </action>
     </event>
     <event eventtype="8" enumb="64">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Gamepad Ui
-if (global.gamepad){
-    //Draws static main ui for both players!
-    draw_sprite(spr_backUi,0,view_xport[0],view_yport[0]);
-    draw_sprite(spr_backUi,0,view_xport[0]+640,view_yport[0]);
-    draw_sprite(spr_uiIcons,0,view_xport[0]+2,view_yport[0]+120);
-    draw_sprite(spr_uiIcons,0,view_xport[0]+642,view_yport[0]+120);
-    if (global.localCoop){
-        draw_sprite(spr_uiLine,0,view_xport[0]+637, view_yport[0]+252);
-    }
-    draw_sprite(spr_goldUi,0,view_xport[0]+8,view_yport[0]+4); //Gold Ui
-    draw_sprite(spr_stoneUi,0,view_xport[0]+8,view_yport[0]+27); // stone Ui
-    //Draws main menu player 1
-    if (!global.buildingMenuP1 &amp;&amp; !global.minersP1 &amp;&amp; !global.defenceMenuP1){
-        draw_sprite(spr_minerIcon,0,view_xport[0]+45, view_yport[0]+155);
-        draw_sprite(spr_buildIcon,-1,view_xport[0]+203, view_yport[0]+155);
-        draw_sprite(spr_uiTowerIcon,-1,view_xport[0]+380, view_yport[0]+155);
-        draw_sprite(spr_uiUpgradeIcon,-1,view_xport[0]+540, view_yport[0]+155);
-    }
-    //Draws miner menu player 1
-    if (!global.buildingMenuP1 &amp;&amp; global.minersP1){
-        draw_sprite(spr_uiMinerIcon2,0,view_xport[0]+41, view_yport[0]+155);
-        draw_sprite(spr_uiGolemIcon,0,view_xport[0]+203, view_yport[0]+155);
-    }
-    //Text in ui
-    draw_set_color(c_white);
-    draw_text(view_xport[0]+35,view_yport+11, string(global.goldP1)); // Gold Text
-    draw_text(view_xport[0]+35,view_yport+35, string(global.stoneP1)); // Stone Text 
-    //Player 2 copy ---&gt;&gt;
-    if (!global.buildingP2 &amp;&amp; !global.minersP2){
-        draw_sprite(spr_minerIcon,-1,view_xport[1]+45, view_yport[1]+155);
-        draw_sprite(spr_buildIcon,-1,view_xport[1]+203, view_yport[1]+155);
-        draw_sprite(spr_uiTowerIcon,-1,view_xport[1]+380, view_yport[1]+155);
-        draw_sprite(spr_uiUpgradeIcon,-1,view_xport[1]+540, view_yport[1]+155);
-    }
-    if (!global.buildingP2 &amp;&amp; global.minersP2){
-        draw_sprite(spr_uiMinerIcon2,0,view_xport[1]+41, view_yport[1]+155);
-        draw_sprite(spr_uiGolemIcon,0,view_xport[1]+203, view_yport[1]+155);
-    }
-    draw_text(view_xport[1]+35,view_yport+11, string(global.goldP2)); // Gold Text
-    draw_text(view_xport[1]+35,view_yport+35, string(global.stoneP2)); // Stone Text
-    draw_sprite(spr_goldUi,0,view_xport[1]+8,view_yport[1]+4); //Gold Ui
-    draw_sprite(spr_stoneUi,0,view_xport[1]+8,view_yport[1]+27); // stone Ui
-}
-
-
-
-
-</string>
-          </argument>
-        </arguments>
-      </action>
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -1304,8 +1186,8 @@ draw_text(view_xview[0]+150,view_yview[0]+(string_height("W")+100),"Population: 
             <string>///Background
 depth = 10;
 draw_background_tiled_hor(bg_mountains,view_xview[0]/1.1,view_yview[0]+90);
-//draw_background_tiled_hor(bg_longTrees,view_xview[0]/1.5,view_yview[0]+580);
-draw_background_tiled_hor(bg_close_trees,view_xview[0]/2.5,view_yview[0]+570);
+draw_background_tiled_hor(bg_bushClose,view_xview[0]/3,view_yview[0]+565);
+
 depth = 0;
 </string>
           </argument>
@@ -1341,6 +1223,8 @@ if (global.dev_mode){
     draw_text(mouse_x-15,mouse_y-130,"SelectStartY_" + string(global.selectStartY)); 
     draw_text(mouse_x-15,mouse_y-120,"SelectedNumber_" + string(global.selectedNumber)); 
     draw_text(mouse_x-15,mouse_y-110,"Select_" + string(global.select));
+    draw_text(mouse_x-15,mouse_y-100,"global.building_" + string(global.building));
+    draw_text(mouse_x-15,mouse_y-90,"global.selected_" + string(global.selected));
     //draw_text(mouse_x-15,mouse_y-100,"BoxColliding?_" + string(collision_rectangle(global.selectStartX,global.selectStartY,mouse_x,mouse_y,obj_workerParent,0,0)));
     draw_text(mouse_x-100,mouse_y-240,"UnitSelected1_" + string(global.unitSelected[0]));
     draw_text(mouse_x-100,mouse_y-230,"UnitSelected2_" + string(global.unitSelected[1]));
@@ -1466,9 +1350,37 @@ if (global.dev_mode){
         <arguments>
           <argument>
             <kind>1</kind>
+            <string>///Clean up
+
+font_delete(global.fontDmg);
+part_system_destroy(global.partMining);
+surface_free(global.worldGenSurface);
+ds_grid_destroy(global.surfaceHeightGrid);
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
             <string>///restart game
 global.tileCount = 0;
 game_restart();
+audio_stop_all();
 </string>
           </argument>
         </arguments>

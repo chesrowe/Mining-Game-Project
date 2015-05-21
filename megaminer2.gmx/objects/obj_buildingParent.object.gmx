@@ -104,6 +104,8 @@ placeSound[3] = sd_buildingPlace4;
             <string>///General
 sprite_index = spriteLevel[(level-1)];
 
+groundY = (instance_nearest(mouse_x,mouse_y,obj_tileSurfaceFlatParent).y);
+
 //Makes the building follow the right curser
 if (!global.gamepad){
     placeX = mouse_x;
@@ -114,9 +116,9 @@ if (!placed){
     image_alpha = .5;
     x = placeX-originOffX;
     if (placeY &gt; groundY - 50){
-        y = groundY;
+        y = groundY-originOffY;
     }else{
-        y = placeY-originOffY;
+        y = placeY;
     }
 }else{
     //place the building (fade in)

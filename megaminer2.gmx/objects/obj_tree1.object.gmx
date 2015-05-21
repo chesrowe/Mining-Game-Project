@@ -3,7 +3,7 @@
   <spriteName>spr_tree1Top</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>-1</depth>
   <persistent>0</persistent>
   <parentName>obj_treeParent</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -25,11 +25,12 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//set up variables for this tree
+            <string>///set up variables for this tree
 event_inherited();
 
 spriteTop = spr_tree1Top;
 
+sprite_index = choose(spr_tree1Top,spr_treeCommon2);
 
 
 </string>
