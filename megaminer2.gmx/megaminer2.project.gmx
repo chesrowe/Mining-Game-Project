@@ -239,6 +239,10 @@
       <sprites name="Gamepad">
         <sprite>sprites\spr_selectorP1</sprite>
       </sprites>
+      <sprite>sprites\obj_uiIconBasic</sprite>
+      <sprite>sprites\obj_uiIconEquipment</sprite>
+      <sprite>sprites\obj_uiIconStats</sprite>
+      <sprite>sprites\obj_uiIconBuild</sprite>
     </sprites>
     <sprites name="non-visible">
       <sprite>sprites\obj_solid</sprite>
@@ -285,6 +289,7 @@
       <script>scripts\scr_unit_array_add.gml</script>
       <script>scripts\scr_unit_move_avoiding_right.gml</script>
       <script>scripts\scr_unit_move_avoiding_left.gml</script>
+      <script>scripts\scr_unit_array_check_for_worker.gml</script>
     </scripts>
     <scripts name="Misc">
       <script>scripts\scr_pop_main.gml</script>
@@ -317,7 +322,7 @@
         <object>objects\obj_workerParent</object>
         <objects name="worker controllers">
           <object>objects\obj_workerDrawTimed</object>
-          <object>objects\obj_workerDraw</object>
+          <object>objects\obj_workerCon</object>
         </objects>
       </objects>
       <objects name="enemies">
@@ -360,6 +365,10 @@
       </objects>
       <objects name="Dev mode">
         <object>objects\obj_devModeSound</object>
+      </objects>
+      <objects name="Workers">
+        <object>objects\obj_uiWorkerButtonParent</object>
+        <object>objects\obj_uiWorkerButtonBuild</object>
       </objects>
     </objects>
     <objects name="Evironment">

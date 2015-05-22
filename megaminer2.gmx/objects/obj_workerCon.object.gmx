@@ -30,6 +30,10 @@
 myWorker = 0;
 
 
+
+
+
+
 </string>
           </argument>
         </arguments>
@@ -59,6 +63,8 @@ y = myWorker.y;
 with(myWorker){
     other.targetDistance = point_distance(x,y,moveTargetX,moveTargetY)
 }
+
+
 </string>
           </argument>
         </arguments>

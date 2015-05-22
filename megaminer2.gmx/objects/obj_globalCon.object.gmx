@@ -160,33 +160,9 @@ if (room == Local_Coop_1){
             <kind>1</kind>
             <string>///UI
 
-//Gamepad Specific
-global.selectedP1 = 0;
-global.selectedP2 = 0;
-
-global.buildingP1 = 0;
-global.buildingP2 = 0;
-
-global.buildingMenuP1 = 0;
-global.buildingMenuP2 = 0;
-
-global.minersP1 = 0;
-global.minersP2 = 0;
-
-global.minerSelectP1 = 0;
-global.minerSelectP2 = 0;
-
-global.selectRockP1 = 0;
-global.selectRockP2 = 0;
-
-global.rockSelectedP1 = 0;
-global.rockSelectedP2 = 0;
-
-global.defenceMenuP1 = 0;
-global.defenceMenuP2 = 0;
-
-global.buildingDefenceP1 = 0;
-global.buildingDefenceP2 = 0;
+//New ui
+workerButtonMenu = 0;
+buildButton = instance_create(x,35,obj_uiWorkerButtonBuild);
 
 //Mouse/keyboard Specific 
 global.building = 0;
@@ -531,10 +507,36 @@ for (i = 0; i &lt;= worldWidth; i++;){
     }
 
 }
+//After world is generated, move camera to center of the room
+view_xview[0] = (worldWidth/2)*32;
 
 
 
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Init towncenter building
+
+global.building = 1;
+instance_create(mouse_x,mouse_y,obj_townCenter);
 </string>
           </argument>
         </arguments>
@@ -755,8 +757,16 @@ if (global.select){
         global.selectTimer = 0;
         global.workerSelectAll = 0;
         global.workerStateSelect = 0;
+         if (global.selectedNumber != 0 &amp;&amp; scr_unit_array_check_for_worker() == 1){
+            buildButton.visible = 1;
+            workerButtonMenu = 0;
+        }else{
+            buildButton.visible = 0;
+        }
     }
 }
+
+
 </string>
           </argument>
         </arguments>
@@ -777,7 +787,13 @@ if (global.select){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string></string>
+            <string>///Ui 
+
+//Snap worker buttons in place
+buildButton.x = view_xview[0]+300;
+
+
+</string>
           </argument>
         </arguments>
       </action>

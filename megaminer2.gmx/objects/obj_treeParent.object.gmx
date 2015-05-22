@@ -98,9 +98,7 @@ if (place_meeting(x,y,obj_townCenter)){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (distance_to_object(obj_townCenter) &lt; 400){
-    instance_destroy();
-}
+            <string>
 
 if (fall &lt;= 0 &amp;&amp; !fell){
     falling = 1;
@@ -171,7 +169,7 @@ if (beingCut){
           <argument>
             <kind>1</kind>
             <string>
-if (!falling &amp;&amp; other.placed == 1){
+if (!falling &amp;&amp; other.placed == 1 ){
     instance_destroy();
 }
 </string>
