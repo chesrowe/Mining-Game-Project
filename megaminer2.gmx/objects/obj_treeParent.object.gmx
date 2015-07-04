@@ -55,6 +55,10 @@ beingCut = 0;
 animationTimer = 0;
 showDebug = 0;
 xp = 25;
+posDistance = 24;
+posTime = 30;
+midTime = 0;
+midRandom = 10;
 //Create obj to handle debug drawing
 myDraw = instance_create(x,y,obj_treeDrawCon);
 myDraw.myResource = id;
@@ -81,6 +85,34 @@ if (place_meeting(x,y,obj_townCenter)){
         </arguments>
       </action>
     </event>
+    <event eventtype="3" enumb="1">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Visibility
+if (x &gt;= (view_xview[0]-260) &amp;&amp; x &lt;= (view_xview[0]+1450)){
+    visible = 1;
+}else{
+    visible = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
@@ -98,7 +130,7 @@ if (place_meeting(x,y,obj_townCenter)){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
+            <string>///General
 
 if (fall &lt;= 0 &amp;&amp; !fell){
     falling = 1;
@@ -146,6 +178,12 @@ if (beingCut){
 }else{
     image_speed = 0;
 }
+
+
+//Destroy the tree, if the wood is gone
+if (woodLeft &lt;= 0){
+    instance_destroy();
+}
 </string>
           </argument>
         </arguments>
@@ -169,8 +207,35 @@ if (beingCut){
           <argument>
             <kind>1</kind>
             <string>
-if (!falling &amp;&amp; other.placed == 1 ){
+if (!falling &amp;&amp; other.placed == 1){
     instance_destroy();
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_tileSurfaceHillParent">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>
+if (falling){
+    fell = 1;
+    falling = 0;
 }
 </string>
           </argument>
@@ -227,7 +292,9 @@ if (global.dev_mode &amp;&amp; !showDebug){
 
 //Set the selected workers to woodcutting
 if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
-    scr_unit_array_set_resource_target('woodcutting');   
+    var tree = id;
+    scr_unit_array_set_resource_target('woodcutting',tree);   
+    scr_unit_array_clear();
 }else{
     scr_unit_array_clear();
 }

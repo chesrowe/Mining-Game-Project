@@ -2,7 +2,7 @@
 <sprite>
   <type>0</type>
   <xorig>225</xorig>
-  <yorigin>238</yorigin>
+  <yorigin>240</yorigin>
   <colkind>1</colkind>
   <coltolerance>0</coltolerance>
   <sepmasks>0</sepmasks>
@@ -17,7 +17,7 @@
     <TextureGroup0>0</TextureGroup0>
   </TextureGroups>
   <For3D>0</For3D>
-  <width>440</width>
+  <width>388</width>
   <height>240</height>
   <frames>
     <frame index="0">images\spr_warehouse1_0.png</frame>

@@ -26,6 +26,8 @@
           <argument>
             <kind>1</kind>
             <string>///Create black tiles underneath 
+event_inherited();
+secondSprite = -4;
 tileNumber = 0;
 canDraw = 0;
 if (y &lt; 696){
@@ -49,7 +51,7 @@ if (y &lt; 696){
         </arguments>
       </action>
     </event>
-    <event eventtype="3" enumb="0">
+    <event eventtype="3" enumb="1">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -67,11 +69,13 @@ if (y &lt; 696){
           <argument>
             <kind>1</kind>
             <string>
-
-if (x &gt;= (view_xview[0]-64) &amp;&amp; x &lt;= (view_xview[0]+1280)){
+//Allow the instance to draw only when it is in the view
+if (x &gt;= (view_xview[0]-(96+(flatNumber*32))) &amp;&amp; x &lt;= (view_xview[0]+1302)){
     canDraw = 1;
+    visible = 1;
 }else{
     canDraw = 0;
+    visible = 0;
 }
 </string>
           </argument>
@@ -97,18 +101,26 @@ if (x &gt;= (view_xview[0]-64) &amp;&amp; x &lt;= (view_xview[0]+1280)){
             <kind>1</kind>
             <string>///Draw self and blackness
 
-draw_self();
+
 
 var tn = (tileNumber - 1);
 
 
-//Draw black tiles underneath
-
+//Draw tile and black tiles underneath if they are in view
+/*
 if (canDraw){
     for(i = 0; i &lt;= tn; i++;){
-        
+        //If the is not a hill under tile , draw the 2nd and 3rd tile's darkness
         draw_sprite(spr_tileBlack,0,x,tileArray[i]);
+        if (!object_is_ancestor(object_index,obj_tileSurfaceHillParent)){
+            if (secondSprite != -4){
+                draw_sprite(spr_tileBlack,0,x+32,tileArray[i]);
+            }
             
+            if (thirdSprite != -4){
+                draw_sprite(spr_tileBlack,0,x+64,tileArray[i]);
+            }
+        }
     
     }
 }

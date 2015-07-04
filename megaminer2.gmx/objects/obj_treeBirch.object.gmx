@@ -3,7 +3,7 @@
   <spriteName>spr_treeBirch1</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-1</depth>
+  <depth>0</depth>
   <persistent>0</persistent>
   <parentName>obj_treeParent</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -25,7 +25,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//set up variables for this tree
+            <string>///set up variables for this tree
 event_inherited();
 
 spriteTop = spr_treeBirch1;
@@ -34,7 +34,10 @@ xp = 30;
 resource = 'birchWood';
 levelReq = 5;
 woodLeft = 1000;
-
+midTime = 2;
+midRandom = 3;
+posDistance = 15;
+posTime = 30;
 </string>
           </argument>
         </arguments>

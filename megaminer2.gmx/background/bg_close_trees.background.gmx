@@ -13,7 +13,7 @@
     <TextureGroup0>0</TextureGroup0>
   </TextureGroups>
   <For3D>0</For3D>
-  <width>2560</width>
-  <height>128</height>
+  <width>2186</width>
+  <height>1266</height>
   <data>images\bg_close_trees.png</data>
 </background>

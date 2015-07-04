@@ -25,20 +25,222 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Create scenery
+            <string>///Merging flat tiles
+event_inherited();
+flatStarter = 0;
+flatNumber = 0;
+//init array to hold sprites to draw
+var i = 0;
+repeat(100){
+    flatTiles[i] = -4;
+    i++;
+}
+tileSprite = choose(spr_surface1,spr_surface2,spr_surface3,spr_surface4);
 
+
+
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Trees
+
+//Init array to hold the index of the tree and it's position
+var i = 0;
+repeat (100){
+    tree[i,0] = -4;
+    tree[i,1] = -4;
+    tree[i,2] = -4;
+    tree[i,3] = -4;
+    i++;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Scenery
+////////Generate scenery\\\\\\\\\\
+//generate scenery Grass
+var i = 0;
+repeat(flatNumber+200){
+    grass[i,0] = irandom(3);//image_index
+    grass[i,1] = irandom_range(-10,5);//X pos randomization
+    grass[i,2] = choose(spr_bush,spr_blank,spr_blank,spr_bush,spr_bush,spr_bush,spr_bush,spr_blank);
+    grass[i,3] = choose(1,-2);
+    if (position_meeting(x + (i*32) + 48,y - 16,obj_tileSurfaceHillParent) || position_meeting(x + (i*32) + 48,y + 16,obj_tileSurfaceHillParent)){
+        grass[i,2] = spr_blank;        
+    }
+    i++;
+}
+//Draw scenery to the scenery surface
+surface_set_target(global.scenerySurface);
+var e = 0;
+repeat(flatNumber){
+    draw_sprite(grass[e,2],grass[e,0],x + (e*32) + grass[e,1],y-50);
+    e++;
+}
+surface_reset_target();
+
+
+//flowers
+var a = 0;
+repeat(flatNumber){
+    flowers[a,0] = irandom(7);//image_index
+    flowers[a,1] = irandom_range(-10,5);//X pos randomization
+    a++;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="3" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>event_inherited();
+
+
+
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Draw scenery
+
+var xx = (x - 32);
+var a = 0;
+if (flatNumber &gt; 0){
+    repeat(flatNumber){
+        //draw_sprite(grass[a,2],grass[a,0],xx+grass[a,1],y-50);
+        a++;
+        xx = (x + (a*32));
+    }
+}
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Draw flat tiles
+event_inherited();
+//draw the first sprite and the flat tiles after it
+draw_sprite(tileSprite,0,x,y);
+if (flatStarter){
+    var i = 0;
+    repeat(flatNumber){
+        draw_sprite(flatTiles[i],0,x+(i*32),y);    
+        i++;
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Draw blackness
 event_inherited();
 
-var rand = irandom(10);
-
-// 3/10 chance to spawn a flower patch
-if (rand == 1 || rand == 2 || rand == 3){
-    instance_create(x,y-10,obj_flowers);
-}
-// 2/10 chance to spawn a bush
-if (rand == 4 || rand == 5){
-    instance_create(x,y-48,obj_bush);
-}
+var height = ((view_xview[0] + 720) + x);
+draw_sprite_stretched(spr_tileBlack,0,x,y+32,sprite_width,height);
 
 </string>
           </argument>

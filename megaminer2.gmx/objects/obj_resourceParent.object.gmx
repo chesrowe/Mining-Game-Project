@@ -10,20 +10,6 @@
   <events>
     <event eventtype="0" enumb="0">
       <action>
-        <libid>0</libid>
-        <id>0</id>
-        <kind>0</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>0</useapplyto>
-        <exetype>0</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-      </action>
-      <action>
         <libid>1</libid>
         <id>603</id>
         <kind>7</kind>
@@ -57,13 +43,15 @@ resource = '';
 exhausted = 0;
 exhaustTimer = 0;
 exhaustTime = 300;
-amountLeft = 400;
 maxAmountLeft = 400;
+amountLeft = maxAmountLeft;
 levelReq = 1;
 exPopUp = 0;
 xp = 25;
 gemChance = 10;
-
+posDistance = 30;
+posTime = 30;
+midTime = 6;
 //Dev mode
 showDebug = 0;
 
@@ -305,7 +293,8 @@ if (exhausted){
 //Makes the selected workers mine this resource
 
 if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
-    scr_unit_array_set_resource_target('mining');   
+    var rock = id;
+    scr_unit_array_set_resource_target('mining',rock);   
     scr_unit_array_clear();
 }else{
     scr_unit_array_clear();

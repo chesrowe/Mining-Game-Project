@@ -33,7 +33,7 @@
         </arguments>
       </action>
     </event>
-    <event eventtype="6" enumb="4">
+    <event eventtype="6" enumb="7">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -51,10 +51,10 @@
           <argument>
             <kind>1</kind>
             <string>
-if (global.woodP1 &gt;= 100){
-    global.building = 1;
+if (global.woodCommon &gt;= 100){
+    global.workerBuild = 1;
     global.selected = instance_create(mouse_x,mouse_y,obj_farmingPatch);
-    global.woodP1 -= 100;
+    global.woodCommon -= 100;
     myBuilding.patches ++;
 }
 </string>

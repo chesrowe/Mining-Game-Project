@@ -25,12 +25,14 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
+            <string>///Setup
 message = " ";
 duration = 30;
 alpha = 1;
 yAdd = 0;
 xAdd = 0;
+xSpeed = 1;
+ySpeed = 2;
 
 </string>
           </argument>
@@ -54,11 +56,13 @@ xAdd = 0;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
+            <string>//Decrement the duration variable
 duration --;
 
-xAdd += 0;
-yAdd += 2;
+//Increment variables to make the text move
+xAdd += xSpeed;
+yAdd += ySpeed;
+
 
 
 if (duration &lt;= 0){

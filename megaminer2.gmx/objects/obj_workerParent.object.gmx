@@ -48,7 +48,8 @@ selected = 0;
 randomize();
 moveToTime = 2 + irandom(15);
 moveToTimer = 0;
-target = 0;
+target = -4;
+targetType = 0;
 moveTargetX = 0;
 moveTargetY = 0;
 moveXStart = 0;
@@ -62,13 +63,14 @@ positionTime = 20;
 idleTimer = 0;
 insideSelectBox = 0;
 insideSelectBoxAlt = 0;
+middleTime = 0;
 
 
 //Stats
 hp = 100;
 hpMax = 100;
 level = 1;
-woodcuttingLevel = 1;
+woodcuttingLevel = 100;
 miningLevel = 1;
 farmingLevel = 1;
 transportingLevel = 1;
@@ -126,6 +128,18 @@ supplyDropOff = 0;
 dropOffTimer = 0;
 dropX = 0;
 dropY = 0;
+workStart = 0;
+workTimer = 0;
+workMiddleTime = 0;
+baseWorkTime = 300;
+workTimeAdd = irandom(round(baseMiningTime/3));
+workTime = (baseWorkTime + workTimeAdd);
+
+//Building
+buildingImageSpeed = .11;
+baseBuildingTime = 200;
+gettingResources = 0;
+currentResource = -1;
 
 //mining
 baseMiningTime = 400;
@@ -323,6 +337,8 @@ spriteDyingLeft = spr_workerDyingLeftReg1;
 
 spriteBuildingRight = spr_workerBuildingRightReg1;
 spriteBuildingLeft = spr_workerBuildingLeftReg1;
+spriteDrawToolBuildingRight = spr_workerPullOutHammerRightReg1;
+spriteDrawToolBuildingLeft = spr_workerPullOutHammerLeftReg1;
 
 spriteDamageFrameRight = spr_workerDamageFrameRightReg1;
 spriteDamageFrameLeft = spr_workerDamageFrameLeftReg1;
@@ -612,7 +628,6 @@ if (!dying){
                     comingFrom = 1;
                     farmStart = 0;
                     farmingTimer = 0;
-                    middleTimeFarming = (choose(30,40,50) + irandom(80));
                     moveToTime = 2 + irandom(20);
                     moveToTimer = 0;
                     middleTimer = 0;
@@ -906,7 +921,7 @@ if (!dying){
             }
         }
     
-    }    
+    }  
 
 }
 
@@ -1049,7 +1064,7 @@ if (state == 'woodcutting'){
                 target.fall -= 40;
                 //Randomizes the position of the cutting more when then the target tree has fallen
                 if (target.fell == 0){
-                    middleTimeWoodcutting =  (2 + irandom(10));
+                    middleTimeWoodcutting =  (2 + irandom(midRandom));
                 }else{
                     middleTimeWoodcutting =  (2 + irandom(40));    
                 }
@@ -1099,7 +1114,7 @@ if (state == 'woodcutting'){
             }
         }else{
             //starts the pulling out tool animation
-            if (target.x &gt; x){
+            if (target.x &gt;= x){
                 sprite_index = spriteDrawToolWoodcuttingRight;
             }else{
                 sprite_index = spriteDrawToolWoodcuttingLeft;    
@@ -1152,7 +1167,26 @@ if (state == 'woodcutting'){
             comingFrom = 0;
         }
     }
+    //If the target tree gets destroyed , set the state to idle
+    if (goingTo &amp;&amp; !instance_exists(target) &amp;&amp; distance_to_object(instance_nearest(x,y,targetType)) &gt; 500){
+        state = 'idle';
+        goingTo = 0;
+        comingFrom = 0;
+        middleTimer = 0;    
+        sprite_index = spriteIdleLeft;
+    }else if (distance_to_object(instance_nearest(x,y,targetType)) &lt; 500 &amp;&amp; !instance_exists(target)){
+        target = instance_nearest(x,y,targetType);
+        comingFrom = 0;
+        middleTimer = 0;
+        goingTo = 1;        
+    }
 }
+
+
+
+
+
+
 </string>
           </argument>
         </arguments>
@@ -1288,10 +1322,10 @@ if (comingFrom &amp;&amp; !instance_exists(dropOffTarget)){
 //1 = left, 2 = right
 if (resourcePosition == 1){
     positionTimer ++;
-    x -= walkSpeed;            
+    scr_unit_move_avoiding_left();            
 }else if (resourcePosition == 2){
     positionTimer ++;
-    x += walkSpeed;
+    scr_unit_move_avoiding_right();
 }
 // stop the movement
 if (positionTimer &gt;= positionTime &amp;&amp; (resourcePosition == 1 || resourcePosition == 2)){
@@ -1302,6 +1336,13 @@ if (positionTimer &gt;= positionTime &amp;&amp; (resourcePosition == 1 || resour
     if (x &gt; target.x){
         
     }
+}
+//Make the worker take their resources back to the warehouse before they begin working
+if (goingTo &amp;&amp; state != 'building'){
+    if (inv[3,0] != -1){
+        goingTo = 0;
+        comingFrom = 1;
+    }    
 }
 
 </string>
@@ -1327,14 +1368,14 @@ if (positionTimer &gt;= positionTime &amp;&amp; (resourcePosition == 1 || resour
             <string>///Multi-click select
 
 //State select
-if (global.workerStateSelect == 1 &amp;&amp; state == global.workerSelectState &amp;&amp; (distance_to_point((view_wview[0]/2),(view_hview[0]/2)) &lt; 2000) &amp;&amp; selected == 0){
+if (global.workerStateSelect == 1 &amp;&amp; state == global.workerSelectState &amp;&amp; (distance_to_point((view_wview[0]/2), y &lt; 2000)) &amp;&amp; selected == 0){
     global.selectedNumber ++;
     global.unitSelected[global.selectedNumber - 1] = id;
     selected = 1;
 }
 
 //select all
-if (global.workerSelectAll &amp;&amp; distance_to_point((view_wview[0]/2),(view_hview[0]/2)) &lt;= 2000 &amp;&amp; selected == 0){
+if (global.workerSelectAll &amp;&amp; distance_to_point((view_wview[0]/2),y) &lt;= 2000 &amp;&amp; selected == 0){
     global.selectedNumber ++;
     global.unitSelected[global.selectedNumber - 1] = id;
     selected = 1;                
@@ -1411,6 +1452,154 @@ if (state == 'sitting'){
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Building 
+
+if (!dying){
+    
+    if (state == 'building'){
+        if (!gettingResources){
+            moveToTimer ++;
+            image_speed = walkingImageSpeed;
+            //Workers walks to the building to bulid it
+            if (moveToTimer &gt; moveToTime){
+                if (target.x &gt; x &amp;&amp; !workStart &amp;&amp; goingTo){
+                    sprite_index = spriteSupplyCarryRight;
+                    scr_unit_move_avoiding_right();  
+                }else if(!workStart &amp;&amp; goingTo){
+                    sprite_index = spriteSupplyCarryLeft;
+                    scr_unit_move_avoiding_left();  
+                }
+            }
+        }else{
+            moveToTimer ++;
+            image_speed = walkingImageSpeed;
+            //Worker goes to get resources from the stockpile to build the building with
+            if (moveToTimer &gt; moveToTime){
+                if (obj_warehouse.x &gt; x &amp;&amp; !workStart &amp;&amp; gettingResources){
+                    sprite_index = spriteWalkingRightEmpty;
+                    scr_unit_move_avoiding_right();  
+                }else if(!workStart &amp;&amp; gettingResources){
+                    sprite_index = spriteWalkingLeftEmpty;
+                    scr_unit_move_avoiding_left();  
+                }
+            }
+        }
+        //Starts the worker to building
+        if (workStart){
+            image_speed = miningImageSpeed;
+            if (!drawTool){
+                workTimer ++;
+                //set the sprite
+                if (x &gt; target.x){
+                    sprite_index = spriteBuildingLeft;
+                }else{
+                    sprite_index = spriteBuildingRight;
+                } 
+                //Triggers sound and particles
+                if (round(image_index) == 5 &amp;&amp; cutSound == 0){
+                    var sound = audio_play_sound_at(pickSound[workRRPosition],x,y,0,1000,200,1,0,999999);  
+                    audio_sound_gain(sound,global.sfxVol,0);
+                    workRRPosition ++;
+                    if (workRRPosition &gt; 3){
+                        randomize();
+                        workRRPosition = irandom(2);
+                    }
+                    cutSound = 1; 
+                } 
+                if (round(image_index) != 5){
+                    cutSound = 0;
+                }
+                //Makes miner take the resources to the stockpile
+                if (workTimer &gt;= workTime){
+                    randomize();
+                    goingTo = 0;
+                    gettingResources = 1;
+                    workStart = 0;
+                    workTimer = 0;
+                    moveToTime = 2 + irandom(20);
+                    moveToTimer = 0;
+                    middleTimer = 0;
+                    workTime = (baseWorkTime + workTimeAdd);
+                    //pops up xp gained
+                    with(instance_create(x,y,obj_workerDrawTimed)){
+                        amount = ("+"+string(target.xp)+"XP");
+                        col = c_yellow;
+                        myWorker = other.id;
+                    }
+                    //Take away the resources the worker was building with
+                    for (i = 0; i &lt; 3; i++){
+                        if (target.cost[i,0] = currentResource){
+                            target.cost[i,2] -= 40;
+                            target.amountBuilt += 40;
+                            for (a = 0; a &lt;= 10; a++;){
+                                if (inv[a,0] == currentResource){
+                                    inv[a,0] = -1;
+                                    inv[a,1] = -1;
+                                    inv[a,2] = -1;
+                                    break;
+                                }
+                            }
+                            currentResource = -1;
+                            break;
+                        }   
+                    }
+    
+                    if (xpMining &gt;= xpNeededMining){
+                        //miningLevel ++;
+                        //xpNeededMining += floor(miningLevel+300 * power(2,(miningLevel/7)));
+                        //baseMiningTime -= (10 + irandom(5));
+                    }
+                    
+                }
+            }else{
+            //starts the pulling out tool animation
+                if (target.x &gt; x){
+                    sprite_index = spriteDrawToolBuildingRight;
+                }else{
+                    sprite_index = spriteDrawToolBuildingLeft;    
+                }
+                    drawToolTimer ++;
+                if (drawToolTimer &gt;= drawToolTimeWoodcutting){
+                    drawTool = 0;
+                    drawToolTimer = 0;
+                    dir = point_direction(x,y,target.x,target.y);
+                }
+            }
+        } 
+        if (target.built){
+            middleTimer = 0;
+            goingTo = 0;
+            gettingResources = 0;
+            state = 'idle';
+            if (x &gt; target.x){
+                sprite_index = spriteIdleLeft;
+            }else{
+                sprite_index = spriteIdleRight;    
+            }
+        }         
+    }  
+
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="4" ename="obj_warehouse">
       <action>
@@ -1429,7 +1618,7 @@ if (state == 'sitting'){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Give resources
+            <string>///Give resources/pick up resources
 
 //Starts middletimer/changes dropoff var
 if (comingFrom){
@@ -1443,22 +1632,22 @@ if (comingFrom){
 }
 
 // Adds the resources and sets the worker back to working
-if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60){
+if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60 &amp;&amp; !gettingResources){
     if ((state == 'mining' || state == 'woodcutting' || state == 'farming') &amp;&amp; comingFrom){
         
         if (!supplyDropOff){
             //loop through the inv slots and add any resources found to the warehouse
-            for (i = 3;i&lt;=6;i++){
+            for (i = 3; i&lt;=6; i++;){
                 if (inv[i,0] != -1 &amp;&amp; (inv[i,1] == 'resource' || inv[i,1] == 'gem')){
                     var yy = 0;
                     (instance_create(x,y+yy,obj_workerDrawTimed)).amount = ("+" + string(inv[i,6]) + " " + string(inv[i,0])); 
                     yy += 32;
                     switch(inv[i,0]){
-                        case 'stone': global.stoneP1 += inv[i,6];   
+                        case 'stone': global.stone += inv[i,6];   
                         break;
-                        case 'wood': global.woodP1 += inv[i,6];
+                        case 'woodCommon': global.woodCommon += inv[i,6];
                         break;
-                        case 'food': global.foodP1 += inv[i,6];
+                        case 'food': global.food += inv[i,6];
                         break;
                     }
                     //clear the slot
@@ -1504,6 +1693,52 @@ if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60){
         
     }
 }
+//Get resources to bulid with
+if (gettingResources){
+    middleTimer ++;
+    if (middleTimer &gt;= 55){
+        slot = scr_unit_find_inventory_slot();
+        //Give the worker the right resources
+        if (target.built != 1){
+            if (scr_building_find_resource_needed() != -4){
+                var resource = scr_building_find_resource_needed();
+                switch(target.cost[resource,0]){
+                    case 'woodCommon':
+                        if (global.woodCommon &gt;= 40){
+                            global.woodCommon -= 40;
+                            gettingResources = 0;
+                            currentResource = 'woodCommon';
+                            goingTo = 1;
+                            middleTimer = 0;
+                            moveToTimer = 0;
+                            inv[slot,0] = 'woodCommon';
+                            inv[slot,1] = 'resource';
+                            inv[slot,2] = 40;
+                        }
+                    break;    
+                
+                }
+      
+            }else{
+                state = "idle";
+                goingTo = 0;
+                middleTimer = 0;
+                moveToTimer = 0;
+                gettingResources = 0;
+            }   
+        }
+    }
+    
+}
+
+
+
+
+
+
+
+
+
 </string>
           </argument>
         </arguments>
@@ -1526,14 +1761,58 @@ if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60){
         <arguments>
           <argument>
             <kind>1</kind>
+            <string>///Start building 
+
+if (other.id == target &amp;&amp; goingTo){
+    if (middleTimer == 0){
+        workMiddleTime = (target.midTime + irandom(target.midRandom));
+    }
+    middleTimer ++;  
+     
+}
+
+if (state == 'building' &amp;&amp; middleTimer &gt;= workMiddleTime &amp;&amp; resourcePosition == 0 &amp;&amp; !gettingResources &amp;&amp; other.id == target){
+    workStart = 1;
+    drawTool = 1;
+    goingTo = 0;
+    image_index = 0;
+    moveToTimer = 0;
+    comingFrom = 0;
+    var workTimeAdd = irandom(round(baseBuildingTime/3)); 
+    workTime = (baseBuildingTime + workTimeAdd);
+    middleTimer = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
             <string>///farming
 //Starts the worker farming
 
-if (other.id == target &amp;&amp; goingTo){
+if (other.id == target &amp;&amp; goingTo &amp;&amp; !global.workerBuild &amp;&amp; other.built){
     middleTimer ++;
+    if (middleTimer == 1){
+        middleTime = (target.midTime + irandom(midRandom));
+    }
 }
 
-if (state == 'farming' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; middleTimer &gt; middleTimeFarming){
+if (state == 'farming' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; middleTimer &gt; middleTime){
     drawTool = 1;
     farmStart = 1; 
     goingTo = 0;
@@ -1550,6 +1829,49 @@ if (state == 'farming' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&am
     waitingToFarm = 1;
     goingTo = 0;
     comingFrom = 0;    
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_buildingParent">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Start building 
+
+if (other.id == target &amp;&amp; goingTo){
+    if (middleTimer == 0){
+        workMiddleTime = (target.midTime + irandom(target.midRandom));
+    }
+    middleTimer ++;  
+     
+}
+
+if (state == 'building' &amp;&amp; middleTimer &gt;= workMiddleTime &amp;&amp; resourcePosition == 0 &amp;&amp; !gettingResources &amp;&amp; other.id == target){
+    workStart = 1;
+    drawTool = 1;
+    goingTo = 0;
+    image_index = 0;
+    moveToTimer = 0;
+    comingFrom = 0;
+    var workTimeAdd = irandom(round(baseBuildingTime/3)); 
+    workTime = (baseBuildingTime + workTimeAdd);
+    middleTimer = 0;
 }
 </string>
           </argument>
@@ -1580,7 +1902,7 @@ if (other.id == target &amp;&amp; goingTo){
     middleTimer ++;
 }
 
-if (state == 'woodcutting' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; middleTimer &gt;= (6+middleTimeWoodcutting) &amp;&amp; woodcuttingLevel &gt;= target.levelReq){
+if (state == 'woodcutting' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; middleTimer &gt;= middleTime &amp;&amp; woodcuttingLevel &gt;= target.levelReq){
     drawTool = 1;
     cutStart = 1;
     randomize();
@@ -1595,6 +1917,7 @@ if (state == 'woodcutting' &amp;&amp; other.id == target &amp;&amp; goingTo &amp
     workingLenDirY = lengthdir_y(26,point_direction(x,y,target.x,target.y));
 }else if (woodcuttingLevel &lt; target.levelReq &amp;&amp; other.id == target.id &amp;&amp; state == 'woodcutting'){
     goingTo = 0;
+    middleTimer = 0;
     state = 'idle';
     var msg = instance_create(x,y,obj_workerDrawTimed);
     msg.col = c_red;
@@ -1639,7 +1962,7 @@ if (other.id == target &amp;&amp; goingTo){
     middleTimer ++;
 }
 
-if (state == 'mining' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; other.exhausted = 0 &amp;&amp; miningLevel &gt;= other.levelReq &amp;&amp; middleTimer &gt; middleTimeMining){
+if (state == 'mining' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; other.exhausted = 0 &amp;&amp; miningLevel &gt;= other.levelReq &amp;&amp; middleTimer &gt; middleTimeMining &amp;&amp; resourcePosition == 0){
     randomize();
     mineStart = 1;
     drawTool = 1; 
@@ -1771,11 +2094,13 @@ if (showDebug){
 
 event_inherited();
 
-if (!global.building &amp;&amp; !global.dev_mode_dupe &amp;&amp; !global.shiftSelect &amp;&amp; global.multiClickSelect &lt; 2){
+if (!global.workerBuild &amp;&amp; !global.dev_mode_dupe &amp;&amp; !global.shiftSelect &amp;&amp; global.multiClickSelect &lt; 2){
     //clear unit array
     scr_unit_array_clear();
     global.unitSelected[0] = id;
     selected = 1;
+    global.selectedNumber = 1;
+    (obj_globalCon.buildButton).visible = 1;
 }
 if (global.shiftSelect){
     scr_unit_array_add(id);

@@ -25,7 +25,19 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string></string>
+            <string>
+instance_create(x,y+32,obj_tileSurfaceHillUpUnder);
+
+//Delete the tile beside the hill's scenery 
+if (place_meeting(x,y,obj_tileSurfaceFlatParent) ){
+    var otherTile = (instance_position(x-16,y+48,obj_tileSurfaceFlatParent));
+    if (otherTile.flowerSpawned){
+        otherTile.flowerSpawned = 0;    
+    }else if (otherTile.bushSpawned){
+        otherTile.bushSpawned = 0;
+    }
+}
+</string>
           </argument>
         </arguments>
       </action>
@@ -50,6 +62,8 @@
             <string>///Draw_self
 
 draw_self();
+
+
 </string>
           </argument>
         </arguments>

@@ -1,4 +1,4 @@
-
+///scr_unit_array_check_for_worker()
 //This script checks to see if any of the selected units are workers
 
 for (i = 0;i < 100;i++){

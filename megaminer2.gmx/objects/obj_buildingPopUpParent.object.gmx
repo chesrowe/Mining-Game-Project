@@ -50,7 +50,7 @@ image_alpha = 0;
           <argument>
             <kind>1</kind>
             <string>
-scr_effects_fade_in(.4);
+//scr_effects_fade_in(.4);
 </string>
           </argument>
         </arguments>

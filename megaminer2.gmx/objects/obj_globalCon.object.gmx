@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-10</depth>
+  <depth>-999</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -31,9 +31,6 @@
 refresh = 0;
 refresh_ = 0;
 
-makeMinerP1 = 0;
-makeMinerP2 = 0;
-
 minerTimerP1 = 0;
 minerTimerP2 = 0;
 
@@ -56,6 +53,7 @@ instance_create(x,y,obj_gameFadeIn);
 
 
 
+
 //Workers/guardians
 unitMoveX = 0;
 
@@ -68,7 +66,7 @@ global.selectStartX = 0;
 global.selectStartY = 0;
 global.selectedNumber = 0;
 //init array to hold selected units
-for (i = 0; i &lt; 100; i++){
+for (i = 0; i &lt; 200; i++){
     global.unitSelected[i] = noone;
 }
 insideSelectBox = 0;
@@ -89,6 +87,12 @@ global.clickTimer = 0;
 global.workerSelectAll = 0;
 global.workerSelectState = 'idle';
 global.workerStateSelect = 0;
+global.towncenterBuilt = 0;
+global.stockpileBuilt = 0;
+global.windTimer = 0;
+global.windTime = irandom_range(200,600);
+global.windBlowTime = irandom_range(100,200);
+global.windBlowing = 0;
 instance_create(x,y,obj_selectBoxDraw);
 
 //layers
@@ -100,43 +104,27 @@ global.gamepad = 0;
 global.localCoop = 0;
 
 //Resources
-global.goldP1 = 0;
-global.stoneP1 = 0;
+global.gold = 0;
+global.stone = 0;
+global.crystal = 0;
+global.brimstone = 0;
+global.mushroom = 0;
+global.woodCommon = 1000;
+global.food = 0;
 
-global.goldP2 = 0;
-global.stoneP2 = 0;
-
-global.crystalP1 = 0;
-global.crystalP1 = 0;
-
-global.brimstoneP1 = 0;
-global.brimstoneP2 = 0;
-
-global.mushroomP1 = 0;
-global.mushroomP2 = 0;
-
-global.woodP1 = 1150;
-global.woodP2 = 0;
-
-global.foodP1 = 40000;
 //Gamepad Specific
 global.controllerCount = 0;
 
 //Farming/Population
 global.pop = 0;
-global.popP2 = 0;
 
-global.maxPop = 99999;
-global.maxPopP2 = 10;
+global.maxPop = 5000;
 
 //Fonts
 global.fontDmg = font_add_sprite(spr_ft_small,ord(' '),1,1);
 draw_set_font(global.fontDmg);
 
-// Checks to see if the game is co op or not
-if (room == Local_Coop_1){
-    global.localCoop = 1;
-}
+
 
 </string>
           </argument>
@@ -163,15 +151,12 @@ if (room == Local_Coop_1){
 //New ui
 workerButtonMenu = 0;
 buildButton = instance_create(x,35,obj_uiWorkerButtonBuild);
+farmButton = instance_create(x,35,obj_uiWorkerButtonFarm);
+stockpileButton = instance_create(x,35,obj_uiWorkerButtonStockpile);
+global.workerBuild = 1;
+global.workerBuildMenu = 0;
 
-//Mouse/keyboard Specific 
-global.building = 0;
-global.buildingDefense = 0;
-global.buildMenuOpen = 0;
-global.buildMenuPushOut = 0;
-global.buildMenuWorkerPushOut = 0;
-global.buildMenuDefensePushOut = 0;
-global.buildMenuBuildingPushOut = 0;
+
 
 
 </string>
@@ -195,6 +180,7 @@ global.buildMenuBuildingPushOut = 0;
           <argument>
             <kind>1</kind>
             <string>///Sound
+
 
 //Sound Variables
 global.currentSong = irandom(1);
@@ -326,15 +312,23 @@ part_type_life(global.partWoodChips,1,10);
             <string>/// World gen
 
 //vars
-global.surfaceHeightGrid = ds_grid_create(50000,1000);
-global.worldGenSurface = surface_create(room_width,room_height);
+
+//global.worldGenSurface = surface_create(room_width,room_height);
 global.tileCount = 0;
 surfaceHeight = 696;
 xPos = 0;
+flatStart = 0;
+flatStarted = 0;
+firstFlat = -4;
+land = -4;
+gridPos = 0;
 tileIndex = 0;
 worldWidth = get_integer("World width in tiles",500); //In tiles (32x32)
-hillChance = get_integer("Hillyness (ranges from 1-1000, 1 being super hilly)",10);
-hillHeightLimit = get_integer("The soft-max y value that the hills can reach(the lower, the higher the hills)",400);
+global.surfaceHeightGrid = ds_grid_create(worldWidth*2,1000);
+hillChance = irandom(1);
+hillDistance = irandom_range(20,150);
+hillLength = 0;
+hillHeightLimit = get_integer("The soft-max y value that the hills can reach(the lower, the higher the hills)",600);
 
 //Put tiles into arrays
 surfaceFlatTile[0] = obj_tileSurfaceFlat1;
@@ -349,10 +343,19 @@ randomize();
 for (i = 0; i &lt;= worldWidth; i++;){
     //Chance to start creating a hill
     if (irandom(hillChance) == 1){
+        flatStart = 0;
+        flatStarted = 0;
+        //Randomize hilliness
+        hillLength ++;
+        if (hillLength &gt;= hillDistance){
+            hillChance = irandom(30);
+            hillDistance = irandom_range(20,150);
+            hillLength = 0;
+        }
         if (surfaceHeight &lt;= (696-64)){
             var hillHeight = choose(32,64,-32,-64);
         }else if (surfaceHeight &lt; (hillHeightLimit)){
-            var hillHeight = choose(-32,-64,-32,-64,32);
+            var hillHeight = choose(-32,-64,-32,-64);
         }else{
             var hillHeight = choose(32,64);
         }
@@ -362,80 +365,96 @@ for (i = 0; i &lt;= worldWidth; i++;){
         switch(hillHeight){
             //Add one slope if the height is 32
             case 32:
-                ds_grid_add(global.surfaceHeightGrid,xPos,0,surfaceHeight);
+                ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight);
                 instance_create(xPos,surfaceHeight,obj_tileSurfaceHillUp);
-                instance_create(xPos,surfaceHeight+32,obj_tileSurfaceHillUpUnder);
                 //Create one flat tile after slope
-                ds_grid_add(global.surfaceHeightGrid,xPos+32,0,surfaceHeight);
+                ds_grid_add(global.surfaceHeightGrid,gridPos+1,0,surfaceHeight);
                 instance_create(xPos+32,surfaceHeight,surfaceFlatTile[tileIndex]);
                 tileIndex ++;
                 if (tileIndex &gt; 3){
                     tileIndex = choose(0,1,2);
                 }
                 xPos += 64;
+                gridPos += 2;
                 global.tileCount += 3;
             break;
             
             //Add 2 if the height is 64
             case 64:
-                ds_grid_add(global.surfaceHeightGrid,xPos,0,surfaceHeight+32);
+                ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight+32);
                 instance_create(xPos,surfaceHeight+32,obj_tileSurfaceHillUp);
-                instance_create(xPos,surfaceHeight+64,obj_tileSurfaceHillUpUnder);
-                ds_grid_add(global.surfaceHeightGrid,xPos+32,0,surfaceHeight);
+                ds_grid_add(global.surfaceHeightGrid,gridPos+1,0,surfaceHeight);
                 instance_create(xPos+32,surfaceHeight,obj_tileSurfaceHillUp);
-                instance_create(xPos+32,surfaceHeight+32,obj_tileSurfaceHillUpUnder);
                 //Create one flat tile after slope
-                ds_grid_add(global.surfaceHeightGrid,xPos+64,0,surfaceHeight);
+                ds_grid_add(global.surfaceHeightGrid,gridPos+2,0,surfaceHeight);
                 instance_create(xPos+64,surfaceHeight,surfaceFlatTile[tileIndex]);
                 tileIndex ++;
                 if (tileIndex &gt; 3){
                     tileIndex = choose(0,1,2);
                 }
                 xPos+= 96;
+                gridPos += 3;
                 global.tileCount += 5;
             break;
             
             //Add one slope if the height is -32
             case -32:
-                ds_grid_add(global.surfaceHeightGrid,xPos,0,surfaceHeight-32);
+                ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight-32);
                 instance_create(xPos,surfaceHeight-32,obj_tileSurfaceHillDown);
-                instance_create(xPos,surfaceHeight,obj_tileSurfaceHillDownUnder);
                 //Create one flat tile after slope
-                ds_grid_add(global.surfaceHeightGrid,xPos+32,0,surfaceHeight);
+                ds_grid_add(global.surfaceHeightGrid,gridPos+1,0,surfaceHeight);
                 instance_create(xPos+32,surfaceHeight,surfaceFlatTile[tileIndex]);
                 tileIndex ++;
                 if (tileIndex &gt; 3){
                     tileIndex = choose(0,1,2);
                 }
                 xPos += 64;
+                gridPos += 2;
                 global.tileCount += 3;
             break;
             
             //Add 2 if the height is -64
             case -64:
-                ds_grid_add(global.surfaceHeightGrid,xPos,0,surfaceHeight-64);
+                ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight-64);
                 instance_create(xPos,surfaceHeight-64,obj_tileSurfaceHillDown);
-                instance_create(xPos,surfaceHeight-32,obj_tileSurfaceHillDownUnder);
-                ds_grid_add(global.surfaceHeightGrid,xPos+32,0,surfaceHeight-32);
+                ds_grid_add(global.surfaceHeightGrid,gridPos+1,0,surfaceHeight-32);
                 instance_create(xPos+32,surfaceHeight-32,obj_tileSurfaceHillDown);
-                instance_create(xPos+32,surfaceHeight,obj_tileSurfaceHillDownUnder);
                 //Create one flat tile after slope
-                ds_grid_add(global.surfaceHeightGrid,xPos+64,0,surfaceHeight);
+                ds_grid_add(global.surfaceHeightGrid,gridPos+2,0,surfaceHeight);
                 instance_create(xPos+64,surfaceHeight,surfaceFlatTile[tileIndex]);
                 tileIndex ++;
                 if (tileIndex &gt; 3){
                     tileIndex = choose(0,1,2);
                 }
                 xPos+= 96;
+                gridPos += 3;
                 global.tileCount += 5;
             break;
         }
     }else{
         //Keep creating land
-        instance_create(xPos,surfaceHeight,surfaceFlatTile[tileIndex]);
-        ds_grid_add(global.surfaceHeightGrid,xPos,0,surfaceHeight);
+        hillLength ++;
+        if (hillLength &gt;= hillDistance){
+            hillChance = irandom(30);
+            hillDistance = irandom_range(20,150);
+            hillLength = 0;
+        }
+        
+        //If the start of the flat surface hasn't been setup , do so
+        if (!flatStarted){
+            firstFlat = instance_create(xPos,surfaceHeight,surfaceFlatTile[tileIndex]);;
+            firstFlat.flatStarter = 1;
+            firstFlat.flatNumber ++;
+            flatStarted = 1;
+        }else{
+            //Else add another number to the first flat tile
+            firstFlat.flatNumber ++; 
+            instance_create(xPos,surfaceHeight,surfaceFlatTile[tileIndex]);   
+        }
+        ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight);
         global.tileCount += 1;
         xPos += 32;
+        gridPos += 1;
         tileIndex ++;
         if (tileIndex &gt; 3){
             tileIndex = choose(0,1,2);
@@ -444,12 +463,47 @@ for (i = 0; i &lt;= worldWidth; i++;){
     }   
 
 }
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Merge flat tiles into one instance
+with (obj_tileSurfaceFlatParent){
+    var i = 0;
+    //Fill the flat array with the sprites to be drawn
+    repeat(flatNumber){
+        flatTiles[i] = choose(spr_surface1,spr_surface2,spr_surface3,spr_surface4);
+        //make sure two of the same type tiles aren't directly next to each other
+        if (i &gt; 0){
+            while(flatTiles[i] == flatTiles[i-1]){
+                flatTiles[i] = choose(spr_surface1,spr_surface2,spr_surface3,spr_surface4);        
+            }
+        }
+        i++;
+    }
+    if (flatStarter &amp;&amp; flatNumber &gt; 0){
+        var tilePos = 0;
+        //Destroy the extra flat tiles
+        repeat(flatNumber){
+            with(instance_position(x+((tilePos*32)+16),y+16,obj_tileSurfaceFlatParent)){
+                if (flatNumber == 0){
+                    instance_destroy();
+                }
+            }  
+            
+            tilePos ++;  
+        }        
+    }
+    if (flatNumber &gt; 0){
+        image_xscale = (image_xscale*flatNumber);
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Generate Foliage/resources
 foliageSpawnList = ds_list_create();
 //add foliage/resources to ds list
 repeat(15){
     ds_list_add(foliageSpawnList,obj_tree1);
+}
+repeat(10){
+    ds_list_add(foliageSpawnList,obj_treeEvergreen);
 }
 repeat(2){
     ds_list_add(foliageSpawnList,obj_stone);
@@ -464,46 +518,53 @@ repeat(5){
     ds_list_add(foliageSpawnList,obj_treeBirch);
 }
 xPos = 0;
+gridPos = 0;
 var spawnChance = 2;
 //Generate foliage/resources
 for (i = 0; i &lt;= worldWidth; i++;){
-
+    xPos = (gridPos * 32);
     //Chance to spawn foliage/resource
     if (irandom(spawnChance) == 1){
+        
         ds_list_shuffle(foliageSpawnList);
         var foliage = ds_list_find_value(foliageSpawnList,0);
-        var folY = ds_grid_get(global.surfaceHeightGrid,xPos,0);
+        var folY = ds_grid_get(global.surfaceHeightGrid,gridPos,0);
         //Place the foliage based on what type it is 
         switch(foliage){
             //spawn common tree
             case obj_tree1: 
                 instance_create(xPos,folY-16,foliage);
-                xPos += 96;
+                gridPos += 3;
             break;
             //spawn oak tree
             case obj_oakTree:
-                instance_create(xPos+96,folY-16,foliage);
-                xPos += 192;
+                instance_create(xPos+96,folY-10,foliage);
+                gridPos += 6;
             break;
             //Spawn stone 
             case obj_stone:
-                instance_create(xPos,folY-32,foliage);
-                xPos += 96;
+                instance_create(xPos,folY-10,foliage);
+                gridPos += 3;
             break;
             //Spawn gold 
             case obj_gold:
-                instance_create(xPos,folY-32,foliage);
-                xPos += 96;
+                instance_create(xPos,folY-10,foliage);
+                gridPos += 3;
             break;
             //Spawn birch tree 
             case obj_treeBirch:
-                instance_create(xPos,folY-32,foliage);
-                xPos += 96;
+                instance_create(xPos,folY-16,foliage);
+                gridPos += 3;
+            break;
+            //Spawn evergreen
+            case obj_treeEvergreen: 
+                instance_create(xPos,folY-6,foliage);
+                gridPos += 3;
             break;
         }
         
     }else{
-        xPos += 32;
+        gridPos += 1;
     }
 
 }
@@ -570,6 +631,7 @@ if (global.clickTimer &gt;= 1){
         global.workerStateSelect = 0;
     }
 }
+depth = 0;
 </string>
           </argument>
         </arguments>
@@ -591,9 +653,9 @@ if (global.clickTimer &gt;= 1){
           <argument>
             <kind>1</kind>
             <string>///Sound
-
 //Set listener position
 audio_listener_position(view_xview[0]+640,view_yview[0]+360,0); 
+
 
 //Checks to see which layer the player is on and if there is a battle or not, then plays the appropriate music
 
@@ -675,6 +737,14 @@ if (keyboard_check(ord('D'))){
     maxScroll = 10;
 }
 
+if (keyboard_check(ord('W'))){
+    view_yview[0] -= 4;
+}
+
+if (keyboard_check(ord('S'))){
+    view_yview[0] += 4;
+}
+
 //Starts and stops the scrolling
 if (scrolling){
     if (scrollSpeed != maxScroll &amp;&amp; scrollSpeed &lt; 11){
@@ -682,6 +752,7 @@ if (scrolling){
     }
     if (view_xview[0] &gt; 0 || view_xview[0] &lt; 1280){ 
         view_xview[0] += scrollSpeed;
+        view_xview[0] = round(view_xview[0]);
     }
     if (view_xview[0] &lt; 0){
         scrollSpeed = 0;
@@ -693,8 +764,11 @@ if (scrolling){
     }
     if (view_xview[0] &gt; 0){
         view_xview[0] += scrollSpeed;
+        view_xview[0] = round(view_xview[0]);
     }
 } 
+
+
 
 
 </string>
@@ -759,6 +833,8 @@ if (global.select){
         global.workerStateSelect = 0;
          if (global.selectedNumber != 0 &amp;&amp; scr_unit_array_check_for_worker() == 1){
             buildButton.visible = 1;
+            farmButton.visible = 0;
+            stockpileButton.visible = 0;
             workerButtonMenu = 0;
         }else{
             buildButton.visible = 0;
@@ -790,9 +866,51 @@ if (global.select){
             <string>///Ui 
 
 //Snap worker buttons in place
-buildButton.x = view_xview[0]+300;
+buildButton.x = view_xview[0]+550;
+stockpileButton.x = view_xview[0]+300;
+farmButton.x = view_xview[0]+550;
 
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Weather
+//Set the wind to blow at random times
+if (!global.windBlowing){
+    global.windTimer ++;
+}
+
+if (global.windTimer &gt;= global.windTime &amp;&amp; !global.windBlowing){
+    global.windBlowing = 1; 
+    global.windTimer = 0;   
+}
+
+if (global.windBlowing){
+    global.windTimer ++;
+    if (global.windTimer &gt;= global.windBlowTime){
+        global.windTimer = 0;
+        global.windBlowing = 0;
+        global.windTime = irandom_range(200,600);
+        global.windBlowTime = irandom_range(200,600);
+    }
+}
 </string>
           </argument>
         </arguments>
@@ -818,7 +936,17 @@ buildButton.x = view_xview[0]+300;
             <string>///Move units
 
 if (!position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_farmingPatch) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){ 
-    scr_unit_array_set_move_target(15);
+    //Only move the units if there is not an unfinished building at the position
+    //otherwise the worker will be set to building
+    if (position_meeting(mouse_x,mouse_y,obj_buildingParent)){
+        var building = instance_position(mouse_x,mouse_y,obj_buildingParent);
+        if (building.built){
+            scr_unit_array_set_move_target(15);
+        }
+    }else{
+        scr_unit_array_set_move_target(15);
+    }
+    
 }
 </string>
           </argument>
@@ -842,12 +970,12 @@ if (!position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !position_m
             <kind>1</kind>
             <string>///Deselect
 
-if (global.building){
+if (global.workerBuild){
     with (global.selected){
-        global.woodP1 += costWoodCommon;
+        global.woodCommon += costWoodCommon;
         global.stoneP1 += costStone;
         instance_destroy();
-        global.building = 0;
+        global.workerBuild = 0;
     }
 }
 //scr_unit_array_clear();
@@ -878,26 +1006,48 @@ global.selected = noone;
             <string>///Place building
 
 //Build selected buildings
-if (global.building &amp;&amp; global.selected != noone &amp;&amp; !global.dev_mode_dupe){
+if (global.workerBuild &amp;&amp; global.selected != noone &amp;&amp; !global.dev_mode_dupe){
     if ((global.selected).y == ((global.selected).groundY - (global.selected).originOffY)){
         with(global.selected){
-            if (!place_meeting(x,y,obj_buildingParent)){
+            if (!place_meeting(x,y,obj_buildingParent) &amp;&amp; scr_building_can_be_placed()){
                 placed = 1;
-                global.building = 0;
-                global.selected = noone;
-            }else{
-                show_debug_message("created");
-                with(instance_create(mouse_x,mouse_y,obj_drawMessage)){
-                    message = "Can't place that there."
-                    duration = 30;
+                //Set the selected units to building the structure
+                with (obj_workerParent){
+                    scr_unit_array_set_resource_target('building',global.selected);
                 }
+                
+                //Assign the selected workers to start building the structure
+                if ((global.selected).object_index != obj_townCenter &amp;&amp; (global.selected).object_index != obj_warehouse){    
+                    global.workerBuild = 0;
+                    workerButtonMenu = 0;
+                    global.workerBuildMenu = 0;
+                    global.selected = noone;
+                    global.building = 0;
+                    scr_unit_array_clear();
+                    //If the structure is a towncenter or warehouse, make the structure automatically build
+                    }else if ((global.selected).object_index == obj_townCenter){
+                    
+                        global.towncenterBuilt = 1; 
+                        var pile = instance_create(mouse_x,mouse_y,obj_warehouse);   
+                        global.workerBuild = 1;
+                        global.selected = pile;
+                        global.building = 0;
+                    }else if ((global.selected).object_index == obj_warehouse){
+                        global.stockpileBuilt = 1;  
+                        global.selected  = -4;
+                        global.workerBuild = 0; 
+                        global.building = 0;     
+                }
+              
+            }else{
+                scr_create_floating_message(mouse_x,mouse_y,.1,2,30,"Can't build that there.");
             }
         }
     }   
 }
 
 //deselects the selected object if you click in an empty area
-if (!global.building &amp;&amp; global.selected != noone){
+if (!global.workerBuild &amp;&amp; global.selected != noone){
     if (!instance_position(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !instance_position(mouse_x,mouse_y,obj_buildingParent) &amp;&amp; !mouseOverPopUpMenu){
         global.selected = noone;
     }
@@ -1007,15 +1157,20 @@ moveTimer = 0;
             <string>/// Select box
 
 //if there is no selectable object underneath the mouse
-if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect){
+if (!global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect){
     global.selectBoxStart = 1;
     global.selectStartX = mouse_x;
     global.selectStartY = mouse_y;
     scr_unit_array_clear();
 
     global.workerStateSelect = 0;
-    with(obj_workerParent){
-        selected = 0;
+    //Deselect all workers, unless you are clicking a button
+    if (!position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent)){
+        with(obj_workerParent){
+            selected = 0;
+            other.buildButton.visible = 0;
+            global.workerBuildMenu = 0;
+        }
     }
 }
 </string>
@@ -1042,7 +1197,7 @@ if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerPare
 var cleared = 0;
 //double click and triple click selects workers
 if (position_meeting(mouse_x,mouse_y,obj_workerParent)){
-    if (!global.building &amp;&amp; !global.dev_mode_dupe &amp;&amp; !global.shiftSelect){
+    if (!global.workerBuild &amp;&amp; !global.dev_mode_dupe &amp;&amp; !global.shiftSelect){
         global.multiClickSelect ++;
         global.clickTimer = 1;
         if (global.multiClickSelect == 2 &amp;&amp; !cleared){
@@ -1131,17 +1286,45 @@ ds_grid_destroy(global.surfaceHeightGrid);
         <arguments>
           <argument>
             <kind>1</kind>
+            <string>///Background
+
+draw_background_tiled_hor(background7,view_xview[0]/1.03,(view_yview[0]+120)/1.03);
+draw_background_tiled_hor(bg_mountains,view_xview[0]/1.1,(view_yview[0]+90)/1.2);
+draw_background_tiled_hor(bg_bushClose,view_xview[0]/6,570);
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
             <string>///Dev mode 
 
 //Draw dev mode on the side of the screen
+
 if (global.dev_mode){
     draw_set_colour(c_white);
     draw_set_font(global.fontDmg);
     draw_text(view_xview[0]+1130,view_yview[0]+695,"Dev mode on");
     draw_text(view_xview[0]+1130,view_yview[0]+30,"Fps: " + string(floor(fps_real)));
     draw_text(view_xview[0]+1130,view_yview[0]+50,"Workers: " + string(instance_number(obj_workerParent)));
-    draw_text(view_xview[0]+10,view_yview[0]+200,"Tile Count: " + string(global.tileCount));
-    draw_text(view_xview[0],view_yview[0]+hillHeightLimit,"----Hill-Softcap-----: ");
+    draw_text(view_xview[0]+1130,view_yview[0]+70,"Tile Count: " + string(global.tileCount));
+    draw_text(view_xview[0]+1130,view_yview[0]+90,"Total instances: " + string(instance_count));
     
     if (global.dev_mode_dupe){
         draw_text(view_xview[0]+1060,view_yview[0]+670,"Object to create: "+string(global.dupeObject));
@@ -1150,6 +1333,7 @@ if (global.dev_mode){
         }
     }
 }
+
 </string>
           </argument>
         </arguments>
@@ -1171,40 +1355,16 @@ if (global.dev_mode){
           <argument>
             <kind>1</kind>
             <string>///General
+
 draw_set_color(c_white);
 draw_set_font(global.fontDmg);
 draw_text(view_xview[0]+5,view_yview[0]+700,"In VERY early development");
-draw_text(view_xview[0]+150,view_yview[0]+100,"Stone: " + string(global.stoneP1));
-draw_text(view_xview[0]+240,view_yview[0]+100,"Wood: " + string(global.woodP1));
-draw_text(view_xview[0]+310,view_yview[0]+100,"Gold: " + string(global.goldP1));
-draw_text(view_xview[0]+410,view_yview[0]+100,"Food: " + string(global.foodP1));
+draw_text(view_xview[0]+150,view_yview[0]+100,"Stone: " + string(global.stone));
+draw_text(view_xview[0]+240,view_yview[0]+100,"Wood: " + string(global.woodCommon));
+draw_text(view_xview[0]+310,view_yview[0]+100,"Gold: " + string(global.gold));
+draw_text(view_xview[0]+410,view_yview[0]+100,"Food: " + string(global.food));
 draw_text(view_xview[0]+150,view_yview[0]+(string_height("W")+100),"Population: " + string(global.pop)+ "/" + string(global.maxPop));
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Background
-depth = 10;
-draw_background_tiled_hor(bg_mountains,view_xview[0]/1.1,view_yview[0]+90);
-draw_background_tiled_hor(bg_bushClose,view_xview[0]/3,view_yview[0]+565);
 
-depth = 0;
 </string>
           </argument>
         </arguments>
@@ -1239,7 +1399,7 @@ if (global.dev_mode){
     draw_text(mouse_x-15,mouse_y-130,"SelectStartY_" + string(global.selectStartY)); 
     draw_text(mouse_x-15,mouse_y-120,"SelectedNumber_" + string(global.selectedNumber)); 
     draw_text(mouse_x-15,mouse_y-110,"Select_" + string(global.select));
-    draw_text(mouse_x-15,mouse_y-100,"global.building_" + string(global.building));
+    draw_text(mouse_x-15,mouse_y-100,"global.workerBuilding_" + string(global.workerBuild));
     draw_text(mouse_x-15,mouse_y-90,"global.selected_" + string(global.selected));
     //draw_text(mouse_x-15,mouse_y-100,"BoxColliding?_" + string(collision_rectangle(global.selectStartX,global.selectStartY,mouse_x,mouse_y,obj_workerParent,0,0)));
     draw_text(mouse_x-100,mouse_y-240,"UnitSelected1_" + string(global.unitSelected[0]));
@@ -1262,30 +1422,9 @@ if (global.dev_mode){
     draw_text(mouse_x-100,mouse_y-70,"UnitSelected18_" + string(global.unitSelected[17]));
     draw_text(mouse_x-100,mouse_y-60,"UnitSelected19_" + string(global.unitSelected[18]));
     draw_text(mouse_x-100,mouse_y-50,"UnitSelected20_" + string(global.unitSelected[19]));
+    draw_text(mouse_x-100,mouse_y-40,"windBlowing_" + string(global.windBlowing));
 }
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///World gen
 
-//draw_surface(global.worldGenSurface,0,0);
 </string>
           </argument>
         </arguments>
@@ -1344,6 +1483,34 @@ if (global.dev_mode){
 }
 
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="10" enumb="85">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Create worker
+
+if (global.food &gt;= 400){
+    instance_create(obj_townCenter.x,obj_townCenter.y-50,obj_workerHumanP1);
+    global.food -= 400;
+}
 </string>
           </argument>
         </arguments>

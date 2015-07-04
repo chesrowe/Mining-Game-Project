@@ -159,6 +159,11 @@ if (global.dev_mode &amp;&amp; myWorker.showDebug){
     if (myWorker.state == 'idle'){
         draw_text(x-15,y-110,"idleTimer" + string(myWorker.idleTimer));     
     }
+    if (myWorker.state == 'building'){
+        draw_text(x-15,y-190,"workTimer_" + string(myWorker.workTimer));  
+        draw_text(x-15,y-180,"gettingResources_" + string(myWorker.gettingResources)); 
+        draw_text(x-15,y-170,"goingTo_" + string(myWorker.goingTo)); 
+    }
     draw_set_colour(c_purple); 
     draw_point(x,y+24); 
     draw_set_colour(c_white);

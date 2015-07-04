@@ -156,6 +156,8 @@
         <sprites name="Worker building REGULAR 1">
           <sprite>sprites\spr_workerBuildingRightReg1</sprite>
           <sprite>sprites\spr_workerBuildingLeftReg1</sprite>
+          <sprite>sprites\spr_workerPullOutHammerLeftReg1</sprite>
+          <sprite>sprites\spr_workerPullOutHammerRightReg1</sprite>
         </sprites>
         <sprites name="Worker Pickup REGULAR 1">
           <sprite>sprites\spr_workerPickupRightReg1</sprite>
@@ -194,13 +196,17 @@
     </sprites>
     <sprites name="Structures">
       <sprite>sprites\spr_townCenter1</sprite>
-      <sprite>sprites\spr_wheatFarm</sprite>
       <sprite>sprites\spr_townCenter2</sprite>
+      <sprite>sprites\spr_farmingPatch</sprite>
+      <sprite>sprites\spr_warehouse1</sprite>
       <sprites name="towers">
         <sprite>sprites\spr_towerArcher</sprite>
       </sprites>
-      <sprite>sprites\spr_farmingPatch</sprite>
-      <sprite>sprites\spr_warehouse1</sprite>
+      <sprites name="farm">
+        <sprite>sprites\spr_farm</sprite>
+        <sprite>sprites\spr_farmVane</sprite>
+        <sprite>sprites\spr_farmPig</sprite>
+      </sprites>
     </sprites>
     <sprites name="Environment">
       <sprites name="resources">
@@ -212,6 +218,9 @@
           <sprite>sprites\spr_tree1Top</sprite>
           <sprite>sprites\spr_treeCommon2</sprite>
           <sprite>sprites\spr_oakTree</sprite>
+          <sprite>sprites\spr_treeEvergreen</sprite>
+          <sprite>sprites\spr_treeEvergreen2</sprite>
+          <sprite>sprites\obj_treeCommonStump</sprite>
         </sprites>
       </sprites>
       <sprites name="Scenery">
@@ -240,12 +249,17 @@
         <sprite>sprites\spr_selectorP1</sprite>
       </sprites>
       <sprite>sprites\obj_uiIconBasic</sprite>
+      <sprite>sprites\spr_uiIconStockPile</sprite>
+      <sprite>sprites\spr_uiIconFarm</sprite>
       <sprite>sprites\obj_uiIconEquipment</sprite>
       <sprite>sprites\obj_uiIconStats</sprite>
       <sprite>sprites\obj_uiIconBuild</sprite>
     </sprites>
     <sprites name="non-visible">
-      <sprite>sprites\obj_solid</sprite>
+      <sprite>sprites\spr_solid</sprite>
+      <sprite>sprites\spr_solid2</sprite>
+      <sprite>sprites\spr_solid3</sprite>
+      <sprite>sprites\spr_blank</sprite>
     </sprites>
     <sprites name="Particles">
       <sprite>sprites\spr_partStoneChips</sprite>
@@ -271,7 +285,7 @@
     <background>background\bg_trees</background>
     <background>background\bg_sky</background>
     <background>background\bg_mountains</background>
-    <background>background\bg_longTrees</background>
+    <background>background\background7</background>
     <background>background\bg_close_trees</background>
     <background>background\bg_bushClose</background>
   </backgrounds>
@@ -286,19 +300,25 @@
       <script>scripts\scr_unit_array_clear.gml</script>
       <script>scripts\scr_unit_array_set_move_target.gml</script>
       <script>scripts\scr_unit_array_set_resource_target.gml</script>
+      <script>scripts\scr_unit_array_check_for_worker.gml</script>
       <script>scripts\scr_unit_array_add.gml</script>
+      <script>scripts\scr_unit_find_inventory_slot.gml</script>
       <script>scripts\scr_unit_move_avoiding_right.gml</script>
       <script>scripts\scr_unit_move_avoiding_left.gml</script>
-      <script>scripts\scr_unit_array_check_for_worker.gml</script>
     </scripts>
     <scripts name="Misc">
-      <script>scripts\scr_pop_main.gml</script>
       <script>scripts\scr_effects_fade_in.gml</script>
       <script>scripts\spr_part_blood_init.gml</script>
       <script>scripts\draw_background_tiled_hor.gml</script>
+      <script>scripts\scr_object_is_in_view.gml</script>
+      <script>scripts\scr_create_floating_message.gml</script>
     </scripts>
     <scripts name="Dev Tools">
       <script>scripts\dev_tool_create_object.gml</script>
+    </scripts>
+    <scripts name="Buildings">
+      <script>scripts\scr_building_can_be_placed.gml</script>
+      <script>scripts\scr_building_find_resource_needed.gml</script>
     </scripts>
   </scripts>
   <fonts name="fonts">
@@ -315,6 +335,8 @@
       <object>objects\obj_gameFadeIn</object>
       <object>objects\obj_selectBoxDraw</object>
       <object>objects\obj_drawMessage</object>
+      <object>objects\obj_tileDraw</object>
+      <object>objects\obj_sceneryCon</object>
     </objects>
     <objects name="NPC">
       <objects name="workers">
@@ -369,6 +391,8 @@
       <objects name="Workers">
         <object>objects\obj_uiWorkerButtonParent</object>
         <object>objects\obj_uiWorkerButtonBuild</object>
+        <object>objects\obj_uiWorkerButtonFarm</object>
+        <object>objects\obj_uiWorkerButtonStockpile</object>
       </objects>
     </objects>
     <objects name="Evironment">
@@ -383,11 +407,9 @@
           <object>objects\obj_tileSurfaceFlat3</object>
           <object>objects\obj_tileSurfaceFlat4</object>
           <object>objects\obj_tileSurfaceHillUp</object>
-          <object>objects\obj_tileSurfaceHillUpUnder</object>
           <object>objects\obj_tileSurfaceHillDown</object>
+          <object>objects\obj_tileSurfaceHillUpUnder</object>
           <object>objects\obj_tileSurfaceHillDownUnder</object>
-          <object>objects\obj_tileBlackMaster</object>
-          <object>objects\obj_tileBlackSlave</object>
         </objects>
       </objects>
       <objects name="resources">
@@ -396,7 +418,6 @@
           <object>objects\obj_stone</object>
           <object>objects\obj_resourceParent</object>
           <object>objects\obj_resourceDrawCon</object>
-          <object>objects\obj_treeDrawCon</object>
         </objects>
         <objects name="Woodcutting">
           <object>objects\obj_treeParent</object>
@@ -404,6 +425,8 @@
           <object>objects\obj_tree1</object>
           <object>objects\obj_oakTree</object>
           <object>objects\obj_treeBirch</object>
+          <object>objects\obj_treeDrawCon</object>
+          <object>objects\obj_treeEvergreen</object>
         </objects>
       </objects>
       <objects name="Scenery">
@@ -416,12 +439,14 @@
         <object>objects\obj_ruby</object>
       </objects>
     </objects>
-    <objects name="Buildings">
+    <objects name="Structures">
       <object>objects\obj_buildingParent</object>
       <object>objects\obj_townCenter</object>
       <object>objects\obj_farm</object>
       <object>objects\obj_farmingPatch</object>
       <object>objects\obj_warehouse</object>
+      <object>objects\obj_farmVane</object>
+      <object>objects\obj_farm1Pig</object>
     </objects>
     <objects name="non-visibles">
       <object>objects\obj_solidGround</object>
@@ -436,9 +461,6 @@
   <rooms name="rooms">
     <rooms name="Single player Rooms">
       <room>rooms\single_player_1</room>
-    </rooms>
-    <rooms name="Co-op Rooms">
-      <room>rooms\Local_Coop_1</room>
     </rooms>
   </rooms>
   <constants number="2">

@@ -33,19 +33,33 @@ groundY = 695;
 originOffX = 0;
 originOffY = 0;
 menuObject = noone;
-costWoodCommon = 150;
-costStone = 0;
 xp = 25;
 resource = 'food';
+//Cost to build
+totalResourcesNeeded = 0;
+cost[0,0] = 'woodCommon'; //Type
+cost[0,1] = 150; //Total amount needed
+cost[0,2] = 150; //Amount left
+//Add up the total amount of resources needed to build the building
+for (i = 0; i &lt;= 3; i++;){
+    if (cost[i,1] != -1){
+        totalResourcesNeeded += cost[i,1];
+    }else{
+        break;
+    }
+}
 
 
 exhausted = 0;
 exhaustTimer = 0;
 exhaustTime = 600;
-amountLeft = 400;
 maxAmountLeft = 500;
+amountLeft = maxAmountLeft;
 resource = 'food';
 exhausted = 0;
+//MiddleTimer 
+midTime = 40;
+midRandom = 60;
 
 //Create obj to handle debug drawing
 myDraw = instance_create(x,y,obj_resourceDrawCon);
@@ -115,10 +129,12 @@ if (exhausted){
             <kind>1</kind>
             <string>///Start working
 //Makes the selected worker mine this resource
+event_inherited();
 
 //Set the selected workers to woodcutting
-if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
-    scr_unit_array_set_resource_target('farming'); 
+if (!global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; built){
+    var target = id;
+    scr_unit_array_set_resource_target('farming',target); 
     scr_unit_array_clear();  
 }else{
     scr_unit_array_clear();
@@ -146,7 +162,8 @@ if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerPare
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Dev mode
+            <string>event_inherited();
+///Dev mode
 
 //Shows the debug 
 if (global.dev_mode &amp;&amp; !showDebug){
