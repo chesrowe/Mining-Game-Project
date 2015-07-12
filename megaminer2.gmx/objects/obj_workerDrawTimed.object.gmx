@@ -29,8 +29,7 @@
 myWorker = 0;
 alpha = 1;
 timer = 0;
-xOffset = 0;
-yOffset = 0;
+duration = 25;
 amount = 0;
 xOffset += choose(0,-5,5,-9,9);
 yOffset -= choose(0,-3,-4,-5,-6);
@@ -62,14 +61,13 @@ yScale = 1;
           <argument>
             <kind>1</kind>
             <string>// Sets the drawing position for the dmg numbers
-randomize();
 x = ((startX+choose(.01,.02,.03,.04,.05,.06)) + xOffset);
 y = ((startY-35+(choose(.01,.02,.03,.04,.05))) - yOffset);
 // Increments the offsets to make the number drift off slightly
 xOffset -= .05;
 yOffset += .08;
 //sets the drawing alpha to make the number fade
-if (timer &gt;= 25){
+if (timer &gt;= duration){
     alpha -= .03;
     if (alpha &lt;= 0){
         draw_set_alpha(1);

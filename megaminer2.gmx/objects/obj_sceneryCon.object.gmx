@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-1</depth>
+  <depth>1</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -27,7 +27,52 @@
             <kind>1</kind>
             <string>///Set up surface
 
-global.scenerySurface = surface_create(5120,720);
+global.scenerySurfaceWidth = (7680);
+global.scenerySurface[0] = surface_create(global.scenerySurfaceWidth,720);
+surfNumber = 1;
+
+//Dynamicly create surfaces
+i = 1;
+repeat(20){
+    if ( (global.tileCount*32) &gt; (7680*i) ){
+        global.scenerySurface[i] = surface_create(7680,2560);   
+        surfNumber++;
+        i++;
+             
+    }else if (x &lt; 7680*i){
+        break;
+    }
+    
+}
+with (obj_tileSurfaceFlatParent){
+    var e = 1; 
+    repeat(20){
+        if ( x &gt;= (7680*e) ){
+            mySurf = global.scenerySurface[e];
+            xAdd = (7680*e);
+            surfIndex = e;  
+            e++;     
+        }else if (x &lt; 7680*e){
+            break;
+        }
+        
+    }  
+    //Draw the sprites to the surface
+    surface_set_target(mySurf);
+        var e = 0;
+        repeat(flatNumber){
+            draw_sprite(grass[e,2],grass[e,0],x + (e*32) + grass[e,1],y-50);
+        e++;
+        }
+    surface_reset_target(); 
+}
+show_message(string(i));
+
+
+
+
+
+
 
 </string>
           </argument>
@@ -78,9 +123,24 @@ global.scenerySurface = surface_create(5120,720);
             <kind>1</kind>
             <string>///Draw scenery
 
-if (surface_exists(global.scenerySurface)){
-    draw_surface(global.scenerySurface,0,0);
+
+//Loop through the surfaces and draw them
+var u = 0;
+repeat(surfNumber){
+    if (surface_exists(global.scenerySurface[u])){
+        draw_surface(global.scenerySurface[u],0 + (u * 7680),0);
+    }else{
+        global.scenerySurface[u] = surface_create(7680,2560);
+    }
+    u++;
 }
+
+
+
+
+
+
+
 </string>
           </argument>
         </arguments>

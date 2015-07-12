@@ -70,12 +70,14 @@ if (y &lt; 696){
             <kind>1</kind>
             <string>
 //Allow the instance to draw only when it is in the view
-if (x &gt;= (view_xview[0]-(96+(flatNumber*32))) &amp;&amp; x &lt;= (view_xview[0]+1302)){
-    canDraw = 1;
-    visible = 1;
-}else{
-    canDraw = 0;
-    visible = 0;
+if (x &gt;= (view_xview[0] - 96)){
+    if(x &lt;= (view_xview[0]+1302)){
+        canDraw = 1;
+        visible = 1;
+    }else{
+        canDraw = 0;
+        visible = 0;
+    }
 }
 </string>
           </argument>

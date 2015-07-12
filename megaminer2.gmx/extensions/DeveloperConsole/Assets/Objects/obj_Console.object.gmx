@@ -11,12 +11,12 @@
     <event eventtype="0" enumb="0">
       <action>
         <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
+        <id>605</id>
+        <kind>0</kind>
         <userelative>0</userelative>
         <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
+        <useapplyto>0</useapplyto>
+        <exetype>0</exetype>
         <functionname></functionname>
         <codestring></codestring>
         <whoName>self</whoName>
@@ -25,65 +25,10 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// if the tree is on a slope or not in the corrent place, delete it 
-if (place_meeting(x,y,obj_tileSurfaceHillParent)){
-    instance_destroy();
-}
-if (!place_meeting(x,y,obj_tileSurfaceParent)){
-    instance_destroy();
-}
-if (y &gt; instance_nearest(x,y,obj_tileSurfaceFlatParent)){
-    y = ((instance_nearest(x,y,obj_tileSurfaceFlatParent)).y)+6;
-}
-//sets the sprites to use for the tree
-x += choose(irandom(16), -(irandom(16)));
-y -= choose(0,2,4);
-spriteTop = 0;
-spriteBottom = 0;
-resource = 'wood';
-levelReq = 1;
-fall = 200;
-falling = 0;
-fallTimer = 80;
-fallDir = 'right';
-fell = 0;
-woodLeft = 2000;
-fallSpeed = 0;
-fallIncrement = 0;
-image_speed = 0;
-beingCut = 0;
-animationTimer = 0;
-showDebug = 0;
-xp = 25;
-posDistance = 24;
-posTime = 30;
-midTime = 0;
-midRandom = 10;
-
-
-
-//bottom = instance_create(x+2,y+18,obj_treeBottom);
-
-//Sound
-soundPlayed = 0;
-
-fallingSound[0] = sd_treeFalling1;
-fallingSound[1] = sd_treeFalling2;
-fallingSound[2] = sd_treeFalling3;
-fallingSound[3] = sd_treeFalling4;
-
-//checks to see if it spawned on the town center
-if (place_meeting(x,y,obj_townCenter)){
-    instance_destroy();
-}
-
-
-</string>
+            <string>Init Console</string>
           </argument>
         </arguments>
       </action>
-    </event>
-    <event eventtype="3" enumb="1">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -100,15 +45,81 @@ if (place_meeting(x,y,obj_townCenter)){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Visibility
-if (x &gt;= (view_xview[0]-260)){
-    if (x &lt;= (view_xview[0]+1450)){
-        visible = 1;
-    }else{
-        visible = 0;
-    }
-}
+            <string>/******************************
+* The 1st argument sets the
+* console to close once a command
+* has been submitted, the 2nd
+* argument sets the number of past
+* commands to keep (also serves as
+* the height of the console) and 
+* the 3rd argument is the character/string
+* that seperates the command and
+* it's arguments.
+******************************/
+console_init(true,3,",");
 </string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="1" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>605</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>0</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>Destroy Console</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>601</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>1</exetype>
+        <functionname>action_execute_script</functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>9</kind>
+            <script>console_destroy</script>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
           </argument>
         </arguments>
       </action>
@@ -116,6 +127,68 @@ if (x &gt;= (view_xview[0]-260)){
     <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
+        <id>601</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>1</exetype>
+        <functionname>action_execute_script</functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>9</kind>
+            <script>console_step</script>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>605</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>0</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>Draw Console</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
         <id>603</id>
         <kind>7</kind>
         <userelative>0</userelative>
@@ -130,77 +203,22 @@ if (x &gt;= (view_xview[0]-260)){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///General
-
-if (fall &lt;= 0) {
-    if (!fell){
-        falling = 1;
-    }
-}
-
-//Makes the tree fall
-if (falling){
-    if (!soundPlayed){
-        audio_play_sound_at(fallingSound[irandom(3)],x,y,0,1000,200,1,0,9999900);    
-        soundPlayed = 1;
-    }
-    fallIncrement += .001;
-    fallTimer --;
-    if (fallSpeed &lt; 5){
-        fallSpeed += fallIncrement;
-    }
-    if (fallTimer &lt;= 0){
-        falling = 0;
-        fell = 1;
-    }
-    if (fallDir = 'right'){
-        image_angle -= fallSpeed;  
-        x += .2;  
-    }else{
-        image_angle += fallSpeed;
-        x -= .2;
-    }
-
-}
-if (!fell){
-    animationTimer ++;
-    if (animationTimer &gt;= 30){
-        beingCut = 0;
-    }else{
-        beingCut = 1;
-    }
-}else{
-    animationTimer = 31;
-    image_speed = 0;
-}
-
-
-
-if (beingCut){
-    image_speed = .09;
-}else{
-    image_speed = 0;
-}
-
-
-//Destroy the tree, if the wood is gone
-if (woodLeft &lt;= 0){
-    instance_destroy();
-}
+            <string>draw_set_font(fnt_Console);
+console_draw(0,0,380,c_navy,c_blue,c_white,c_yellow,0.8);
 </string>
           </argument>
         </arguments>
       </action>
     </event>
-    <event eventtype="4" ename="obj_buildingParent">
+    <event eventtype="9" enumb="123">
       <action>
         <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
+        <id>605</id>
+        <kind>0</kind>
         <userelative>0</userelative>
         <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
+        <useapplyto>0</useapplyto>
+        <exetype>0</exetype>
         <functionname></functionname>
         <codestring></codestring>
         <whoName>self</whoName>
@@ -209,101 +227,47 @@ if (woodLeft &lt;= 0){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
-if (!falling &amp;&amp; other.placed == 1){
-    instance_destroy();
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="4" ename="obj_tileSurfaceHillParent">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>
-if (falling){
-    fell = 1;
-    falling = 0;
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="6" enumb="5">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Dev mode
-
-//Shows the debug 
-if (global.dev_mode &amp;&amp; !showDebug){
-    showDebug = 1;
-}else{
-    showDebug = 0;
-}
-</string>
+            <string>Toggle Console</string>
           </argument>
         </arguments>
       </action>
       <action>
         <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
+        <id>601</id>
+        <kind>0</kind>
         <userelative>0</userelative>
         <isquestion>0</isquestion>
         <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
+        <exetype>1</exetype>
+        <functionname>action_execute_script</functionname>
         <codestring></codestring>
         <whoName>self</whoName>
         <relative>0</relative>
         <isnot>0</isnot>
         <arguments>
           <argument>
-            <kind>1</kind>
-            <string>///Start working
-//Makes the selected worker mine this resource
-
-//Set the selected workers to woodcutting
-if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
-    var tree = id;
-    scr_unit_array_set_resource_target('woodcutting',tree);   
-    scr_unit_array_clear();
-}else{
-    scr_unit_array_clear();
-}
-    
-
-</string>
+            <kind>9</kind>
+            <script>console_toggle</script>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
+          </argument>
+          <argument>
+            <kind>0</kind>
+            <string></string>
           </argument>
         </arguments>
       </action>

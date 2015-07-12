@@ -55,9 +55,6 @@ midTime = 6;
 //Dev mode
 showDebug = 0;
 
-//Create obj to handle debug drawing
-myDraw = instance_create(x,y,obj_resourceDrawCon);
-myDraw.myResource = id;
 
 
 
