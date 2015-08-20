@@ -26,11 +26,19 @@
           <argument>
             <kind>1</kind>
             <string>///Set up tree 
-
 event_inherited();
 
+spriteTop = spr_treeEvergreen;
+spriteBottom = spr_treeEvergreenStump;
+bottomX = 1;
+bottomY = 10;
+stumpX = x + bottomX;
+stumpY = y + bottomY;
+fallYAdd = .2;
+fallXAdd = -.02;
+
 xp = 30;
-resource = 'birchWood';
+resource = 'WoodCommon';
 levelReq = 5;
 woodLeft = 1000;
 midTime = 2;

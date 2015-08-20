@@ -6,7 +6,7 @@
 //arugment 1 : What instance to set as the target
 
 for(i = 0;i < 100;i++){
-    if (global.unitSelected[i].object_index == obj_workerHumanP1){
+    if (instance_exists(global.unitSelected[i]) && global.unitSelected[i].object_index == obj_workerHumanP1){
         with (global.unitSelected[i]){
             target = argument1.id;
             targetType = argument1.object_index;

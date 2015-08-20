@@ -52,6 +52,7 @@ gemChance = 10;
 posDistance = 30;
 posTime = 30;
 midTime = 6;
+midRandom = 12;
 //Dev mode
 showDebug = 0;
 

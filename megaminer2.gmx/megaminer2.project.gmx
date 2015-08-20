@@ -3,9 +3,7 @@
   <Configs name="configs">
     <Config>Configs\Default</Config>
   </Configs>
-  <NewExtensions>
-    <extension index="0">extensions\DeveloperConsole</extension>
-  </NewExtensions>
+  <NewExtensions/>
   <sounds name="sound">
     <sounds name="Music">
       <sounds name="Special">
@@ -213,16 +211,24 @@
     <sprites name="Environment">
       <sprites name="resources">
         <sprite>sprites\spr_oreGold</sprite>
-        <sprite>sprites\spr_stone</sprite>
         <sprite>sprites\spr_oreStone</sprite>
         <sprites name="Woodcutting">
-          <sprite>sprites\spr_treeBirch1</sprite>
-          <sprite>sprites\spr_tree1Top</sprite>
-          <sprite>sprites\spr_treeCommon2</sprite>
-          <sprite>sprites\spr_oakTree</sprite>
-          <sprite>sprites\spr_treeEvergreen</sprite>
-          <sprite>sprites\spr_treeEvergreen2</sprite>
-          <sprite>sprites\obj_treeCommonStump</sprite>
+          <sprites name="Common tree">
+            <sprite>sprites\spr_treeCommonStump</sprite>
+            <sprite>sprites\spr_treeCommonTop</sprite>
+          </sprites>
+          <sprites name="Oak Tree">
+            <sprite>sprites\spr_oakTreeBottom</sprite>
+            <sprite>sprites\spr_oakTree</sprite>
+          </sprites>
+          <sprites name="Birch Tree">
+            <sprite>sprites\spr_treeBirch1</sprite>
+            <sprite>sprites\spr_treeBirchStump</sprite>
+          </sprites>
+          <sprites name="Evergreen Tree">
+            <sprite>sprites\spr_treeEvergreen</sprite>
+            <sprite>sprites\spr_treeEvergreenStump</sprite>
+          </sprites>
         </sprites>
       </sprites>
       <sprites name="Scenery">
@@ -336,7 +342,6 @@
       <object>objects\obj_selectBoxDraw</object>
       <object>objects\obj_drawMessage</object>
       <object>objects\obj_tileDraw</object>
-      <object>objects\obj_sceneryCon</object>
       <object>objects\obj_debugDraw</object>
       <object>objects\obj_console</object>
     </objects>
@@ -403,6 +408,7 @@
         <object>objects\obj_tileSurfaceHillParent</object>
         <object>objects\obj_tileSurfaceFlatParent</object>
         <object>objects\obj_groundParent</object>
+        <object>objects\obj_sceneryDraw</object>
         <objects name="surface">
           <object>objects\obj_tileSurfaceFlat1</object>
           <object>objects\obj_tileSurfaceFlat2</object>
@@ -423,11 +429,10 @@
         </objects>
         <objects name="Woodcutting">
           <object>objects\obj_treeParent</object>
-          <object>objects\obj_treeBottom</object>
-          <object>objects\obj_tree1</object>
+          <object>objects\obj_treeDrawCon</object>
+          <object>objects\obj_treeCommon</object>
           <object>objects\obj_oakTree</object>
           <object>objects\obj_treeBirch</object>
-          <object>objects\obj_treeDrawCon</object>
           <object>objects\obj_treeEvergreen</object>
         </objects>
       </objects>

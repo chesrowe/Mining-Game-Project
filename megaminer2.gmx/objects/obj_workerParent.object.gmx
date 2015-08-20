@@ -56,7 +56,7 @@ moveXStart = 0;
 myDraw = instance_create(x,y,obj_workerCon);
 myDraw.myWorker = id;
 image_speed = 0;
-image_alpha = 0;
+image_alpha = 1;
 resourcePosition = 0; //1 = move left , 2 = move right
 positionTimer = 0;
 positionTime = 20;
@@ -64,10 +64,15 @@ idleTimer = 0;
 insideSelectBox = 0;
 insideSelectBoxAlt = 0;
 middleTime = 0;
+run = 0;
+hillStart = 0;
+
 
 
 //Stats
 hp = 100;
+maxStamina = 100;
+stamina = maxStamina;
 hpMax = 100;
 level = 1;
 woodcuttingLevel = 100;
@@ -116,8 +121,8 @@ foodHeld = 0;
 maxFood = 50;
 
 //Working general
-workingLenDirX = lengthdir_x(40,point_direction(x,y,target.x,target.y));
-workingLenDirY = lengthdir_y(26,point_direction(x,y,target.x,target.y));
+workingLenDirX = lengthdir_x(40,point_direction(x,y,x,y));
+workingLenDirY = lengthdir_y(26,point_direction(x,y,x,y));
 walkingImageSpeed = .12;
 drawTool = 0;
 drawToolTimer = 0;
@@ -132,7 +137,7 @@ workStart = 0;
 workTimer = 0;
 workMiddleTime = 0;
 baseWorkTime = 300;
-workTimeAdd = irandom(round(baseMiningTime/3));
+workTimeAdd = irandom(round(baseWorkTime/3));
 workTime = (baseWorkTime + workTimeAdd);
 
 //Building
@@ -222,6 +227,7 @@ footstepTimer = 0;
 workRRPosition = 0;
 footstepRRPosition = 0;
 stepSound = 0;
+footStepSound = -4;
 
 //4 round robins for pick sounds
 pickSound[0] = sd_pickaxe1; 
@@ -288,7 +294,7 @@ pullOutToolSound[3] = sd_toolPullOut4;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///spirtes
+            <string>///sprites
 
 //Putting sprite indexes into variables so that we can change the sprites on the go without changing the code that changes the sprites
 
@@ -471,10 +477,15 @@ inv[6,6] = -1;
           <argument>
             <kind>1</kind>
             <string>///Falling 
+// y = y + lengthdir_y(2,70); 
+//x = x + lengthdir_x(2,70); 
 
 if (place_meeting(x,y+3,obj_groundParent)){
     falling = 0;
-}else{
+    if (place_meeting(x,y+3,obj_tileSurfaceFlatParent) &amp;&amp; !place_meeting(x,y,obj_tileSurfaceHillParent)){
+        y = (instance_place(x,y+3,obj_tileSurfaceFlatParent).y) - 24;
+    }
+}else if (!hillStart){
     falling = 1;
 }
 
@@ -484,6 +495,93 @@ if (falling){
 }else{
     gravity = 0;
     vspeed = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="3" enumb="1">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Move to target
+if (state == 'moveToTarget'){
+    moveToTimer ++;
+    image_speed = walkingImageSpeed;
+}
+//move towards target WALKING
+if (moveToTimer &gt; moveToTime){
+    if ( (state == "moveToTarget" &amp;&amp; moveTargetX &gt;= x) &amp;&amp; (moveToTimer &gt; moveToTime) &amp;&amp; !run ){
+            sprite_index = spriteWalkingRightEmpty;
+            x += walkSpeed;
+        //Make the worker go up or down a hill
+        if ( (place_meeting(x,y,obj_tileSurfaceHillUp) || place_meeting(x,y,obj_tileSurfaceHillUpUnder) ) &amp;&amp; !position_meeting(x+4,y+24,obj_tileSurfaceFlatParent) ){
+            y -= walkSpeedHill+.3;
+            leveled = 0;
+
+        }else if (place_meeting(x,y,obj_tileSurfaceHillDown) &amp;&amp; !position_meeting(x-4,y+24,obj_tileSurfaceFlatParent)){
+            y += walkSpeedHill+.2;
+        }
+    }else if (state = 'moveToTarget' &amp;&amp; moveTargetX &lt;= x &amp;&amp; !run){
+            sprite_index = spriteWalkingLeftEmpty;
+            x -= walkSpeed;
+        //Make the worker go up or down a hill
+        if ( (place_meeting(x,y,obj_tileSurfaceHillDown) || place_meeting(x,y,obj_tileSurfaceHillDownUnder) ) &amp;&amp; !position_meeting(x-4,y+24,obj_tileSurfaceFlatParent) ){
+            y -= walkSpeedHill+.3;
+            leveled = 0;
+        }else if (place_meeting(x,y,obj_tileSurfaceHillUp) &amp;&amp; !position_meeting(x-4,y+24,obj_tileSurfaceFlatParent)){
+                y += walkSpeedHill+.2;
+        }
+    }
+    //move towards target RUNNING
+    if ( (state == "moveToTarget" &amp;&amp; moveTargetX &gt;= x) &amp;&amp; (moveToTimer &gt; moveToTime) &amp;&amp; run ){
+        sprite_index = spriteRunningRight;
+        if (!hillStart){
+            x += walkSpeed*2;
+            if (place_meeting(x-6,y,obj_tileSurfaceHillParent)){
+                hillStart = 1;
+            }
+        }else{
+            if (hillStart &amp;&amp; position_meeting(x+2,y+26,obj_tileSurfaceFlatParent) &amp;&amp; !place_meeting(x-4,y,obj_tileSurfaceHillParent)){
+                hillStart = 0;
+            } 
+            if (hillStart){
+                falling = 0;
+                if (place_meeting(x,y,obj_tileSurfaceHillUp)){
+                    y = y + lengthdir_y(2,50); 
+                    x = x + lengthdir_x(2,50);   
+                }
+            }   
+        }
+    }
+}else if (state == 'moveToTarget'){
+    image_index = 0;
+}
+
+//Stop when the target is reached
+if (state == 'moveToTarget' &amp;&amp; ceil(point_distance(x,y,moveTargetX,y)) == 0 &amp;&amp; moveToTimer &gt; moveToTime){
+    state = 'idle';
+    moveToTimer = 0;
+    image_speed = idleImageSpeed;
+    if (moveXStart == 'less'){
+        sprite_index = spriteIdleRight;
+    }else{
+        sprite_index = spriteIdleLeft;
+    }
 }
 </string>
           </argument>
@@ -507,57 +605,34 @@ if (falling){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///fade-in
-
-if(image_alpha &lt; 1){
-    image_alpha += .01;
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
             <string>///sound
 
 //footsteps
-if (goingTo || comingFrom || state == 'moveToTarget'){
-    if (round(image_index) == 1 &amp;&amp; stepSound == 0 || round(image_index) == 5 &amp;&amp; stepSound == 0){
-        randomize();
-        if (!audio_is_playing(footstepGrassSound[footstepRRPosition])){
-            footStepSound = audio_play_sound_at(footstepGrassSound[footstepRRPosition],x,y,0,1000,200,1,0,1);  
+if (state != "idle"){
+    if (gettingResources || goingTo || comingFrom || state == 'moveToTarget'){
+        if (round(image_index) == 1 &amp;&amp; stepSound == 0 || round(image_index) == 5 &amp;&amp; stepSound == 0){
+            randomize();
+            if (!audio_is_playing(footstepGrassSound[footstepRRPosition])){
+                footStepSound = audio_play_sound_at(footstepGrassSound[footstepRRPosition],x,y,0,1000,200,1,0,1);  
+            }
+            audio_sound_pitch(footStepSound,random_range(.90,1.3));
+            audio_sound_gain(footStepSound, global.sfxVol,0);
+            footstepRRPosition ++;
+            if (footstepRRPosition &gt; 3){
+                footstepRRPosition = irandom(2);
+            }       
+            stepSound = 1;
+        } 
+        
+        if (round(image_index) != 1 &amp;&amp; round(image_index) != 5){
+            stepSound = 0;
         }
-        audio_sound_pitch(footStepSound,random_range(.90,1.3));
-        audio_sound_gain(footStepSound, global.sfxVol,0);
-        footstepRRPosition ++;
-        if (footstepRRPosition &gt; 3){
-            footstepRRPosition = irandom(2);
-        }       
-        stepSound = 1;
-    } 
-    
-    if (round(image_index) != 1 &amp;&amp; round(image_index) != 5){
-        stepSound = 0;
     }
-}
-//Pulling out tool
-if (drawTool &amp;&amp; drawToolTimer == 0){
-    var sound = audio_play_sound_at(pullOutToolSound[irandom(3)],x,y,0,1000,200,1,0,5);
-    audio_sound_gain(sound,global.sfxVol,0);
+    //Pulling out tool
+    if (drawTool &amp;&amp; drawToolTimer == 0){
+        var sound = audio_play_sound_at(pullOutToolSound[irandom(3)],x,y,0,1000,200,1,0,5);
+        audio_sound_gain(sound,global.sfxVol,0);
+    }
 }
 </string>
           </argument>
@@ -634,15 +709,14 @@ if (!dying){
                     target.amountLeft -= 40;
                     //pops up xp gained
                     with(instance_create(x,y,obj_workerDrawTimed)){
-                        amount = ("+"+string(25)+"XP");
+                        amount = ("+"+string((other.target).xp)+"XP");
                         col = c_yellow;
                         myWorker = other.id;
                     }
-                    target.resources -= pickupLoad;
                     xpFarming += target.xp;
                     //Put the just mined resources into the inventory
                     for (i = 3;i &lt;= 6; i++){
-                        if (inv[i,0] == -1){
+                        if (is_real(inv[i,0]) &amp;&amp; inv[i,0] == -1){
                             inv[i,0] = target.resource;
                             inv[i,1] = 'resource';
                             inv[i,6] = pickupLoad;
@@ -793,7 +867,7 @@ if (!dying){
                     part_particles_create(global.partMining,x+lengthdir_x(6,dir),y+lengthdir_y(6,dir),global.partStoneChips,10);
                     workRRPosition ++;
                     if (workRRPosition &gt; 3){
-                        randomize();
+        
                         workRRPosition = irandom(2);
                     }
                     cutSound = 1; 
@@ -805,7 +879,6 @@ if (!dying){
                 if (miningTimer &gt;= miningTime){
                     //Set chance to drop a gem
                     gemBonus = (((target.gemChance) * .01) * miningLevel);
-                    randomize();
                     if (irandom(target.gemChance - gemBonus) == 1){
                         instance_create(target.x,target.y-6,obj_ruby);
                         show_debug_message("Ruby");
@@ -814,22 +887,20 @@ if (!dying){
                     comingFrom = 1;
                     mineStart = 0;
                     miningTimer = 0;
-                    middleTimeMining = (2 + irandom(10));
                     moveToTime = 2 + irandom(20);
                     moveToTimer = 0;
                     middleTimer = 0;
                     target.amountLeft -= 40;
                     //pops up xp gained
                     with(instance_create(x,y,obj_workerDrawTimed)){
-                        amount = ("+"+string(target.xp)+"XP");
+                        amount = ("+"+string((other.target).xp)+"XP");
                         col = c_yellow;
                         myWorker = other.id;
                     }
-                    target.resources -= pickupLoad;
                     xpMining += target.xp;
                     //Put the just mined resources into the inventory
                     for (i = 3;i &lt;= 6; i++){
-                        if (inv[i,0] == -1){
+                        if (is_real(inv[i,0]) &amp;&amp; inv[i,0] == -1){
                             inv[i,0] = target.resource;
                             inv[i,1] = 'resource';
                             inv[i,6] = pickupLoad;
@@ -875,8 +946,8 @@ if (!dying){
                 }
                 amountLeft = 0;
                 exhausted = 1;
-                other.farmStart = 0;
-                other.farmingTimer = 0;
+                other.mineStart = 0;
+                other.miningTimer = 0;
                 other.pickSoundTimer = 0;
             }
         }
@@ -1015,7 +1086,7 @@ if (state == 'woodcutting'){
     moveToTimer ++;
      //makes the worker walk to the tree
      if (moveToTimer &gt; moveToTime){
-         if (target.x &gt; x &amp;&amp; !cutStart &amp;&amp; goingTo){
+         if (instance_exists(target)&amp;&amp; target.x &gt; x &amp;&amp; !cutStart &amp;&amp; goingTo){
             sprite_index = spriteWalkingRightEmpty;
             scr_unit_move_avoiding_right();
          }else if(!cutStart &amp;&amp; goingTo){
@@ -1065,15 +1136,15 @@ if (state == 'woodcutting'){
                 target.fall -= 40;
                 //Randomizes the position of the cutting more when then the target tree has fallen
                 if (target.fell == 0){
-                    middleTimeWoodcutting =  (2 + irandom(midRandom));
+                    middleTimeWoodcutting =  (2 + irandom(target.midRandom));
                 }else{
-                    middleTimeWoodcutting =  (2 + irandom(40));    
+                    middleTimeWoodcutting =  (2 + irandom(target.midRandom) + irandom(40));    
                 }
                 moveToTime = 2 + irandom(20);
                 moveToTimer = 0;
                 //pops up xp gained
                 with(instance_create(x,y,obj_workerDrawTimed)){
-                    amount = ("+"+string(target.xp)+"XP");
+                    amount = ("+"+string((other.target).xp)+"XP");
                     col = c_yellow;
                     myWorker = other.id;
                 }
@@ -1082,11 +1153,10 @@ if (state == 'woodcutting'){
                     middleTimer = middleTimeWoodcutting;
                 }
                 //pops up xp gained
-                target.resources -= pickupLoad;
                 xpWoodcutting += target.xp;
                 //Put the just mined resources into the inventory
                 for (i = 3;i &lt;= 6; i++){
-                    if (inv[i,0] == -1){
+                    if (is_real(inv[i,0]) &amp;&amp; inv[i,0] == -1){
                         inv[i,0] = target.resource;
                         inv[i,1] = 'resource';
                         inv[i,6] = pickupLoad;
@@ -1144,13 +1214,13 @@ if (state == 'woodcutting'){
     }
 
     //stops the worker from cutting when the tree is falling
-    if (target.falling){
+    if (instance_exists(target) &amp;&amp; target.falling){
         cutStart = 0;
         cuttingTimer = 0;
         move = 1;
     }
     //makes the worker move out from away from the falling tree
-    if (move){
+    if (move &amp;&amp; instance_exists(target)){
         cutTimer = 0;
         cutStart = 0;
         moveTimer ++;
@@ -1160,7 +1230,7 @@ if (state == 'woodcutting'){
         if (x &lt; target.x &amp;&amp; moveTimer &lt; 150 &amp;&amp; target.fallDir == 'left'){
             scr_unit_move_avoiding_left();   
         }
-        if (target.fell){
+        if (instance_exists(target) &amp;&amp; target.fell){
             move = 0;
             moveTimer = 0;
             moveToTimer = 0;
@@ -1254,68 +1324,6 @@ if (global.select &amp;&amp; selected == 1){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Move to target
-if (state == 'moveToTarget'){
-    moveToTimer ++;
-    image_speed = walkingImageSpeed;
-}
-//move towards target
-if (moveToTimer &gt; moveToTime){
-    if (state == "moveToTarget" &amp;&amp; moveTargetX &gt;= x &amp;&amp; moveToTimer &gt; moveToTime){
-        sprite_index = spriteWalkingRightEmpty;
-        x += walkSpeed;
-        //Make the worker go up or down a hill
-        if ( (place_meeting(x,y,obj_tileSurfaceHillUp) || place_meeting(x,y,obj_tileSurfaceHillUpUnder) ) &amp;&amp; !position_meeting(x+4,y+24,obj_tileSurfaceFlatParent) ){
-            y -= walkSpeedHill+.3;
-            leveled = 0;
-        }else if (place_meeting(x,y,obj_tileSurfaceHillDown) &amp;&amp; !position_meeting(x-4,y+24,obj_tileSurfaceFlatParent)){
-            y += walkSpeedHill+.2;
-        }
-    }else if (state = 'moveToTarget' &amp;&amp; moveTargetX &lt;= x){
-        sprite_index = spriteWalkingLeftEmpty;
-        x -= walkSpeed;
-        //Make the worker go up or down a hill
-        if ( (place_meeting(x,y,obj_tileSurfaceHillDown) || place_meeting(x,y,obj_tileSurfaceHillDownUnder) ) &amp;&amp; !position_meeting(x-4,y+24,obj_tileSurfaceFlatParent) ){
-            y -= walkSpeedHill+.3;
-            leveled = 0;
-        }else if (place_meeting(x,y,obj_tileSurfaceHillUp) &amp;&amp; !position_meeting(x-4,y+24,obj_tileSurfaceFlatParent)){
-            y += walkSpeedHill+.2;
-        }
-    }
-}else if (state == 'moveToTarget'){
-    image_index = 0;
-}
-//Stop when the target is reached
-if (state == 'moveToTarget' &amp;&amp; ceil(point_distance(x,y,moveTargetX,y)) == 0 &amp;&amp; moveToTimer &gt; moveToTime){
-    state = 'idle';
-    moveToTimer = 0;
-    image_speed = idleImageSpeed;
-    if (moveXStart == 'less'){
-        sprite_index = spriteIdleRight;
-    }else{
-        sprite_index = spriteIdleLeft;
-    }
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
             <string>///Working general
 
 if (comingFrom &amp;&amp; !instance_exists(dropOffTarget)){
@@ -1347,7 +1355,7 @@ if (positionTimer &gt;= positionTime &amp;&amp; (resourcePosition == 1 || resour
 }
 //Make the worker take their resources back to the warehouse before they begin working
 if (goingTo &amp;&amp; state != 'building'){
-    if (inv[3,0] != -1){
+    if (is_real(inv[3,0]) &amp;&amp; inv[3,0] != -1){
         goingTo = 0;
         comingFrom = 1;
     }    
@@ -1545,8 +1553,9 @@ if (!dying){
                     middleTimer = 0;
                     workTime = (baseWorkTime + workTimeAdd);
                     //pops up xp gained
+                    var targetXp = string(target.xp);
                     with(instance_create(x,y,obj_workerDrawTimed)){
-                        amount = ("+"+string(target.xp)+"XP");
+                        amount = ("+" + targetXp + "XP");
                         col = c_yellow;
                         myWorker = other.id;
                     }
@@ -1646,7 +1655,7 @@ if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60 &amp;&amp
         if (!supplyDropOff){
             //loop through the inv slots and add any resources found to the warehouse
             for (i = 3; i&lt;=6; i++;){
-                if (inv[i,0] != -1 &amp;&amp; (inv[i,1] == 'resource' || inv[i,1] == 'gem')){
+                if ( (is_real(inv[i,0]) &amp;&amp; inv[i,0] != -1) || (is_string(inv[i,1]) &amp;&amp; (inv[i,1] == 'resource' || inv[i,1] == 'gem')) ){
                     var yy = 0;
                     (instance_create(x,y+yy,obj_workerDrawTimed)).amount = ("+" + string(inv[i,6]) + " " + string(inv[i,0])); 
                     yy += 32;
@@ -1905,41 +1914,42 @@ if (state == 'building' &amp;&amp; middleTimer &gt;= workMiddleTime &amp;&amp; r
             <kind>1</kind>
             <string>///Woodcut
 //Starts the worker woodcutting
-
-if (other.id == target &amp;&amp; goingTo){
-    middleTimer ++;
-}
-
-if (state == 'woodcutting' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; middleTimer &gt;= middleTime &amp;&amp; woodcuttingLevel &gt;= target.levelReq){
-    drawTool = 1;
-    cutStart = 1;
-    randomize();
-    cutTimeAdd = irandom(round(baseCuttingTime/3));
-    cuttingTime = (baseCuttingTime + cutTimeAdd);
-    moveToTimer = 0;
-    image_index = 0; 
-    goingTo = 0;
-    comingFrom = 0; 
-    middleTimer = 0;
-    workingLenDirX = lengthdir_x(40,point_direction(x,y,target.x,target.y));
-    workingLenDirY = lengthdir_y(26,point_direction(x,y,target.x,target.y));
-}else if (woodcuttingLevel &lt; target.levelReq &amp;&amp; other.id == target.id &amp;&amp; state == 'woodcutting'){
-    goingTo = 0;
-    middleTimer = 0;
-    state = 'idle';
-    var msg = instance_create(x,y,obj_workerDrawTimed);
-    msg.col = c_red;
-    msg.amount = "Can't do that."
-    image_speed = idleImageSpeed;
-    if (target.x &gt; x){
-        sprite_index = spriteIdleRight;
-    }else{
-        sprite_index = spriteIdleLeft;
+if (state == 'woodcutting'){
+    if (other.id == target &amp;&amp; goingTo){
+        middleTimer ++;
     }
-}
-
-if (other.id == target &amp;&amp; !drawTool &amp;&amp; cutSound){
-    other.animationTimer = 0;
+    
+    if (other.id == target &amp;&amp; goingTo &amp;&amp; (middleTimer &gt;= middleTime) &amp;&amp; woodcuttingLevel &gt;= target.levelReq){
+        drawTool = 1;
+        cutStart = 1;
+        randomize();
+        cutTimeAdd = irandom(round(baseCuttingTime/3));
+        cuttingTime = (baseCuttingTime + cutTimeAdd);
+        moveToTimer = 0;
+        image_index = 0; 
+        goingTo = 0;
+        comingFrom = 0; 
+        middleTimer = 0;
+        workingLenDirX = lengthdir_x(40,point_direction(x,y,target.x,target.y));
+        workingLenDirY = lengthdir_y(26,point_direction(x,y,target.x,target.y));
+    }else if (woodcuttingLevel &lt; target.levelReq &amp;&amp; other.id == target.id &amp;&amp; state == 'woodcutting'){
+        goingTo = 0;
+        middleTimer = 0;
+        state = 'idle';
+        var msg = instance_create(x,y,obj_workerDrawTimed);
+        msg.col = c_red;
+        msg.amount = "Can't do that."
+        image_speed = idleImageSpeed;
+        if (target.x &gt; x){
+            sprite_index = spriteIdleRight;
+        }else{
+            sprite_index = spriteIdleLeft;
+        }
+    }
+    
+    if (other.id == target &amp;&amp; !drawTool &amp;&amp; cutSound){
+        other.animationTimer = 0;
+    }
 }
 </string>
           </argument>

@@ -45,6 +45,7 @@ costStone = 0;
 totalResourcesNeeded = 0;
 amountBuilt = 0;
 devMode = 0;
+xp = 100; //xp a worker gets for building
 ///Being built specific
 //Cost array table 
 //cost[0,0]
@@ -267,40 +268,6 @@ if (global.selectedNumber &gt; 0 &amp;&amp; scr_unit_array_check_for_worker() &a
     scr_unit_array_set_resource_target('building',target);   
     scr_unit_array_clear();    
 }
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="6" enumb="4">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>
-if (!global.workerBuild &amp;&amp; built &amp;&amp; placed){
-    global.selected = id;
-    if (menuObject != noone){
-        if (!menu){ 
-            menu = 1;
-            myMenu = instance_create(x, menuY, menuObject);
-            myMenu.myBuilding = id;
-        }
-    }
-} 
-
 </string>
           </argument>
         </arguments>

@@ -3,7 +3,7 @@
   <spriteName>spr_farm</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>-1</depth>
   <persistent>0</persistent>
   <parentName>obj_buildingParent</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -42,6 +42,7 @@ image_speed = 0;
 vane = instance_create(x-40,y-100,obj_farmVane);
 pig = instance_create(x-90,y,obj_farm1Pig);
 vane.myFarm = id;
+pig.myFarm = id;
 
 
 

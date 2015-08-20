@@ -497,13 +497,29 @@ with (obj_tileSurfaceFlatParent){
     if (flatNumber &gt; 0){
         image_xscale = (image_xscale*flatNumber);
     }
+    //////Generate scenery\\\\\\\\
+    //Tall grass and flowers
+    for(i = 0; i &lt;= flatNumber; i++){
+        grass[i,0] = irandom(3);//image_index
+        grass[i,1] = irandom_range(-30,0);//X pos randomization
+        grass[i,2] = choose(spr_bush,spr_blank,spr_blank,spr_bush,spr_bush,spr_bush,spr_bush,spr_blank);
+        grass[i,3] = choose(1,-2);
+        flowers[i,0] = irandom(7);//image_index
+        flowers[i,1] = irandom_range(-30,0);//X pos randomization
+        flowers[i,2] = choose(spr_flowers,spr_blank,spr_flowers,spr_flowers,spr_flowers,spr_blank,spr_blank);
+        flowers[i,3] = choose(1,-2);
+        if (position_meeting(x + (i*32) + 48,y - 16,obj_tileSurfaceHillParent) || position_meeting(x + (i*32) + 48,y + 16,obj_tileSurfaceHillParent)){
+            grass[i,2] = spr_blank;        
+        } 
+    }
+
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Generate Foliage/resources
 foliageSpawnList = ds_list_create();
 //add foliage/resources to ds list
 repeat(15){
-    ds_list_add(foliageSpawnList,obj_tree1);
+    ds_list_add(foliageSpawnList,obj_treeCommon);
 }
 repeat(10){
     ds_list_add(foliageSpawnList,obj_treeEvergreen);
@@ -535,7 +551,7 @@ for (i = 0; i &lt;= worldWidth; i++;){
         //Place the foliage based on what type it is 
         switch(foliage){
             //spawn common tree
-            case obj_tree1: 
+            case obj_treeCommon: 
                 instance_create(xPos,folY-16,foliage);
                 gridPos += 3;
             break;
@@ -605,6 +621,30 @@ instance_create(mouse_x,mouse_y,obj_townCenter);
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Units
+
+global.doubleClickTimer = 0;
+global.doubleClick = 0;
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="3" enumb="0">
       <action>
@@ -634,7 +674,7 @@ if (global.clickTimer &gt;= 1){
         global.workerStateSelect = 0;
     }
 }
-depth = 2;
+
 </string>
           </argument>
         </arguments>
@@ -701,7 +741,7 @@ if (global.currentLayer == 0){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Keyboard/Mouse
+            <string>///Camera movement/full screen
 
 //Spacebar makes the game go to full screen
 if (keyboard_check_released(vk_space)){ 
@@ -714,15 +754,19 @@ if (keyboard_check_released(vk_space)){
 
 //Camera movement with mouse
 if (mouse_x &lt; view_xview[0] + 40){
-    scrolling = 1;
-    scrollIncrements = -.5;
-    maxScroll = -10;
+    if (window_get_fullscreen()){
+        scrolling = 1;
+        scrollIncrements = -.5;
+        maxScroll = -10;
+    }
 }
 
 if (mouse_x &gt; view_xview[0] + 1200){
-    scrolling = 1;
-    scrollIncrements = .5;
-    maxScroll = 10;
+    if (window_get_fullscreen()){
+        scrolling = 1;
+        scrollIncrements = .5;
+        maxScroll = 10;
+    }
 }
 //stops scrolling when no scroll action is beining performed
 if (mouse_x &lt; view_xview[0] + 1200 &amp;&amp; mouse_x &gt; view_xview[0] + 40 &amp;&amp; !keyboard_check(ord('A')) &amp;&amp; !keyboard_check(ord('D'))){
@@ -750,6 +794,32 @@ if (keyboard_check(ord('S'))){
 
 //Starts and stops the scrolling
 if (scrolling){
+    with(obj_tileSurfaceFlatParent){
+        if (x &gt;= (view_xview[0]-(96+(flatNumber*32))) &amp;&amp; x &lt;= (view_xview[0]+1302)){
+                canDraw = 1;
+                visible = 1;
+                if (!instance_exists(drawObj)){
+                    drawObj = instance_create(x,y,obj_sceneryDraw);
+                    drawObj.myTile = id;
+                }
+        }else{
+            if (canDraw){
+                canDraw = 0;
+                visible = 0;
+                spriteMade = 0;
+                if (instance_exists(drawObj)){
+                    with(drawObj){
+                        instance_destroy();
+                    }
+                }
+                if (mergedLand != -4){
+                    sprite_delete(mergedLand);  
+                    mergedLand = -4; 
+                }
+            }
+    
+        }
+    }
     if (scrollSpeed != maxScroll &amp;&amp; scrollSpeed &lt; 11){
         scrollSpeed += scrollIncrements;
     }
@@ -804,7 +874,7 @@ if (instance_exists(obj_buildingPopUpParent) &amp;&amp; instance_position(mouse_
 
 // Sets the current population
 
-global.pop = instance_number(obj_workerParent);
+
 </string>
           </argument>
         </arguments>
@@ -896,9 +966,7 @@ farmButton.x = view_xview[0]+550;
             <kind>1</kind>
             <string>///Weather
 //Set the wind to blow at random times
-if (!global.windBlowing){
-    global.windTimer ++;
-}
+global.windTimer ++;
 
 if (global.windTimer &gt;= global.windTime &amp;&amp; !global.windBlowing){
     global.windBlowing = 1; 
@@ -906,7 +974,6 @@ if (global.windTimer &gt;= global.windTime &amp;&amp; !global.windBlowing){
 }
 
 if (global.windBlowing){
-    global.windTimer ++;
     if (global.windTimer &gt;= global.windBlowTime){
         global.windTimer = 0;
         global.windBlowing = 0;
@@ -914,6 +981,32 @@ if (global.windBlowing){
         global.windBlowTime = irandom_range(200,600);
     }
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="61">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>
+//Zoom out
+
+
 </string>
           </argument>
         </arguments>
@@ -944,10 +1037,14 @@ if (!position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !position_m
     if (position_meeting(mouse_x,mouse_y,obj_buildingParent)){
         var building = instance_position(mouse_x,mouse_y,obj_buildingParent);
         if (building.built){
-            scr_unit_array_set_move_target(15);
+            if (!global.doubleClick){
+                scr_unit_array_set_move_target(15,1);
+            }else{
+                scr_unit_array_set_move_target(15,1);    
+            }
         }
     }else{
-        scr_unit_array_set_move_target(15);
+        scr_unit_array_set_move_target(15,1);
     }
     
 }
@@ -976,7 +1073,6 @@ if (!position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !position_m
 if (global.workerBuild){
     with (global.selected){
         global.woodCommon += costWoodCommon;
-        global.stoneP1 += costStone;
         instance_destroy();
         global.workerBuild = 0;
     }

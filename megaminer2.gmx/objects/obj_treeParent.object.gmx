@@ -25,7 +25,8 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// if the tree is on a slope or not in the corrent place, delete it 
+            <string>///Init
+// if the tree is on a slope or not in the corrent place, delete it 
 if (place_meeting(x,y,obj_tileSurfaceHillParent)){
     instance_destroy();
 }
@@ -38,8 +39,6 @@ if (y &gt; instance_nearest(x,y,obj_tileSurfaceFlatParent)){
 //sets the sprites to use for the tree
 x += choose(irandom(16), -(irandom(16)));
 y -= choose(0,2,4);
-spriteTop = 0;
-spriteBottom = 0;
 resource = 'wood';
 levelReq = 1;
 fall = 200;
@@ -50,6 +49,8 @@ fell = 0;
 woodLeft = 2000;
 fallSpeed = 0;
 fallIncrement = 0;
+fallXAdd = .3;
+fallYAdd =.2;
 image_speed = 0;
 beingCut = 0;
 animationTimer = 0;
@@ -59,6 +60,12 @@ posDistance = 24;
 posTime = 30;
 midTime = 0;
 midRandom = 10;
+spriteTop = spr_treeCommonTop;
+spriteBottom = spr_treeCommonStump;
+bottomX = -2;
+bottomY = 4;
+stumpX = x + bottomX;
+stumpY = y + bottomY;
 
 
 
@@ -102,7 +109,7 @@ if (place_meeting(x,y,obj_townCenter)){
             <kind>1</kind>
             <string>///Visibility
 if (x &gt;= (view_xview[0]-260)){
-    if (x &lt;= (view_xview[0]+1450)){
+    if (x &lt;= (view_xview[0]+1400)){
         visible = 1;
     }else{
         visible = 0;
@@ -149,16 +156,19 @@ if (falling){
     if (fallSpeed &lt; 5){
         fallSpeed += fallIncrement;
     }
-    if (fallTimer &lt;= 0){
+    if (collision_line(x,y,x + lengthdir_x(220,image_angle+90),y + lengthdir_y(220,image_angle+90),obj_tileSurfaceParent,1,0)){
         falling = 0;
         fell = 1;
+        midRandom += 10;
+        midTime += 30;
     }
     if (fallDir = 'right'){
         image_angle -= fallSpeed;  
-        x += .2;  
+        x += fallXAdd;  
+        y -= fallYAdd;
     }else{
         image_angle += fallSpeed;
-        x -= .2;
+        x -= .3;
     }
 
 }
@@ -209,36 +219,11 @@ if (woodLeft &lt;= 0){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
+            <string>//Make the tree delete itself it a building is placed over it
 if (!falling &amp;&amp; other.placed == 1){
-    instance_destroy();
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="4" ename="obj_tileSurfaceHillParent">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>
-if (falling){
-    fell = 1;
-    falling = 0;
+    if (!fell){
+        instance_destroy();
+    }
 }
 </string>
           </argument>
@@ -303,6 +288,37 @@ if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerPare
 }
     
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>//Draw self and bottom
+
+draw_self();
+draw_sprite(spriteBottom,0,stumpX,stumpY);
+
+//draw_line for collision checking
+if (global.dev_mode){
+    draw_line_width(x,y,x + lengthdir_x(200,image_angle+90),y + lengthdir_y(200,image_angle+90),10);
+}
 </string>
           </argument>
         </arguments>

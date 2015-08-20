@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-5</depth>
+  <depth>0</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -25,19 +25,38 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// set some local variables
-myWorker = 0;
-alpha = 1;
-timer = 0;
-duration = 25;
-amount = 0;
-xOffset = choose(0,-5,5,-9,9);
-yOffset = choose(0,-3,-4,-5,-6);
-startX = x;
-startY = y;
-col = c_white;
-xScale = 1;
-yScale = 1;
+            <string>///init
+
+myTile = -4;
+scenerySprite = -4;
+spriteMade = 0;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="1" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>//Delete sprite
+
+if (sprite_exists(scenerySprite)){
+    sprite_delete(scenerySprite);
+}
 </string>
           </argument>
         </arguments>
@@ -60,22 +79,10 @@ yScale = 1;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// Sets the drawing position for the dmg numbers
-x = ((startX+choose(.01,.02,.03,.04,.05,.06)) + xOffset);
-y = ((startY-35+(choose(.01,.02,.03,.04,.05))) - yOffset);
-// Increments the offsets to make the number drift off slightly
-xOffset -= .05;
-yOffset += .08;
-//sets the drawing alpha to make the number fade
-if (timer &gt;= duration){
-    alpha -= .03;
-    if (alpha &lt;= 0){
-        draw_set_alpha(1);
-        instance_destroy();
-    }
+            <string>
+if (myTile.drawObj != id){
+    instance_destroy();
 }
-//increment the timer
-timer ++;
 </string>
           </argument>
         </arguments>
@@ -98,14 +105,26 @@ timer ++;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//draws the number;
-
-draw_set_font(global.fontDmg);
-draw_set_alpha(alpha);
-draw_text_transformed_colour(x,y,string(amount),xScale,yScale,0,col,col,col,col,alpha);
-draw_set_alpha(1);
-draw_set_color(c_white);
-
+            <string>//Draw/create sprite
+if (spriteMade){
+    draw_sprite(scenerySprite,0,x,y-50);    
+}else if (scenerySprite == -4){
+    var surf = surface_create(32 + (32*myTile.flatNumber)+32,50);
+    surface_set_target(surf);
+    for (i = 0; i &lt; myTile.flatNumber; i++){
+        draw_sprite(myTile.grass[i,2],myTile.grass[i,0],i*32,0
+        
+        );
+    }   
+    scenerySprite = sprite_create_from_surface(surf,0,0,surface_get_width(surf),50,0,0,0,0);
+    surface_reset_target();
+    surface_free(surf);
+    spriteMade = 1; 
+}else{
+    sprite_delete(scenerySprite);
+    spriteMade = 0;
+    scenerySprite = -4;
+}
 </string>
           </argument>
         </arguments>

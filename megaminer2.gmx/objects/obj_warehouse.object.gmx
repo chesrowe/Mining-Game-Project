@@ -32,7 +32,7 @@ surfaceOnly = 1;
 originOffX = 0;
 originOffY = 0;
 menuObject = obj_buildingPopUpFarm;
-menuY = myBuilding.y - 200;
+
 
 
 

@@ -29,6 +29,13 @@
 event_inherited();
 
 spriteTop = spr_oakTree;
+spriteBottom = spr_oakTreeBottom;
+bottomX = 0;
+bottomY = -3;
+stumpX = x + bottomX;
+stumpY = y + bottomY;
+fallYAdd = .2;
+fallXAdd = .2;
 
 xp = 100;
 resource = 'oakWood';

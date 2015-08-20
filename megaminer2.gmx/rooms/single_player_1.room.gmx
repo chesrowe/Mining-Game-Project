@@ -26,7 +26,7 @@
     <showViews>0</showViews>
     <deleteUnderlyingObj>0</deleteUnderlyingObj>
     <deleteUnderlyingTiles>0</deleteUnderlyingTiles>
-    <page>0</page>
+    <page>4</page>
     <xoffset>630</xoffset>
     <yoffset>218</yoffset>
   </makerSettings>
@@ -53,7 +53,6 @@
   <instances>
     <instance objName="obj_devModeSound" x="1728" y="168" name="inst_BF822859" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_globalCon" x="1008" y="476" name="inst_25E1C54A" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_sceneryCon" x="48" y="58" name="inst_B6BA97F9" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
   </instances>
   <tiles>
     <tile bgName="&lt;undefined&gt;" x="112" y="686" w="32" h="32" xo="0" yo="0" id="10002706" name="inst_7A215280" depth="0" locked="0" colour="4294967295" scaleX="1" scaleY="1"/>

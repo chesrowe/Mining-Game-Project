@@ -29,6 +29,13 @@
 event_inherited();
 
 spriteTop = spr_treeBirch1;
+spriteBottom = spr_treeBirchStump;
+bottomX = 0;
+bottomY = 14;
+stumpX = x + bottomX;
+stumpY = y + bottomY;
+fallYAdd = .12;
+fallXAdd = .03;
 
 xp = 30;
 resource = 'birchWood';
