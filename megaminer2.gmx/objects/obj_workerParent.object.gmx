@@ -523,50 +523,24 @@ if (state == 'moveToTarget'){
     moveToTimer ++;
     image_speed = walkingImageSpeed;
 }
-//move towards target WALKING
+//move towards target 
 if (moveToTimer &gt; moveToTime){
-    if ( (state == "moveToTarget" &amp;&amp; moveTargetX &gt;= x) &amp;&amp; (moveToTimer &gt; moveToTime) &amp;&amp; !run ){
-            sprite_index = spriteWalkingRightEmpty;
-            x += walkSpeed;
-        //Make the worker go up or down a hill
-        if ( (place_meeting(x,y,obj_tileSurfaceHillUp) || place_meeting(x,y,obj_tileSurfaceHillUpUnder) ) &amp;&amp; !position_meeting(x+4,y+24,obj_tileSurfaceFlatParent) ){
-            y -= walkSpeedHill+.3;
-            leveled = 0;
-
-        }else if (place_meeting(x,y,obj_tileSurfaceHillDown) &amp;&amp; !position_meeting(x-4,y+24,obj_tileSurfaceFlatParent)){
-            y += walkSpeedHill+.2;
-        }
-    }else if (state = 'moveToTarget' &amp;&amp; moveTargetX &lt;= x &amp;&amp; !run){
-            sprite_index = spriteWalkingLeftEmpty;
-            x -= walkSpeed;
-        //Make the worker go up or down a hill
-        if ( (place_meeting(x,y,obj_tileSurfaceHillDown) || place_meeting(x,y,obj_tileSurfaceHillDownUnder) ) &amp;&amp; !position_meeting(x-4,y+24,obj_tileSurfaceFlatParent) ){
-            y -= walkSpeedHill+.3;
-            leveled = 0;
-        }else if (place_meeting(x,y,obj_tileSurfaceHillUp) &amp;&amp; !position_meeting(x-4,y+24,obj_tileSurfaceFlatParent)){
-                y += walkSpeedHill+.2;
-        }
-    }
-    //move towards target RUNNING
-    if ( (state == "moveToTarget" &amp;&amp; moveTargetX &gt;= x) &amp;&amp; (moveToTimer &gt; moveToTime) &amp;&amp; run ){
-        sprite_index = spriteRunningRight;
-        if (!hillStart){
-            x += walkSpeed*2;
-            if (place_meeting(x-6,y,obj_tileSurfaceHillParent)){
-                hillStart = 1;
-            }
+    if ( (state == "moveToTarget" &amp;&amp; moveTargetX &gt;= x) &amp;&amp; (moveToTimer &gt; moveToTime)){
+         //change the sprite to the right one
+         if (run){
+            sprite_index = spriteRunningRight; 
         }else{
-            if (hillStart &amp;&amp; position_meeting(x+2,y+26,obj_tileSurfaceFlatParent) &amp;&amp; !place_meeting(x-4,y,obj_tileSurfaceHillParent)){
-                hillStart = 0;
-            } 
-            if (hillStart){
-                falling = 0;
-                if (place_meeting(x,y,obj_tileSurfaceHillUp)){
-                    y = y + lengthdir_y(2,50); 
-                    x = x + lengthdir_x(2,50);   
-                }
-            }   
+            sprite_index = spriteWalkingRightEmpty;
         }
+        scr_unit_move_avoiding(walkSpeed,run,1);
+    }else if (state == 'moveToTarget' &amp;&amp; moveTargetX &lt;= x){
+        //change the sprite to the right one
+        if (run){
+            sprite_index = spriteRunningLeft; 
+        }else{
+            sprite_index = spriteWalkingLeftEmpty;
+        }
+        scr_unit_move_avoiding(walkSpeed,run,0); 
     }
 }else if (state == 'moveToTarget'){
     image_index = 0;
@@ -664,10 +638,10 @@ if (!dying){
         if (moveToTimer &gt; moveToTime){
             if (target.x &gt; x &amp;&amp; !farmStart &amp;&amp; goingTo){
                 sprite_index = spriteWalkingRightEmpty;
-                scr_unit_move_avoiding_right();
+                scr_unit_move_avoiding(walkSpeed,0,1);
             }else if(!farmStart &amp;&amp; goingTo){
                 sprite_index = spriteWalkingLeftEmpty;
-                scr_unit_move_avoiding_left();
+                scr_unit_move_avoiding(walkSpeed,0,0);
             }
         }
         //Starts the worker to mining
@@ -798,13 +772,13 @@ if (!dying){
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteSupplyCarryRight;
-                scr_unit_move_avoiding_right();   
+                scr_unit_move_avoiding(walkSpeed,0,1);   
         }
         }else if (comingFrom){
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteSupplyCarryLeft;
-                scr_unit_move_avoiding_left();
+                scr_unit_move_avoiding(walkSpeed,0,0);
             }
         }
     
@@ -842,10 +816,10 @@ if (!dying){
         if (moveToTimer &gt; moveToTime){
             if (target.x &gt; x &amp;&amp; !mineStart &amp;&amp; goingTo){
                 sprite_index = spriteWalkingRightEmpty;
-                scr_unit_move_avoiding_right();  
+                scr_unit_move_avoiding(walkSpeed,0,1); 
             }else if(!mineStart &amp;&amp; goingTo){
                 sprite_index = spriteWalkingLeftEmpty;
-                scr_unit_move_avoiding_left();  
+                scr_unit_move_avoiding(walkSpeed,0,0);  
             }
         }
         //Starts the worker to mining
@@ -983,13 +957,13 @@ if (!dying){
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteSupplyCarryRight;
-                scr_unit_move_avoiding_right();     
+                scr_unit_move_avoiding(walkSpeed,0,1);     
         }
         }else if (comingFrom){
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteSupplyCarryLeft;
-                scr_unit_move_avoiding_left();  
+                scr_unit_move_avoiding(walkSpeed,0,0);  
             }
         }
     
@@ -1088,10 +1062,10 @@ if (state == 'woodcutting'){
      if (moveToTimer &gt; moveToTime){
          if (instance_exists(target)&amp;&amp; target.x &gt; x &amp;&amp; !cutStart &amp;&amp; goingTo){
             sprite_index = spriteWalkingRightEmpty;
-            scr_unit_move_avoiding_right();
+            scr_unit_move_avoiding(walkSpeed,0,1);
          }else if(!cutStart &amp;&amp; goingTo){
             sprite_index = spriteWalkingLeftEmpty;
-            scr_unit_move_avoiding_left();
+            scr_unit_move_avoiding(walkSpeed,0,0);
          }
      }
     //starts the worker to woodcutting
@@ -1203,13 +1177,13 @@ if (state == 'woodcutting'){
         moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteSupplyCarryRight;
-                scr_unit_move_avoiding_right();    
+                scr_unit_move_avoiding(walkSpeed,0,1);    
         }
     }else if (comingFrom){
         moveToTimer ++;
         if (moveToTimer &gt; moveToTime){
             sprite_index = spriteSupplyCarryLeft;
-            scr_unit_move_avoiding_left();
+            scr_unit_move_avoiding(walkSpeed,0,0);
         }
     }
 
@@ -1225,10 +1199,10 @@ if (state == 'woodcutting'){
         cutStart = 0;
         moveTimer ++;
         if (x &gt; target.x &amp;&amp; moveTimer &lt; 150 &amp;&amp; target.fallDir == 'right'){
-            scr_unit_move_avoiding_right();
+            scr_unit_move_avoiding(walkSpeed,0,0);
         }
         if (x &lt; target.x &amp;&amp; moveTimer &lt; 150 &amp;&amp; target.fallDir == 'left'){
-            scr_unit_move_avoiding_left();   
+            scr_unit_move_avoiding(walkSpeed,0,0);   
         }
         if (instance_exists(target) &amp;&amp; target.fell){
             move = 0;
@@ -1338,10 +1312,10 @@ if (comingFrom &amp;&amp; !instance_exists(dropOffTarget)){
 //1 = left, 2 = right
 if (resourcePosition == 1){
     positionTimer ++;
-    scr_unit_move_avoiding_left();            
+    scr_unit_move_avoiding(walkSpeed,0,0);            
 }else if (resourcePosition == 2){
     positionTimer ++;
-    scr_unit_move_avoiding_right();
+    scr_unit_move_avoiding(walkSpeed,0,1);
 }
 // stop the movement
 if (positionTimer &gt;= positionTime &amp;&amp; (resourcePosition == 1 || resourcePosition == 2)){
@@ -1496,10 +1470,10 @@ if (!dying){
             if (moveToTimer &gt; moveToTime){
                 if (target.x &gt; x &amp;&amp; !workStart &amp;&amp; goingTo){
                     sprite_index = spriteSupplyCarryRight;
-                    scr_unit_move_avoiding_right();  
+                    scr_unit_move_avoiding(walkSpeed,0,1);  
                 }else if(!workStart &amp;&amp; goingTo){
                     sprite_index = spriteSupplyCarryLeft;
-                    scr_unit_move_avoiding_left();  
+                    scr_unit_move_avoiding(walkSpeed,0,0); 
                 }
             }
         }else{
@@ -1509,10 +1483,10 @@ if (!dying){
             if (moveToTimer &gt; moveToTime){
                 if (obj_warehouse.x &gt; x &amp;&amp; !workStart &amp;&amp; gettingResources){
                     sprite_index = spriteWalkingRightEmpty;
-                    scr_unit_move_avoiding_right();  
+                    scr_unit_move_avoiding(walkSpeed,0,1);  
                 }else if(!workStart &amp;&amp; gettingResources){
                     sprite_index = spriteWalkingLeftEmpty;
-                    scr_unit_move_avoiding_left();  
+                    scr_unit_move_avoiding(walkSpeed,0,0);  
                 }
             }
         }
