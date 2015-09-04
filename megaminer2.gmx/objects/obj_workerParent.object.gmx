@@ -529,6 +529,7 @@ if (moveToTimer &gt; moveToTime){
          //change the sprite to the right one
          if (run){
             sprite_index = spriteRunningRight; 
+            stamina --;
         }else{
             sprite_index = spriteWalkingRightEmpty;
         }
@@ -537,6 +538,7 @@ if (moveToTimer &gt; moveToTime){
         //change the sprite to the right one
         if (run){
             sprite_index = spriteRunningLeft; 
+            stamina --;
         }else{
             sprite_index = spriteWalkingLeftEmpty;
         }
@@ -547,7 +549,7 @@ if (moveToTimer &gt; moveToTime){
 }
 
 //Stop when the target is reached
-if (state == 'moveToTarget' &amp;&amp; ceil(point_distance(x,y,moveTargetX,y)) == 0 &amp;&amp; moveToTimer &gt; moveToTime){
+if (state == 'moveToTarget' &amp;&amp; ceil(point_distance(x,y,moveTargetX,y)) &lt;= 1 &amp;&amp; moveToTimer &gt; moveToTime){
     state = 'idle';
     moveToTimer = 0;
     image_speed = idleImageSpeed;
@@ -2098,6 +2100,59 @@ if (global.shiftSelect){
     scr_unit_array_add(id);
 }
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///General
+draw_self();
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Hp/stamina bar
+
+//If the worker is running , draw the stamina bar
+//if (run){
+    draw_rectangle_colour(x-10,y-36,x+10,y-42,c_black,c_black,c_black,c_black,0);
+    var stPercent = ((stamina/maxStamina)*10)*10;
+    var drawPercent = round( ((stPercent/100) * 20) ); 
+    draw_rectangle_colour(x-10,y-36,(x-10)+drawPercent,y-42,c_green,c_green,c_green,c_green,0);
+//} 
 </string>
           </argument>
         </arguments>

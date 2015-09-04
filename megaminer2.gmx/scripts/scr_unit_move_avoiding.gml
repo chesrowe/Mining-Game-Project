@@ -30,13 +30,14 @@ if (dir == 1){
         }
     }
 }else{
-    //Left
-    if ( (position_meeting(x-16,y+10,obj_tileSurfaceHillDown) || position_meeting(x-16,y+26,obj_tileSurfaceHillDownUnder)) ){
+    //Left and up
+    if ( (position_meeting(x-16,y+10,obj_tileSurfaceHillDown) || position_meeting(x-16,y+26,obj_tileSurfaceHillDownUnder) || position_meeting(x+16,y+26,obj_tileSurfaceFlatParent) || (position_meeting(x,y+30,obj_tileSurfaceHillParent) && !position_meeting(x+6,y+30,obj_tileSurfaceFlatParent)) ) ){
         if (!runOn){
             y -= yMoveSpeed+.3;
         }else{
             y -= (yMoveSpeed+.3)*2;    
         }
+        //left and DOWN
     }else if ( (position_meeting(x+24,y+26,obj_tileSurfaceHillUp) || position_meeting(x,y+30,obj_tileSurfaceHillUpUnder) || place_meeting(x+10,y,obj_tileSurfaceHillUp)) && (!position_meeting(x-16,y+26,obj_tileSurfaceFlatParent)) ){
         if (!runOn){
             y += yMoveSpeed+.2;
