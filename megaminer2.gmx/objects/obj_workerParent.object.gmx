@@ -69,10 +69,13 @@ hillStart = 0;
 
 
 
+
 //Stats
 hp = 100;
 maxStamina = 100;
 stamina = maxStamina;
+staminaRegen = 0;
+staminaTimer = 0;
 hpMax = 100;
 level = 1;
 woodcuttingLevel = 100;
@@ -528,8 +531,13 @@ if (moveToTimer &gt; moveToTime){
     if ( (state == "moveToTarget" &amp;&amp; moveTargetX &gt;= x) &amp;&amp; (moveToTimer &gt; moveToTime)){
          //change the sprite to the right one
          if (run){
+            staminaTimer = 0;
             sprite_index = spriteRunningRight; 
-            stamina --;
+            if (stamina &gt; 0){
+                stamina --;
+            }else{
+                run = 0;
+            }
         }else{
             sprite_index = spriteWalkingRightEmpty;
         }
@@ -537,8 +545,13 @@ if (moveToTimer &gt; moveToTime){
     }else if (state == 'moveToTarget' &amp;&amp; moveTargetX &lt;= x){
         //change the sprite to the right one
         if (run){
+            staminaTimer = 0;
             sprite_index = spriteRunningLeft; 
-            stamina --;
+            if (stamina &gt; 0){
+                stamina --;
+            }else{
+                run = 0;
+            }
         }else{
             sprite_index = spriteWalkingLeftEmpty;
         }
@@ -551,6 +564,7 @@ if (moveToTimer &gt; moveToTime){
 //Stop when the target is reached
 if (state == 'moveToTarget' &amp;&amp; ceil(point_distance(x,y,moveTargetX,y)) &lt;= 1 &amp;&amp; moveToTimer &gt; moveToTime){
     state = 'idle';
+    run = 0;
     moveToTimer = 0;
     image_speed = idleImageSpeed;
     if (moveXStart == 'less'){
@@ -1593,6 +1607,40 @@ if (!dying){
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Stamina regen
+
+if (!run &amp;&amp; stamina &lt; maxStamina){
+    staminaTimer ++;
+    if (staminaTimer &gt;= 180){
+        staminaRegen = 1;
+        stamina ++;
+    }
+}
+
+if (staminaRegen &amp;&amp; stamina == maxStamina){
+    staminaRegen = 0;    
+    staminaTimer ++;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="4" ename="obj_warehouse">
       <action>
@@ -2147,12 +2195,16 @@ draw_self();
             <string>///Hp/stamina bar
 
 //If the worker is running , draw the stamina bar
-//if (run){
-    draw_rectangle_colour(x-10,y-36,x+10,y-42,c_black,c_black,c_black,c_black,0);
+if (run || staminaRegen){
+    draw_rectangle_colour(x-6,y-38,x+16,y-42,c_black,c_black,c_black,c_black,0);
     var stPercent = ((stamina/maxStamina)*10)*10;
     var drawPercent = round( ((stPercent/100) * 20) ); 
-    draw_rectangle_colour(x-10,y-36,(x-10)+drawPercent,y-42,c_green,c_green,c_green,c_green,0);
-//} 
+    draw_rectangle_colour(x-6,y-38,(x-6)+drawPercent,y-42,c_green,c_green,c_green,c_green,0);
+} 
+
+//Temp debug
+
+draw_text(x, y - 16,"run "+string(run));
 </string>
           </argument>
         </arguments>
