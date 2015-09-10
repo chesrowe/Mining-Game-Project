@@ -32,7 +32,6 @@ groundY = 615;
 surfaceOnly = 1;
 originOffX = 0;
 originOffY = 0;
-menuObject = obj_buildingPopUpFarm;
 menuY = y+300;
 patches = 0;
 maxPatches = 2;
@@ -46,13 +45,13 @@ pig.myFarm = id;
 
 
 
-
+//Sprites
 spriteLevel[0] = spr_farm;
 spriteLevel[1] = spr_farm;
 spriteLevel[2] = spr_farm;
 spriteLevel[3] = spr_farm;
 spriteLevel[4] = spr_farm;
-spriteLevel[5] = spr_farm;
+
 </string>
           </argument>
         </arguments>

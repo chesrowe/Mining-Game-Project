@@ -35,10 +35,6 @@ placeY = 0;
 originOffX = 0;
 originOffY = 0;
 mouseYOff = 50;
-menu = 0;
-myMenu = 0;
-menuObject = 0;
-menuY = y - 300;
 placeSoundPlayed = 0;
 costWoodCommon = 500;
 costStone = 0;
@@ -87,6 +83,27 @@ placeSound[0] = sd_buildingPlace1;
 placeSound[1] = sd_buildingPlace2;
 placeSound[2] = sd_buildingPlace3;
 placeSound[3] = sd_buildingPlace4;
+
+//Buttons
+showButtons = 0;
+buttonsSpawned = 0;
+buttonNumber = 0;
+
+button[0] = obj_structureButtonLevelUp;
+button[0].myStructure = id;
+button[1] = -4;
+button[2] = -4;
+button[3] = -4;
+button[4] = -4;
+
+//Get the number of buttons the structure has
+for (i = 0; i &lt; 10; i++){
+    if (button[i] == -4){
+        break;
+    }else{
+        buttonNumber ++;
+    }
+}
 </string>
           </argument>
         </arguments>

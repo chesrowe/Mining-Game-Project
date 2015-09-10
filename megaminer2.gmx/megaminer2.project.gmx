@@ -195,10 +195,7 @@
       <sprite>sprites\spr_hpFront</sprite>
     </sprites>
     <sprites name="Structures">
-      <sprite>sprites\spr_townCenter1</sprite>
-      <sprite>sprites\spr_townCenter2</sprite>
       <sprite>sprites\spr_farmingPatch</sprite>
-      <sprite>sprites\spr_warehouse1</sprite>
       <sprites name="towers">
         <sprite>sprites\spr_towerArcher</sprite>
       </sprites>
@@ -206,6 +203,20 @@
         <sprite>sprites\spr_farm</sprite>
         <sprite>sprites\spr_farmVane</sprite>
         <sprite>sprites\spr_farmPig</sprite>
+      </sprites>
+      <sprites name="Towncenter">
+        <sprite>sprites\spr_townCenter2</sprite>
+        <sprite>sprites\spr_townCenter1</sprite>
+      </sprites>
+      <sprites name="House">
+        <sprite>sprites\spr_house1</sprite>
+      </sprites>
+      <sprites name="Wall">
+        <sprite>sprites\spr_wall1</sprite>
+      </sprites>
+      <sprites name="Warehouse">
+        <sprite>sprites\spr_warehouse2</sprite>
+        <sprite>sprites\spr_warehouse1</sprite>
       </sprites>
     </sprites>
     <sprites name="Environment">
@@ -240,14 +251,6 @@
     </sprites>
     <sprites name="Ui">
       <sprites name="Mouse/keyboard">
-        <sprites name="build menu">
-          <sprite>sprites\spr_menuStripVir</sprite>
-          <sprite>sprites\spr_menuStripHor</sprite>
-          <sprite>sprites\spr_testButton</sprite>
-          <sprite>sprites\sprite84</sprite>
-          <sprite>sprites\spr_testIcon</sprite>
-        </sprites>
-        <sprite>sprites\spr_buildingPopUp</sprite>
         <sprites name="buttons">
           <sprite>sprites\spr_buttonLevelUp</sprite>
           <sprite>sprites\spr_buttonFarmPatch</sprite>
@@ -363,34 +366,6 @@
       </objects>
     </objects>
     <objects name="UI">
-      <object>objects\obj_goldUi</object>
-      <object>objects\obj_stoneUi</object>
-      <objects name="Mouse/Keyboard">
-        <objects name="Build Menu">
-          <object>objects\obj_buildMenuHor</object>
-          <object>objects\obj_menuIcon</object>
-          <object>objects\obj_buildMenuWorkerIcon</object>
-          <object>objects\obj_buildMenuDefenseIcon</object>
-          <object>objects\obj_buildMenuBuildingIcon</object>
-          <object>objects\obj_buildMenuWorkersStrip</object>
-          <object>objects\obj_buildMenuDefenseStrip</object>
-          <object>objects\obj_buildMenuBuildingStrip</object>
-          <object>objects\obj_buildMenuHumanWorkerIcon</object>
-          <object>objects\obj_buildMenuFarmIcon</object>
-          <object>objects\obj_warehouseIcon</object>
-          <object>objects\obj_buildMenuArcherTowerIcon</object>
-        </objects>
-        <objects name="Building Pop up menus">
-          <objects name="Buttons">
-            <object>objects\obj_buttonFarmPatch</object>
-            <object>objects\obj_buttonParent</object>
-            <object>objects\obj_buttonUpgradeTC</object>
-          </objects>
-          <object>objects\obj_buildingPopUpParent</object>
-          <object>objects\obj_buildingPopUpFarm</object>
-          <object>objects\obj_buildingPopUpTownCenter</object>
-        </objects>
-      </objects>
       <objects name="Dev mode">
         <object>objects\obj_devModeSound</object>
       </objects>
@@ -399,6 +374,10 @@
         <object>objects\obj_uiWorkerButtonBuild</object>
         <object>objects\obj_uiWorkerButtonFarm</object>
         <object>objects\obj_uiWorkerButtonStockpile</object>
+      </objects>
+      <objects name="Structures">
+        <object>objects\obj_structureButtonParent</object>
+        <object>objects\obj_structureButtonLevelUp</object>
       </objects>
     </objects>
     <objects name="Evironment">
