@@ -88,22 +88,35 @@ placeSound[3] = sd_buildingPlace4;
 showButtons = 0;
 buttonsSpawned = 0;
 buttonNumber = 0;
+buttonsDelete = 0;
 
-button[0] = obj_structureButtonLevelUp;
-button[0].myStructure = id;
-button[1] = -4;
-button[2] = -4;
-button[3] = -4;
-button[4] = -4;
+button[0,0] = obj_structureButtonLevelUp;
+button[0,1] = 90;
+button[0,2] = 260;
+button[1,0] = -4;
+button[1,1] = -4;
+button[1,2] = -4;
+button[2,0] = -4;
 
 //Get the number of buttons the structure has
 for (i = 0; i &lt; 10; i++){
-    if (button[i] == -4){
+    if (button[i,0] == -4){
         break;
     }else{
         buttonNumber ++;
     }
 }
+
+//Pop up text
+buildingName = "Towncenter Level 1";
+textPopUp = 0;
+popUpX1 = -44
+popUpX2 = 89
+popUpY1 = -284;
+popUpY2 = -302;
+textDrawX = -40;
+textDrawY = -300;
+yOffset = 100;
 </string>
           </argument>
         </arguments>
@@ -201,6 +214,102 @@ if (percentBuilt &gt;= 100){
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Buttons
+
+
+if (showButtons){
+    //If the buttons are not spawn, spawn them
+    if (!buttonsSpawned){
+        for (i = 0; i &lt; buttonNumber; i++){
+            buttonsDelete = 0;
+            var but = instance_create(x - button[i,1],y - button[i,2],button[i,0]);
+            but.myStructure = id;
+            but.xx = button[i,1];
+            but.yy = button[i,2];
+            buttonsSpawned = 1;
+        }
+    }
+}else{
+    //Delete the buttons
+    if (buttonsSpawned){
+        buttonsDelete = 1;
+        buttonsSpawned = 0;    
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Building text popup
+if (instance_position(mouse_x,mouse_y,object_index)){
+    if (!showButtons &amp;&amp; built){
+        textPopUp = 1;
+    }
+}else{
+    textPopUp = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="54">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Hide buttons
+with(obj_buildingParent){
+    showButtons = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="6" enumb="53">
       <action>
@@ -219,9 +328,45 @@ if (percentBuilt &gt;= 100){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Spawn first worker
-if (global.building == 1 &amp;&amp; global.selected == id &amp;&amp; object_index = obj_townCenter){
-    instance_create(x,y-96,obj_workerHumanP1);
+            <string>///Draw self/percent
+draw_self();
+
+//If the building is still being built, draw the percentage
+if (!built){
+    draw_text(x+70,y-100,string(percentBuilt)+"%");
+}
+
+//Text pop up
+if (textPopUp){
+    draw_rectangle_colour(x + popUpX1, y + popUpY1, x + popUpX2, y + popUpY2,c_black,c_black,c_black,c_black,0);
+    draw_text_colour(x + textDrawX, y + textDrawY, buildingName,c_white,c_white,c_white,c_white,1);
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///ALL BUILDINGS: hide buttons
+
+if (!instance_position(mouse_x,mouse_y,obj_structureButtonParent)){
+    with(obj_buildingParent){
+        showButtons = 0;
+    }    
 }
 </string>
           </argument>
@@ -251,6 +396,36 @@ if (!devMode){
     devMode = 1;
 }else {
     devMode = 0;    
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="7">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Show buttons
+
+if (!instance_position(mouse_x,mouse_y,obj_workerParent)){
+    if (!showButtons){
+        showButtons = 1;
+        textPopUp = 0;
+    }
 }
 </string>
           </argument>
@@ -310,9 +485,15 @@ if (global.selectedNumber &gt; 0 &amp;&amp; scr_unit_array_check_for_worker() &a
             <string>///Draw self/percent
 draw_self();
 
+//If the building is still being built, draw the percentage
 if (!built){
-    
     draw_text(x+70,y-100,string(percentBuilt)+"%");
+}
+
+//Text pop up
+if (textPopUp){
+    draw_rectangle_colour(x + popUpX1, y + yOffset + popUpY1, x + popUpX2, y + yOffset + popUpY2,c_black,c_black,c_black,c_black,0);
+    draw_text_colour(x +textDrawX, y + yOffset + textDrawY, buildingName,c_white,c_white,c_white,c_white,1);
 }
 </string>
           </argument>

@@ -253,6 +253,8 @@
       <sprites name="Mouse/keyboard">
         <sprites name="buttons">
           <sprite>sprites\spr_buttonLevelUp</sprite>
+          <sprite>sprites\spr_workerCreateButton</sprite>
+          <sprite>sprites\spr_sturctureInfoButton</sprite>
           <sprite>sprites\spr_buttonFarmPatch</sprite>
         </sprites>
       </sprites>
@@ -378,6 +380,8 @@
       <objects name="Structures">
         <object>objects\obj_structureButtonParent</object>
         <object>objects\obj_structureButtonLevelUp</object>
+        <object>objects\obj_structureIconButtonCreateWorker</object>
+        <object>objects\obj_structureButtonBuildingInfo</object>
       </objects>
     </objects>
     <objects name="Evironment">
