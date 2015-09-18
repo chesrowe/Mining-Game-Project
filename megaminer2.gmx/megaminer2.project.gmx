@@ -250,23 +250,29 @@
       <sprite>sprites\spr_gameFade</sprite>
     </sprites>
     <sprites name="Ui">
-      <sprites name="Mouse/keyboard">
-        <sprites name="buttons">
-          <sprite>sprites\spr_buttonLevelUp</sprite>
-          <sprite>sprites\spr_workerCreateButton</sprite>
-          <sprite>sprites\spr_sturctureInfoButton</sprite>
-          <sprite>sprites\spr_buttonFarmPatch</sprite>
-        </sprites>
-      </sprites>
-      <sprites name="Gamepad">
-        <sprite>sprites\spr_selectorP1</sprite>
-      </sprites>
       <sprite>sprites\obj_uiIconBasic</sprite>
+      <sprite>sprites\spr_selectorP1</sprite>
       <sprite>sprites\spr_uiIconStockPile</sprite>
       <sprite>sprites\spr_uiIconFarm</sprite>
       <sprite>sprites\obj_uiIconEquipment</sprite>
       <sprite>sprites\obj_uiIconStats</sprite>
       <sprite>sprites\obj_uiIconBuild</sprite>
+      <sprites name="buttons">
+        <sprite>sprites\spr_buttonLevelUp</sprite>
+        <sprite>sprites\spr_workerCreateButton</sprite>
+        <sprite>sprites\spr_sturctureInfoButton</sprite>
+        <sprite>sprites\spr_buttonFarmPatch</sprite>
+        <sprite>sprites\spr_uiButtonBase</sprite>
+        <sprite>sprites\spr_buttonShowResources</sprite>
+      </sprites>
+      <sprite>sprites\spr_uiDynamicboxTopLeft</sprite>
+      <sprite>sprites\spr_uiDynamicBoxBottomLeft</sprite>
+      <sprite>sprites\spr_uiDynamicBoxBottomRight</sprite>
+      <sprite>sprites\spr_uiDynamicBoxLeft</sprite>
+      <sprite>sprites\spr_uiDynamicBoxTop</sprite>
+      <sprite>sprites\spr_uiDynamicBoxBottom</sprite>
+      <sprite>sprites\spr_uiDynamicBoxRight</sprite>
+      <sprite>sprites\spr_uiDynamicBoxTopRight</sprite>
     </sprites>
     <sprites name="non-visible">
       <sprite>sprites\spr_solid</sprite>
@@ -293,6 +299,7 @@
     <sprite>sprites\spr_surface3</sprite>
     <sprite>sprites\spr_surface4</sprite>
     <sprite>sprites\spr_tileBlack</sprite>
+    <sprite>sprites\sprite106</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_sky</background>
@@ -330,6 +337,7 @@
       <script>scripts\scr_building_can_be_placed.gml</script>
       <script>scripts\scr_building_find_resource_needed.gml</script>
     </scripts>
+    <script>scripts\scr_draw_ui_box.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\ft_gameFont</font>
