@@ -11,7 +11,7 @@ for(i = 0;i < 100;i++){
             target = argument1.id;
             targetType = argument1.object_index;
             state = argument0;
-            if (state == 'building'){
+            if (state == 'building' || state == 'upgrading'){
                 gettingResources = 1;
                 goingTo = 0;
             }else{

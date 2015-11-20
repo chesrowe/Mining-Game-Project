@@ -108,12 +108,12 @@ global.localCoop = 0;
 
 //Resources
 global.gold = 0;
-global.stone = 0;
+global.stone = 9200;
 global.crystal = 0;
 global.brimstone = 0;
 global.mushroom = 0;
-global.woodCommon = 1000;
-global.food = 0;
+global.woodCommon = 9000;
+global.food = 9200;
 
 //Gamepad Specific
 global.controllerCount = 0;
@@ -190,13 +190,13 @@ global.workerBuildMenu = 0;
 
 //Sound Variables
 global.currentSong = irandom(1);
-global.mute = 0;
+global.mute = 1;
 pickSoundTimer = 0;
 global.songPlaying[0] = 0;
 //audio_master_gain(0);
-global.sfxVol = .6;
-global.musicVol = 0;
-global.ambienceVol = .4;
+global.sfxVol = .1;
+global.musicVol = .2;
+global.ambienceVol = .1;
 global.ambience[0] = audio_play_sound(sd_surfaceAmbience,9,1);
 audio_sound_gain(global.ambience[0],global.ambienceVol,0);
 //audio_channel_num(20);
@@ -644,6 +644,56 @@ instance_create(mouse_x,mouse_y,obj_townCenter);
 
 global.doubleClickTimer = 0;
 global.doubleClick = 0;
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Initial world update
+
+with(obj_tileSurfaceFlatParent){
+    if (x &gt;= (view_xview[0]-(96+(flatNumber*32))) &amp;&amp; x &lt;= (view_xview[0]+1302)){
+            canDraw = 1;
+            visible = 1;
+            if (!instance_exists(drawObj)){
+                drawObj = instance_create(x,y,obj_sceneryDraw);
+                drawObj.myTile = id;
+            }
+    }else{
+        if (canDraw){
+            canDraw = 0;
+            visible = 0;
+            spriteMade = 0;
+            if (instance_exists(drawObj)){
+                with(drawObj){
+                    instance_destroy();
+                }
+            }
+            if (mergedLand != -4){
+                sprite_delete(mergedLand);  
+                mergedLand = -4; 
+            }
+        }
+
+    }
+}
 </string>
           </argument>
         </arguments>
@@ -912,8 +962,11 @@ if (global.select){
 
 //Snap worker buttons in place
 buildButton.x = view_xview[0]+550;
+buildButton.y = view_yview[0]+60;
 stockpileButton.x = view_xview[0]+300;
+stockpileButton.y = view_yview[0] + 60;
 farmButton.x = view_xview[0]+550;
+farmButton.y = view_yview[0]+60;
 
 
 </string>
@@ -1291,7 +1344,7 @@ moveTimer = 0;
             <string>/// Select box
 
 //if there is no selectable object underneath the mouse
-if (!global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect){
+if (!global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent)){
     global.selectBoxStart = 1;
     global.selectStartX = mouse_x;
     global.selectStartY = mouse_y;
@@ -1430,29 +1483,6 @@ draw_text(mouse_x,mouse_y-40,string(global.doubleClick));
 
 
 
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>//TEST
-
-scr_draw_ui_box(1,1,mouse_x,mouse_y);
 </string>
           </argument>
         </arguments>

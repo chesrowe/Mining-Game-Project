@@ -25,19 +25,52 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///General
-event_inherited();
+            <string>///Positioning
 
-//Icon
-icon = spr_sturctureInfoButton;
-iconOffsetX = 14;
-iconOffsetY = 20;
-//infobox
-infoBoxWidth = 6;
-infoBoxHeight = 0;
-infoBoxX = x - 100;
-infoBoxY = y - 100;
-showInfoBox = 0;
+event_inherited();
+iconOffsetX = 16;
+iconOffsetY = 16;
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="7">
+      <action>
+        <libid>1</libid>
+        <id>604</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>1</exetype>
+        <functionname>action_inherited</functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Start upgrade
+
+myStructure.upgrade = 1;
 </string>
           </argument>
         </arguments>
@@ -74,10 +107,30 @@ showInfoBox = 0;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Draw info 
+            <string>///info-box
+ 
+
+//Info text
 
 if (showInfoBox){
-    draw_text(infoBoxX + 28,infoBoxY + 24,"Show settlement Information");    
+    draw_set_colour(c_white);
+    draw_text(infoBoxX + 24, infoBoxY + 32,"Upgrade to level " + string(myStructure.level + 1));
+    //wood cost
+    draw_text(infoBoxX + 24, infoBoxY + 64,"Cost - " );
+    draw_set_color(c_yellow);
+    draw_text(infoBoxX + 48, infoBoxY + 64,"         200" );
+    draw_set_colour(c_white);
+    draw_text(infoBoxX + 64, infoBoxY + 64,"              wood" );
+    //stone cost 
+    draw_set_color(c_yellow);
+    draw_text(infoBoxX + 48, infoBoxY + 80,"         200" );
+    draw_set_colour(c_white);
+    draw_text(infoBoxX + 64, infoBoxY + 80,"              stone" );
+    //Food cost 
+    draw_set_color(c_yellow);
+    draw_text(infoBoxX + 48, infoBoxY + 96,"         200" );
+    draw_set_colour(c_white);
+    draw_text(infoBoxX + 64, infoBoxY + 96,"              food" );
 }
 </string>
           </argument>

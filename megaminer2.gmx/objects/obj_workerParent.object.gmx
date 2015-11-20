@@ -1551,7 +1551,7 @@ if (!dying){
                     }
                     //Take away the resources the worker was building with
                     for (i = 0; i &lt; 3; i++){
-                        if (target.cost[i,0] = currentResource){
+                        if (target.cost[i,0] == currentResource){
                             target.cost[i,2] -= 40;
                             target.amountBuilt += 40;
                             for (a = 0; a &lt;= 10; a++;){
@@ -1590,6 +1590,149 @@ if (!dying){
             }
         } 
         if (target.built){
+            middleTimer = 0;
+            goingTo = 0;
+            gettingResources = 0;
+            state = 'idle';
+            if (x &gt; target.x){
+                sprite_index = spriteIdleLeft;
+            }else{
+                sprite_index = spriteIdleRight;    
+            }
+        }         
+    }  
+
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Upgrading
+
+if (!dying){
+    
+    if (state == 'upgrading'){
+        if (!gettingResources){
+            moveToTimer ++;
+            image_speed = walkingImageSpeed;
+            //Workers walks to the building to bulid it
+            if (moveToTimer &gt; moveToTime){
+                if (target.x &gt; x &amp;&amp; !workStart &amp;&amp; goingTo){
+                    sprite_index = spriteSupplyCarryRight;
+                    scr_unit_move_avoiding(walkSpeed,0,1);  
+                }else if(!workStart &amp;&amp; goingTo){
+                    sprite_index = spriteSupplyCarryLeft;
+                    scr_unit_move_avoiding(walkSpeed,0,0); 
+                }
+            }
+        }else{
+            moveToTimer ++;
+            image_speed = walkingImageSpeed;
+            //Worker goes to get resources from the stockpile to build the building with
+            if (moveToTimer &gt; moveToTime){
+                if (obj_warehouse.x &gt; x &amp;&amp; !workStart &amp;&amp; gettingResources){
+                    sprite_index = spriteWalkingRightEmpty;
+                    scr_unit_move_avoiding(walkSpeed,0,1);  
+                }else if(!workStart &amp;&amp; gettingResources){
+                    sprite_index = spriteWalkingLeftEmpty;
+                    scr_unit_move_avoiding(walkSpeed,0,0);  
+                }
+            }
+        }
+        //Starts the worker to building
+        if (workStart){
+            image_speed = miningImageSpeed;
+            if (!drawTool){
+                workTimer ++;
+                //set the sprite
+                if (x &gt; target.x){
+                    sprite_index = spriteBuildingLeft;
+                }else{
+                    sprite_index = spriteBuildingRight;
+                } 
+                //Triggers sound and particles
+                if (round(image_index) == 5 &amp;&amp; cutSound == 0){
+                    var sound = audio_play_sound_at(pickSound[workRRPosition],x,y,0,1000,200,1,0,999999);  
+                    audio_sound_gain(sound,global.sfxVol,0);
+                    workRRPosition ++;
+                    if (workRRPosition &gt; 3){
+                        randomize();
+                        workRRPosition = irandom(2);
+                    }
+                    cutSound = 1; 
+                } 
+                if (round(image_index) != 5){
+                    cutSound = 0;
+                }
+                //Makes miner take the resources to the stockpile
+                if (workTimer &gt;= workTime){
+                    randomize();
+                    goingTo = 0;
+                    gettingResources = 1;
+                    workStart = 0;
+                    workTimer = 0;
+                    moveToTime = 2 + irandom(20);
+                    moveToTimer = 0;
+                    middleTimer = 0;
+                    workTime = (baseWorkTime + workTimeAdd);
+                    //pops up xp gained
+                    var targetXp = string(target.xp);
+                    with(instance_create(x,y,obj_workerDrawTimed)){
+                        amount = ("+" + targetXp + "XP");
+                        col = c_yellow;
+                        myWorker = other.id;
+                    }
+                    //Take away the resources the worker was building with
+                    for (i = 0; i &lt; 3; i++){
+                        if (target.upgradeCost[i,0] == currentResource){
+                            target.upgradeCost[i,2] -= 40;
+                            target.amountUpgraded += 40;
+                            for (a = 0; a &lt;= 10; a++;){
+                                if (inv[a,0] == currentResource){
+                                    inv[a,0] = -1;
+                                    inv[a,1] = -1;
+                                    inv[a,2] = -1;
+                                    break;
+                                }
+                            }
+                            currentResource = -1;
+                            break;
+                        }   
+                    }
+                    
+                }
+            }else{
+            //starts the pulling out tool animation
+                if (target.x &gt; x){
+                    sprite_index = spriteDrawToolBuildingRight;
+                }else{
+                    sprite_index = spriteDrawToolBuildingLeft;    
+                }
+                    drawToolTimer ++;
+                if (drawToolTimer &gt;= drawToolTimeWoodcutting){
+                    drawTool = 0;
+                    drawToolTimer = 0;
+                    dir = point_direction(x,y,target.x,target.y);
+                }
+            }
+        } 
+        if (target.upgrade == 0){
             middleTimer = 0;
             goingTo = 0;
             gettingResources = 0;
@@ -1784,6 +1927,96 @@ if (gettingResources){
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Upgrading 
+
+//Get resources to bulid with
+if (gettingResources){
+    middleTimer ++;
+    if (middleTimer &gt;= 55){
+        slot = scr_unit_find_inventory_slot();
+        //Give the worker the right resources
+        if (target.upgrade == 1){
+            if (scr_building_find_resource_needed_upgrade(target) != -4){
+                var resource = scr_building_find_resource_needed_upgrade(target);
+                //Put the proper resource into the worker's inventory
+                switch(target.upgradeCost[resource,0]){
+                    //Wood
+                    case 'woodCommon':
+                        if (global.woodCommon &gt;= 40){
+                            global.woodCommon -= 40;
+                            gettingResources = 0;
+                            currentResource = 'woodCommon';
+                            goingTo = 1;
+                            middleTimer = 0;
+                            moveToTimer = 0;
+                            inv[slot,0] = 'woodCommon';
+                            inv[slot,1] = 'resource';
+                            inv[slot,2] = 40;
+                        }
+                    break;   
+                    //food 
+                     case 'food':
+                        if (global.food &gt;= 40){
+                            global.food -= 40;
+                            gettingResources = 0;
+                            currentResource = 'food';
+                            goingTo = 1;
+                            middleTimer = 0;
+                            moveToTimer = 0;
+                            inv[slot,0] = 'food';
+                            inv[slot,1] = 'resource';
+                            inv[slot,2] = 40;
+                        }
+                    break;  
+                    //stone 
+                    case 'stone':
+                        if (global.stone &gt;= 40){
+                            global.stone -= 40;
+                            gettingResources = 0;
+                            currentResource = 'stone';
+                            goingTo = 1;
+                            middleTimer = 0;
+                            moveToTimer = 0;
+                            inv[slot,0] = 'stone';
+                            inv[slot,1] = 'resource';
+                            inv[slot,2] = 40;
+                        }
+                    break;  
+                    
+                
+                }
+      
+            }else{
+                state = "idle";
+                goingTo = 0;
+                middleTimer = 0;
+                moveToTimer = 0;
+                gettingResources = 0;
+            }   
+        }
+    }
+    
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="4" ename="obj_farmingPatch">
       <action>
@@ -1895,7 +2128,7 @@ if (state == 'farming' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&am
             <kind>1</kind>
             <string>///Start building 
 
-if (other.id == target &amp;&amp; goingTo){
+if (other.id == target &amp;&amp; goingTo &amp;&amp; state == 'building'){
     if (middleTimer == 0){
         workMiddleTime = (target.midTime + irandom(target.midRandom));
     }
@@ -1904,6 +2137,47 @@ if (other.id == target &amp;&amp; goingTo){
 }
 
 if (state == 'building' &amp;&amp; middleTimer &gt;= workMiddleTime &amp;&amp; resourcePosition == 0 &amp;&amp; !gettingResources &amp;&amp; other.id == target){
+    workStart = 1;
+    drawTool = 1;
+    goingTo = 0;
+    image_index = 0;
+    moveToTimer = 0;
+    comingFrom = 0;
+    var workTimeAdd = irandom(round(baseBuildingTime/3)); 
+    workTime = (baseBuildingTime + workTimeAdd);
+    middleTimer = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Start upgrading
+
+if (other.id == target &amp;&amp; goingTo &amp;&amp; state == 'upgrading'){
+    if (middleTimer == 0){
+        workMiddleTime = (target.midTime + irandom(target.midRandom));
+    }
+    middleTimer ++;  
+     
+}
+
+if (state == 'upgrading' &amp;&amp; middleTimer &gt;= workMiddleTime &amp;&amp; resourcePosition == 0 &amp;&amp; !gettingResources &amp;&amp; other.id == target){
     workStart = 1;
     drawTool = 1;
     goingTo = 0;
@@ -2202,9 +2476,7 @@ if (run || staminaRegen){
     draw_rectangle_colour(x-6,y-38,(x-6)+drawPercent,y-42,c_green,c_green,c_green,c_green,0);
 } 
 
-//Temp debug
 
-draw_text(x, y - 16,"run "+string(run));
 </string>
           </argument>
         </arguments>

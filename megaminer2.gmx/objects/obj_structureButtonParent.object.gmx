@@ -30,9 +30,28 @@
 myStructure = -4;
 xx = 0;
 yy = 0;
+//icon
 icon = spr_buttonLevelUp;
 iconOffsetX = 14;
 iconOffsetY = 14;
+//infobox
+infoBoxWidth = 3;
+infoBoxHeight = 3;
+infoBoxX = x;
+infoBoxY = y - 168;
+showInfoBox = 0;
+
+//sounds
+soundRR = 0;
+sound[0] = sd_menuNav1;
+sound[1] = sd_menuNav2;
+sound[2] = sd_menuNav3;
+sound[3] = sd_menuNav4;
+
+//windows
+//Window
+myWindow = -4;
+windowOpen = 0;
 </string>
           </argument>
         </arguments>
@@ -59,6 +78,48 @@ iconOffsetY = 14;
 
 if (myStructure.buttonsDelete){
     instance_destroy();
+
+}
+if (position_meeting(mouse_x,mouse_y,self)){
+    showInfoBox = 1;   
+    infoBoxX = mouse_x;
+    infoBoxY = mouse_y;
+}else{
+    showInfoBox = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="7">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Play sounds
+
+//Play button sound
+audio_play_sound(sound[soundRR],999,0);
+
+//randomize round robins
+if (soundRR &gt;= 3){
+    var i = soundRR;
+    while(i == soundRR){
+        soundRR = irandom(4);
+    }
 }
 </string>
           </argument>
@@ -87,6 +148,39 @@ draw_self();
 
 draw_sprite(icon,0,x+iconOffsetX,y+iconOffsetY);
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///info-box
+ 
+//Ui box
+if (showInfoBox){
+    scr_draw_ui_box(infoBoxWidth,infoBoxHeight,infoBoxX,infoBoxY);
+}
+
+//Info text
+
+if (showInfoBox){
+    draw_set_colour(c_white);
+    //draw_text(infoBoxX + 24, infoBoxY + 32,"Info Box");
+}
 </string>
           </argument>
         </arguments>

@@ -273,6 +273,9 @@
       <sprite>sprites\spr_uiDynamicBoxBottom</sprite>
       <sprite>sprites\spr_uiDynamicBoxRight</sprite>
       <sprite>sprites\spr_uiDynamicBoxTopRight</sprite>
+      <sprite>sprites\spr_foodIcon</sprite>
+      <sprite>sprites\scr_uiWindowCollider</sprite>
+      <sprite>sprites\spr_uiWindowExit</sprite>
     </sprites>
     <sprites name="non-visible">
       <sprite>sprites\spr_solid</sprite>
@@ -299,7 +302,6 @@
     <sprite>sprites\spr_surface3</sprite>
     <sprite>sprites\spr_surface4</sprite>
     <sprite>sprites\spr_tileBlack</sprite>
-    <sprite>sprites\sprite106</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_sky</background>
@@ -310,9 +312,7 @@
   <paths name="paths"/>
   <scripts name="scripts">
     <scripts name="Ui">
-      <scripts name="Gamepad">
-        <script>scripts\scr_ui_selected_placer.gml</script>
-      </scripts>
+      <script>scripts\scr_draw_ui_box.gml</script>
     </scripts>
     <scripts name="Workers">
       <script>scripts\scr_unit_array_clear.gml</script>
@@ -336,8 +336,8 @@
     <scripts name="Buildings">
       <script>scripts\scr_building_can_be_placed.gml</script>
       <script>scripts\scr_building_find_resource_needed.gml</script>
+      <script>scripts\scr_building_find_resource_needed_upgrade.gml</script>
     </scripts>
-    <script>scripts\scr_draw_ui_box.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\ft_gameFont</font>
@@ -387,9 +387,13 @@
       </objects>
       <objects name="Structures">
         <object>objects\obj_structureButtonParent</object>
-        <object>objects\obj_structureButtonLevelUp</object>
+        <object>objects\obj_structureButtonLevelUpTowncenter</object>
         <object>objects\obj_structureIconButtonCreateWorker</object>
-        <object>objects\obj_structureButtonBuildingInfo</object>
+        <object>objects\obj_structureButtonBuildingInfoSettlementCenter</object>
+        <objects name="Windows">
+          <object>objects\obj_uiWindowParent</object>
+          <object>objects\obj_uiWindowExit</object>
+        </objects>
       </objects>
     </objects>
     <objects name="Evironment">

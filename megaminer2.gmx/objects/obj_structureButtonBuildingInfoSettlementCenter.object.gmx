@@ -38,6 +38,40 @@ infoBoxHeight = 0;
 infoBoxX = x - 100;
 infoBoxY = y - 100;
 showInfoBox = 0;
+
+//Window
+myWindow = -4;
+windowOpen = 0;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="7">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Create window 
+
+if (!windowOpen &amp;&amp; myWindow == -4){
+    myWindow = instance_create(x,y,obj_uiWindowParent);
+    windowOpen = 1;
+}else{
+    //Do nothing
+}
 </string>
           </argument>
         </arguments>
@@ -77,7 +111,7 @@ showInfoBox = 0;
             <string>///Draw info 
 
 if (showInfoBox){
-    draw_text(infoBoxX + 28,infoBoxY + 24,"Show settlement Information");    
+    draw_text(infoBoxX + 28,infoBoxY + 24,"Show settlement information");    
 }
 </string>
           </argument>

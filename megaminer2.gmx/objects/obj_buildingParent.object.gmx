@@ -90,7 +90,7 @@ buttonsSpawned = 0;
 buttonNumber = 0;
 buttonsDelete = 0;
 
-button[0,0] = obj_structureButtonLevelUp;
+button[0,0] = obj_structureButtonLevelUpTowncenter;
 button[0,1] = 90;
 button[0,2] = 260;
 button[1,0] = -4;
@@ -108,7 +108,7 @@ for (i = 0; i &lt; 10; i++){
 }
 
 //Pop up text
-buildingName = "Towncenter Level 1";
+buildingName = "Settlement center"
 textPopUp = 0;
 popUpX1 = -44
 popUpX2 = 89
@@ -117,6 +117,74 @@ popUpY2 = -302;
 textDrawX = -40;
 textDrawY = -300;
 yOffset = 100;
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Sounds
+
+sound[0] = sd_windowPopUp1;
+sound[1] = sd_windowPopUp2;
+sound[2] = sd_windowPopUp3;
+sound[3] = sd_windowPopUp4;
+soundRR = 0;
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Upgrade costs/vars
+levelUp = 0;
+upgrade = 0;
+amountUpgraded = 0;
+
+//wood - 200
+upgradeCost[0,0] = 'woodCommon'; //type
+upgradeCost[0,1] = 200; //Amount needed
+upgradeCost[0,2] = 200; //Amount left
+//Stone - 200
+upgradeCost[1,0] = 'stone';
+upgradeCost[1,1] = 200;
+upgradeCost[1,2] = 200;
+//food - 200
+upgradeCost[2,0] = 'food';
+upgradeCost[2,1] = 200;
+upgradeCost[2,2] = 200;
+//next (empty)
+upgradeCost[3,0] = -4;
+upgradeCost[3,1] = -4;
+upgradeCost[3,2] = -4;
 </string>
           </argument>
         </arguments>
@@ -188,7 +256,7 @@ if (!placed){
     }else{
         y = placeY+mouseYOff;
     }
-}else if (built){
+}else if (built &amp;&amp; !upgrade){
     //play the place sound
     image_alpha = 1;
     if (!placeSoundPlayed){
@@ -284,6 +352,63 @@ if (instance_position(mouse_x,mouse_y,object_index)){
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Level up
+
+if (levelUp){
+    level ++;
+    sprite_index = spriteLevel[level-1];
+    levelUp = 0;
+    upgrade = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Upgrading
+
+if (upgrade){
+    image_alpha = .5;
+    if (scr_building_find_resource_needed_upgrade(id) == -4){
+        upgrade = 0;
+        levelUp = 1;
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="6" enumb="54">
       <action>
@@ -333,7 +458,7 @@ draw_self();
 
 //If the building is still being built, draw the percentage
 if (!built){
-    draw_text(x+70,y-100,string(percentBuilt)+"%");
+    draw_text(x+70,y-100,string(ceil(percentBuilt))+"%");
 }
 
 //Text pop up
@@ -421,10 +546,42 @@ if (!devMode){
             <kind>1</kind>
             <string>///Show buttons
 
-if (!instance_position(mouse_x,mouse_y,obj_workerParent)){
+if (!instance_position(mouse_x,mouse_y,obj_workerParent) &amp;&amp; built){
     if (!showButtons){
         showButtons = 1;
         textPopUp = 0;
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Play sounds
+
+if (built){
+    audio_play_sound(sound[soundRR],999,0);
+    
+    //Randomize round robins
+    if (soundRR &gt; 3){
+        while(soundRR == 4){
+            soundRR = irandom(3);   
+        } 
     }
 }
 </string>
@@ -464,6 +621,37 @@ if (global.selectedNumber &gt; 0 &amp;&amp; scr_unit_array_check_for_worker() &a
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Start selected workers upgrading
+
+//Check if there is any workers currently selected and if the player is not currently building
+if (global.selectedNumber &gt; 0 &amp;&amp; scr_unit_array_check_for_worker() &amp;&amp; !global.workerBuild &amp;&amp; built &amp;&amp; upgrade){
+    //Set the selected workers to building
+    (obj_globalCon.buildButton).visible = 0;
+    global.workerBuildMenu = 0;
+    var target = id;
+    scr_unit_array_set_resource_target('upgrading',target);   
+    scr_unit_array_clear();    
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="8" enumb="0">
       <action>
@@ -482,7 +670,7 @@ if (global.selectedNumber &gt; 0 &amp;&amp; scr_unit_array_check_for_worker() &a
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Draw self/percent
+            <string>///Draw self/percent/pop-up
 draw_self();
 
 //If the building is still being built, draw the percentage
@@ -492,8 +680,8 @@ if (!built){
 
 //Text pop up
 if (textPopUp){
-    draw_rectangle_colour(x + popUpX1, y + yOffset + popUpY1, x + popUpX2, y + yOffset + popUpY2,c_black,c_black,c_black,c_black,0);
-    draw_text_colour(x +textDrawX, y + yOffset + textDrawY, buildingName,c_white,c_white,c_white,c_white,1);
+    scr_draw_ui_box(4,0,x + textDrawX - 33 ,y + yOffset + textDrawY - 24);
+    draw_text_colour(x +textDrawX, y + yOffset + textDrawY, buildingName + "level " + string(level),c_white,c_white,c_white,c_white,1);
 }
 </string>
           </argument>
@@ -521,6 +709,33 @@ if (devMode &amp;&amp; global.dev_mode){
     draw_text(x-50,y-200,"totalResourcesNeeded_" + string(totalResourcesNeeded));
     draw_text(x-50,y-190,"amountBuilt_" + string(amountBuilt));
     
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Upgrade debug text
+
+
+if (upgrade){
+    var currentStuff = scr_building_find_resource_needed_upgrade(id);
+    draw_text(x , y -50,string(upgradeCost[currentStuff,2]) + " " + string(upgradeCost[currentStuff,0]) + " / " + string(upgradeCost[currentStuff,1]));
 }
 </string>
           </argument>

@@ -42,6 +42,7 @@ vane = instance_create(x-40,y-100,obj_farmVane);
 pig = instance_create(x-90,y,obj_farm1Pig);
 vane.myFarm = id;
 pig.myFarm = id;
+buildingName = "Farm";
 
 
 
