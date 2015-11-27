@@ -5,12 +5,26 @@
   <visible>-1</visible>
   <depth>-10</depth>
   <persistent>0</persistent>
-  <parentName>&lt;undefined&gt;</parentName>
+  <parentName>obj_uiWindowParent</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
       <action>
         <libid>1</libid>
+        <id>604</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>1</exetype>
+        <functionname>action_inherited</functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+      </action>
+      <action>
+        <libid>1</libid>
         <id>603</id>
         <kind>7</kind>
         <userelative>0</userelative>
@@ -25,35 +39,36 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///general
+            <string>///Window setup
+
 //Window Size
-windowWidth = 3;
+windowWidth = 5;
 windowHeight = 3;
 windowX = x;
 windowY = y;
 showShowWindow = 0;
 myButton = -4;
-image_xscale += windowWidth + 1;
-
-//Drag
-dragging = 0;
-xOff = 0;
-yOff = 0;
-viewXOff = x - view_xview[0];
-viewYOff = y - view_yview[0];
-
-//Exit button
-myExit = instance_create(x + (windowWidth * 32),y + 32, obj_uiWindowExit);
-myExit.myWindow = id;
-
-
-
+image_xscale = windowWidth + 1;
 </string>
           </argument>
         </arguments>
       </action>
     </event>
-    <event eventtype="3" enumb="2">
+    <event eventtype="3" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>604</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>1</exetype>
+        <functionname>action_inherited</functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+      </action>
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -70,155 +85,13 @@ myExit.myWindow = id;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Snap to view
+            <string>///Let building know the window is open
 
-if (!dragging){
-    
-
-    x = view_xview[0] + viewXOff;
-    y = view_yview[0] + viewYOff;
+if (instance_exists(obj_structureButtonBuildingInfoSettlementCenter)){
+    with(obj_structureButtonBuildingInfoSettlementCenter){
+        windowOpen = 1;
+    }
 }
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="3" enumb="1">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Exit button sync
-
-if (instance_exists(myExit)){
-    myExit.x = x + (windowWidth * 32) + 32;
-    myExit.y = y ;
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Dragging 
-
-if (dragging){
-    
-    x = mouse_x + xOff;
-    y = mouse_y + yOff;
-
-}
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Snap to view
-
-if (!dragging){
-    
-
-    x = view_xview[0] + viewXOff;
-    y = view_yview[0] + viewYOff;
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="6" enumb="7">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Stop dragging 
-
-dragging = 0;
-
-viewXOff = x - view_xview[0];
-viewYOff = y - view_yview[0];
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="6" enumb="4">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Start dragging
-
-dragging = 1;
-
-xOff = x - mouse_x;
-yOff = y - mouse_y;
 </string>
           </argument>
         </arguments>
@@ -227,6 +100,20 @@ yOff = y - mouse_y;
     <event eventtype="8" enumb="0">
       <action>
         <libid>1</libid>
+        <id>604</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>1</exetype>
+        <functionname>action_inherited</functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+      </action>
+      <action>
+        <libid>1</libid>
         <id>603</id>
         <kind>7</kind>
         <userelative>0</userelative>
@@ -241,12 +128,11 @@ yOff = y - mouse_y;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Draw the window 
-draw_self();
+            <string>///Draw text in window
 
-scr_draw_ui_box(windowWidth,windowHeight,x,y);
-
-draw_self();
+draw_text(x + 58, y + 16,"Settlement Info.");
+draw_text(x + 20, y + 48,"Population:  " + string(global.pop) + " / " + string(global.maxPop));
+draw_text(x + 20, y + 64,"Resources Collected: " + string(global.totalResourcesCollected));
 </string>
           </argument>
         </arguments>

@@ -25,7 +25,8 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>event_inherited();
+            <string>///General
+event_inherited();
 
 //general variabels
 surfaceOnly = 1;
@@ -78,6 +79,20 @@ spriteLevel[0] = spr_farmingPatch;
     <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
+        <id>604</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>1</exetype>
+        <functionname>action_inherited</functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+      </action>
+      <action>
+        <libid>1</libid>
         <id>603</id>
         <kind>7</kind>
         <userelative>0</userelative>
@@ -92,9 +107,7 @@ spriteLevel[0] = spr_farmingPatch;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>event_inherited();
-
-
+            <string>///Patch exhaustion
 if (exhausted){
     exhaustTimer ++;
     image_alpha = .6;    
@@ -148,6 +161,20 @@ if (!global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerP
     <event eventtype="6" enumb="4">
       <action>
         <libid>1</libid>
+        <id>604</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>1</exetype>
+        <functionname>action_inherited</functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+      </action>
+      <action>
+        <libid>1</libid>
         <id>603</id>
         <kind>7</kind>
         <userelative>0</userelative>
@@ -162,8 +189,7 @@ if (!global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerP
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>event_inherited();
-///Dev mode
+            <string>///Dev mode
 
 //Shows the debug 
 if (global.dev_mode &amp;&amp; !showDebug){

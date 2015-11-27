@@ -108,15 +108,17 @@ for (i = 0; i &lt; 10; i++){
 }
 
 //Pop up text
-buildingName = "Settlement center"
+buildingName = "Settlement Center "
 textPopUp = 0;
 popUpX1 = -44
 popUpX2 = 89
 popUpY1 = -284;
 popUpY2 = -302;
-textDrawX = -40;
+textDrawX = -70;
 textDrawY = -300;
 yOffset = 100;
+textXExtra = 15;
+popUpWidth = 6;
 </string>
           </argument>
         </arguments>
@@ -174,17 +176,17 @@ upgradeCost[0,0] = 'woodCommon'; //type
 upgradeCost[0,1] = 200; //Amount needed
 upgradeCost[0,2] = 200; //Amount left
 //Stone - 200
-upgradeCost[1,0] = 'stone';
-upgradeCost[1,1] = 200;
-upgradeCost[1,2] = 200;
+//upgradeCost[1,0] = 'stone';
+//upgradeCost[1,1] = 200;
+//upgradeCost[1,2] = 200;
 //food - 200
-upgradeCost[2,0] = 'food';
-upgradeCost[2,1] = 200;
-upgradeCost[2,2] = 200;
+//upgradeCost[2,0] = 'food';
+//upgradeCost[2,1] = 200;
+//upgradeCost[2,2] = 200;
 //next (empty)
-upgradeCost[3,0] = -4;
-upgradeCost[3,1] = -4;
-upgradeCost[3,2] = -4;
+//upgradeCost[3,0] = -4;
+//upgradeCost[3,1] = -4;
+//upgradeCost[3,2] = -4;
 </string>
           </argument>
         </arguments>
@@ -453,39 +455,6 @@ with(obj_buildingParent){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Draw self/percent
-draw_self();
-
-//If the building is still being built, draw the percentage
-if (!built){
-    draw_text(x+70,y-100,string(ceil(percentBuilt))+"%");
-}
-
-//Text pop up
-if (textPopUp){
-    draw_rectangle_colour(x + popUpX1, y + popUpY1, x + popUpX2, y + popUpY2,c_black,c_black,c_black,c_black,0);
-    draw_text_colour(x + textDrawX, y + textDrawY, buildingName,c_white,c_white,c_white,c_white,1);
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
             <string>///ALL BUILDINGS: hide buttons
 
 if (!instance_position(mouse_x,mouse_y,obj_structureButtonParent)){
@@ -680,8 +649,8 @@ if (!built){
 
 //Text pop up
 if (textPopUp){
-    scr_draw_ui_box(4,0,x + textDrawX - 33 ,y + yOffset + textDrawY - 24);
-    draw_text_colour(x +textDrawX, y + yOffset + textDrawY, buildingName + "level " + string(level),c_white,c_white,c_white,c_white,1);
+    scr_draw_ui_box(popUpWidth ,0,x + textDrawX - 33 ,y + yOffset + textDrawY - 24);
+    draw_text_colour(x + textDrawX + textXExtra, y + yOffset + textDrawY, buildingName + " Level  " + string(level),c_white,c_white,c_white,c_white,1);
 }
 </string>
           </argument>

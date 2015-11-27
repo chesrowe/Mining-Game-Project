@@ -1827,11 +1827,19 @@ if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60 &amp;&amp
                     (instance_create(x,y+yy,obj_workerDrawTimed)).amount = ("+" + string(inv[i,6]) + " " + string(inv[i,0])); 
                     yy += 32;
                     switch(inv[i,0]){
-                        case 'stone': global.stone += inv[i,6];   
+                        case 'stone': 
+                            global.stone += inv[i,6]; 
+                            global.totalResourcesCollected += inv[i,6];  
                         break;
-                        case 'woodCommon': global.woodCommon += inv[i,6];
+                        
+                        case 'woodCommon': 
+                            global.woodCommon += inv[i,6] 
+                            global.totalResourcesCollected += inv[i,6];
                         break;
-                        case 'food': global.food += inv[i,6];
+                
+                        case 'food': 
+                            global.food += inv[i,6]; 
+                            global.totalResourcesCollected += inv[i,6];
                         break;
                     }
                     //clear the slot

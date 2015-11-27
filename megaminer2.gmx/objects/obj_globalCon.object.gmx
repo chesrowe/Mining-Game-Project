@@ -107,6 +107,7 @@ global.gamepad = 0;
 global.localCoop = 0;
 
 //Resources
+global.totalResourcesCollected = 0;
 global.gold = 0;
 global.stone = 9200;
 global.crystal = 0;
@@ -1344,7 +1345,7 @@ moveTimer = 0;
             <string>/// Select box
 
 //if there is no selectable object underneath the mouse
-if (!global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent)){
+if (!global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowExit) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent)){
     global.selectBoxStart = 1;
     global.selectStartX = mouse_x;
     global.selectStartY = mouse_y;

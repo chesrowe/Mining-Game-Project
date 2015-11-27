@@ -25,37 +25,6 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///General
-
-draw_set_color(c_white);
-draw_set_font(global.fontDmg);
-draw_text(view_xview[0]+5,view_yview[0]+700,"In  very  early  development");
-draw_text(view_xview[0]+150,view_yview[0]+100,"Stone: " + string(global.stone));
-draw_text(view_xview[0]+240,view_yview[0]+100,"Wood: " + string(global.woodCommon));
-draw_text(view_xview[0]+310,view_yview[0]+100,"Gold: " + string(global.gold));
-draw_text(view_xview[0]+410,view_yview[0]+100,"Food: " + string(global.food));
-draw_text(view_xview[0]+150,view_yview[0]+(string_height("W")+100),"Population: " + string(global.pop)+ "/" + string(global.maxPop));
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
             <string>///Debug
 
 if (global.dev_mode){

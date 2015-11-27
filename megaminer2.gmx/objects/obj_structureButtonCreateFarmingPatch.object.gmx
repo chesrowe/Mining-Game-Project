@@ -11,6 +11,20 @@
     <event eventtype="0" enumb="0">
       <action>
         <libid>1</libid>
+        <id>604</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>1</exetype>
+        <functionname>action_inherited</functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+      </action>
+      <action>
+        <libid>1</libid>
         <id>603</id>
         <kind>7</kind>
         <userelative>0</userelative>
@@ -25,30 +39,26 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///General
-event_inherited();
+            <string>///iSetup
 
 //Icon
-icon = spr_sturctureInfoButton;
+icon = spr_buttonFarmPatch;
 iconOffsetX = 14;
-iconOffsetY = 20;
+iconOffsetY = 14;
+
 //infobox
-infoBoxWidth = 6;
-infoBoxHeight = 0;
-infoBoxX = x - 100;
-infoBoxY = y - 100;
-showInfoBox = 0;
+infoBoxWidth = 3;
+infoBoxHeight = 3;
 
 //Window
-myWindow = -4;
-windowOpen = 0;
-hasWindow = 1;
+hasWindow = 0;
+
 </string>
           </argument>
         </arguments>
       </action>
     </event>
-    <event eventtype="8" enumb="0">
+    <event eventtype="6" enumb="7">
       <action>
         <libid>1</libid>
         <id>604</id>
@@ -79,10 +89,11 @@ hasWindow = 1;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Draw info 
+            <string>///Create farming patch
 
-if (showInfoBox){
-    draw_text(infoBoxX + 28,infoBoxY + 24,"Show settlement information");    
+if (global.woodCommon &gt;= 200){
+    global.woodCommon -= 200;
+    instance_create(mouse_x,mouse_y,obj_farmingPatch);
 }
 </string>
           </argument>

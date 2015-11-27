@@ -388,12 +388,17 @@
       <objects name="Structures">
         <object>objects\obj_structureButtonParent</object>
         <object>objects\obj_structureButtonLevelUpTowncenter</object>
+        <object>objects\obj_structureButtonLevelUpWarehouse</object>
         <object>objects\obj_structureIconButtonCreateWorker</object>
         <object>objects\obj_structureButtonBuildingInfoSettlementCenter</object>
+        <object>objects\obj_structureButtonWarehouseShowResources</object>
         <objects name="Windows">
           <object>objects\obj_uiWindowParent</object>
           <object>objects\obj_uiWindowExit</object>
+          <object>objects\obj_uiWindowSettlementCenter</object>
+          <object>objects\obj_uiWindowWarehouse</object>
         </objects>
+        <object>objects\obj_structureButtonCreateFarmingPatch</object>
       </objects>
     </objects>
     <objects name="Evironment">

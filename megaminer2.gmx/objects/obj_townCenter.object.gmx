@@ -84,7 +84,7 @@ for (i = 0; i &lt; 10; i++){
             <string>///Sprites
 
 spriteLevel[0] = spr_townCenter1;
-spriteLevel[1] = spr_townCenter2;
+spriteLevel[1] = spr_townCenter2; 
 </string>
           </argument>
         </arguments>

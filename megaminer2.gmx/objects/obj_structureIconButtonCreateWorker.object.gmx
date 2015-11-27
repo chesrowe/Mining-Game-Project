@@ -88,6 +88,7 @@ event_inherited();
 if (global.food &gt;= 50){
     instance_create(myStructure.x + choose(-4,-10,-8,-1,12,-3,3,2,6,20,13,7), myStructure.y,obj_workerHumanP1);
     global.food -= 50;
+    global.pop ++;
 }
 
   
