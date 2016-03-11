@@ -245,7 +245,8 @@ sprite_index = spriteLevel[(level-1)];
 //Make the building follow the curcer when it's not placed
 if (!placed){
     if !(position_meeting(x,y+16,obj_tileSurfaceFlatParent)){
-        groundY = (instance_nearest(mouse_x,mouse_y,obj_tileSurfaceFlatParent).y);
+        //groundY = (instance_nearest(mouse_x,mouse_y,obj_tileSurfaceFlatParent).y);
+        groundY = mouse_y;
     }else{
         groundY = (instance_position(x,y+16,obj_tileSurfaceFlatParent).y);
     }
@@ -265,6 +266,10 @@ if (!placed){
         var sound = audio_play_sound_at(placeSound[irandom(3)],x,y,0,1000,200,1,0,999);
         audio_sound_gain(sound,global.sfxVol,0);
         placeSoundPlayed = 1;
+        // Add 10 to max population if the building was a house
+        if (object_index == obj_house){
+            global.maxPop += 10;
+        }
     }
 }else if (!built){
     image_alpha = .5; 

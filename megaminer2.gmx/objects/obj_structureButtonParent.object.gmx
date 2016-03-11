@@ -210,8 +210,9 @@ if (showInfoBox){
 //Info text
 
 if (showInfoBox){
-    //draw_set_colour(c_white);
-    //draw_text(infoBoxX + 24, infoBoxY + 32,"Info Box");
+    draw_set_colour(c_white);
+    
+    
 }
 </string>
           </argument>

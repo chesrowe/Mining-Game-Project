@@ -85,9 +85,9 @@ event_inherited();
             <kind>1</kind>
             <string>///Create worker
 
-if (global.food &gt;= 50){
+if (global.food &gt;= 100 &amp;&amp; global.pop &lt; global.maxPop){
     instance_create(myStructure.x + choose(-4,-10,-8,-1,12,-3,3,2,6,20,13,7), myStructure.y,obj_workerHumanP1);
-    global.food -= 50;
+    global.food -= 100;
     global.pop ++;
 }
 

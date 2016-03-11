@@ -3,7 +3,7 @@
   <spriteName>spr_uiButtonBase</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-10</depth>
+  <depth>-9</depth>
   <persistent>0</persistent>
   <parentName>obj_structureButtonParent</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -39,7 +39,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///iSetup
+            <string>///Setup
 
 //Icon
 icon = spr_buttonFarmPatch;
@@ -47,8 +47,8 @@ iconOffsetX = 14;
 iconOffsetY = 14;
 
 //infobox
-infoBoxWidth = 3;
-infoBoxHeight = 3;
+infoBoxWidth = 5;
+infoBoxHeight = 1;
 
 //Window
 hasWindow = 0;
@@ -93,7 +93,51 @@ hasWindow = 0;
 
 if (global.woodCommon &gt;= 200){
     global.woodCommon -= 200;
-    instance_create(mouse_x,mouse_y,obj_farmingPatch);
+    global.selected = instance_create(mouse_x,mouse_y,obj_farmingPatch);
+    global.workerBuild = 1;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>604</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>1</exetype>
+        <functionname>action_inherited</functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Draw info box
+
+if (showInfoBox){
+    draw_set_colour(c_white);
+    draw_text(infoBoxX + 24, infoBoxY + 32,"Create Basic Farm Patch");
+    draw_text(infoBoxX + 24, infoBoxY + 48,"Cost:  150  Wood");
 }
 </string>
           </argument>

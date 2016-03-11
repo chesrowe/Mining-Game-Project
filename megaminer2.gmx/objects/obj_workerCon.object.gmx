@@ -135,7 +135,9 @@ if (global.dev_mode &amp;&amp; myWorker.showDebug){
         
     }
     if (myWorker.state == 'woodcutting'){
-        draw_line_width_colour(myWorker.x,myWorker.y,(myWorker.target).x,(myWorker.target).y,4,c_green,c_green);
+        if (instance_exists(myWorker.target)){
+            draw_line_width_colour(myWorker.x,myWorker.y,(myWorker.target).x,(myWorker.target).y,4,c_green,c_green);
+        }
         draw_text(x-15,y-190,"woodcuttingLevel_" + string(myWorker.woodcuttingLevel));
         draw_text(x-15,y-180,"woodcuttingXpNeeded_" + string(myWorker.xpNeededWoodcutting));
         draw_text(x-15,y-160,"woodcuttingLevel_" + string(myWorker.woodcuttingLevel));

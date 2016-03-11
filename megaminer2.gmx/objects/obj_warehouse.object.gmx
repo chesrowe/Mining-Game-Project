@@ -43,6 +43,12 @@ spriteLevel[2] = spr_warehouse1;
 spriteLevel[3] = spr_warehouse1;
 spriteLevel[4] = spr_warehouse1;
 spriteLevel[5] = spr_warehouse1;
+
+//If its the first warehouse, auto-place it(the first warehouse is already built)
+if (instance_number(obj_warehouse) == 1){
+    placed = 1;
+    built  = 1;    
+}
 </string>
           </argument>
         </arguments>

@@ -26,7 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>
-// Defines the default values for the variables the enemy children when need(default is the wolf)
+// Defines the default values for the variables the enemy children when needed(default is the wolf)
 hp = 160; //the amount of Healt the enemy is going to have
 dmg = 5; // The base amount of damage an enemy deals
 dmgNumber = 0; // A variable used to store the id of the dmg number created when the enemy is damaged
@@ -58,7 +58,7 @@ madeContact = 0; // A boolean used to check to see if the enemy has made contact
 contactTarget = 0; // if the enemy has made contact with the target, it's id is stored in this var
 attack = 0; // NOT USED
 attackTimer = 0; // A tiemr that counts up between each attack(basicly used to set the attack speed)
-
+hillStart = 0;
 spriteAttackingRight = spr_wolfAttackingRight; // sets the sprite for when the enemy is attacking to the right
 spriteAttackingLeft = spr_wolfAttackingLeft; // sets the sprite for when the enemy is attacking to the right
 
@@ -84,10 +84,50 @@ spriteAttackingLeft = spr_wolfAttackingLeft; // sets the sprite for when the ene
         <arguments>
           <argument>
             <kind>1</kind>
+            <string>///Falling 
+// y = y + lengthdir_y(2,70); 
+//x = x + lengthdir_x(2,70); 
+
+if (place_meeting(x,y+3,obj_groundParent)){
+    falling = 0;
+    if (place_meeting(x,y+3,obj_tileSurfaceFlatParent) &amp;&amp; !place_meeting(x,y,obj_tileSurfaceHillParent)){
+        y = (instance_place(x,y+3,obj_tileSurfaceFlatParent).y) - 24;
+    }
+}else if (!hillStart){
+    falling = 1;
+}
+
+//when the worker is falling 
+if (falling){
+    gravity = 0.2;
+}else{
+    gravity = 0;
+    vspeed = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
             <string>
 // Checks to see if the enemy is dying or not
 if (!dying){
-    //sets nearestEnemy to the nearest miner
+    //sets nearest enemy to the nearest miner
     if (instance_exists(obj_workerParent)){
         nearestTarget = instance_nearest(x,y,obj_workerParent);
         minerDist = distance_to_point(nearestTarget.x,nearestTarget.y);

@@ -108,21 +108,17 @@ global.localCoop = 0;
 
 //Resources
 global.totalResourcesCollected = 0;
-global.gold = 0;
-global.stone = 9200;
+global.gold = 5000;
+global.stone = 5000;
 global.crystal = 0;
 global.brimstone = 0;
 global.mushroom = 0;
-global.woodCommon = 9000;
-global.food = 9200;
-
-//Gamepad Specific
-global.controllerCount = 0;
+global.woodCommon = 5000;
+global.food = 5000;
 
 //Farming/Population
-global.pop = 0;
-
-global.maxPop = 5000;
+global.pop = 2;
+global.maxPop = 5;
 
 //Fonts
 global.fontDmg = font_add_sprite(spr_ft_small,ord(' '),1,1);
@@ -160,8 +156,11 @@ workerButtonMenu = 0;
 buildButton = instance_create(x,35,obj_uiWorkerButtonBuild);
 farmButton = instance_create(x,35,obj_uiWorkerButtonFarm);
 stockpileButton = instance_create(x,35,obj_uiWorkerButtonStockpile);
-global.workerBuild = 1;
+settlementCenterButton = instance_create(x,35,obj_uiWorkerButtonSettlementCenter);
+houseButton = instance_create(x,35,obj_uiWorkerButtonHouse);
 global.workerBuildMenu = 0;
+global.workerBuild = 0;
+global.building = 0;
 
 
 
@@ -330,12 +329,12 @@ firstFlat = -4;
 land = -4;
 gridPos = 0;
 tileIndex = 0;
-worldWidth = get_integer("World width in tiles",500); //In tiles (32x32)
+worldWidth = 1000//In tiles (32x32)
 global.surfaceHeightGrid = ds_grid_create(worldWidth*2,1000);
 hillChance = irandom(1);
 hillDistance = irandom_range(20,150);
 hillLength = 0;
-hillHeightLimit = get_integer("The soft-max y value that the hills can reach(the lower, the higher the hills)",600);
+hillHeightLimit = 200;
 
 //Put tiles into arrays
 surfaceFlatTile[0] = obj_tileSurfaceFlat1;
@@ -592,35 +591,12 @@ for (i = 0; i &lt;= worldWidth; i++;){
 
 }
 //After world is generated, move camera to center of the room
-view_xview[0] = (worldWidth/2)*32;
+//view_xview[0] = (worldWidth/2)*32;
+view_xview[0] = 0;
 
 
 
 
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Init towncenter building
-
-global.building = 1;
-instance_create(mouse_x,mouse_y,obj_townCenter);
 </string>
           </argument>
         </arguments>
@@ -962,12 +938,16 @@ if (global.select){
             <string>///Ui 
 
 //Snap worker buttons in place
-buildButton.x = view_xview[0]+550;
-buildButton.y = view_yview[0]+60;
-stockpileButton.x = view_xview[0]+300;
+buildButton.x = view_xview[0] + 550;
+buildButton.y = view_yview[0] + 60;
+stockpileButton.x = view_xview[0] + 390
 stockpileButton.y = view_yview[0] + 60;
-farmButton.x = view_xview[0]+550;
-farmButton.y = view_yview[0]+60;
+farmButton.x = view_xview[0] + 550;
+farmButton.y = view_yview[0] + 60;
+settlementCenterButton.x = view_xview[0] + 470;
+settlementCenterButton.y = view_yview[0] + 60;
+houseButton.x = view_xview[0] + 630;
+houseButton.y = view_yview[0] + 60;
 
 
 </string>
@@ -1037,32 +1017,6 @@ if (doubleClickTimer &gt;= 20){
     doubleClickTimer = 0;
     global.doubleClick = 0;
 }
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="6" enumb="61">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>
-//Zoom out
-
-
 </string>
           </argument>
         </arguments>
@@ -1214,11 +1168,9 @@ if (global.workerBuild &amp;&amp; global.selected != noone &amp;&amp; !global.de
                     scr_unit_array_clear();
                     //If the structure is a towncenter or warehouse, make the structure automatically build
                     }else if ((global.selected).object_index == obj_townCenter){
-                    
-                        global.towncenterBuilt = 1; 
-                        var pile = instance_create(mouse_x,mouse_y,obj_warehouse);   
-                        global.workerBuild = 1;
-                        global.selected = pile;
+                        global.towncenterBuilt = 1;
+                        global.workerBuild = 0;
+                        global.selected = -4;
                         global.building = 0;
                     }else if ((global.selected).object_index == obj_warehouse){
                         global.stockpileBuilt = 1;  
@@ -1345,7 +1297,7 @@ moveTimer = 0;
             <string>/// Select box
 
 //if there is no selectable object underneath the mouse
-if (!global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowExit) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent)){
+if (!global.workerBuild &amp;&amp; !global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowExit) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent)){
     global.selectBoxStart = 1;
     global.selectStartX = mouse_x;
     global.selectStartY = mouse_y;
@@ -1564,7 +1516,7 @@ if (global.dev_mode){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
+            <string>//Show debug overlay
 show_debug_overlay(1);
 </string>
           </argument>

@@ -252,30 +252,38 @@
     <sprites name="Ui">
       <sprite>sprites\obj_uiIconBasic</sprite>
       <sprite>sprites\spr_selectorP1</sprite>
-      <sprite>sprites\spr_uiIconStockPile</sprite>
-      <sprite>sprites\spr_uiIconFarm</sprite>
-      <sprite>sprites\obj_uiIconEquipment</sprite>
       <sprite>sprites\obj_uiIconStats</sprite>
-      <sprite>sprites\obj_uiIconBuild</sprite>
-      <sprites name="buttons">
-        <sprite>sprites\spr_buttonLevelUp</sprite>
-        <sprite>sprites\spr_workerCreateButton</sprite>
-        <sprite>sprites\spr_sturctureInfoButton</sprite>
-        <sprite>sprites\spr_buttonFarmPatch</sprite>
-        <sprite>sprites\spr_uiButtonBase</sprite>
-        <sprite>sprites\spr_buttonShowResources</sprite>
-      </sprites>
-      <sprite>sprites\spr_uiDynamicboxTopLeft</sprite>
-      <sprite>sprites\spr_uiDynamicBoxBottomLeft</sprite>
-      <sprite>sprites\spr_uiDynamicBoxBottomRight</sprite>
-      <sprite>sprites\spr_uiDynamicBoxLeft</sprite>
-      <sprite>sprites\spr_uiDynamicBoxTop</sprite>
-      <sprite>sprites\spr_uiDynamicBoxBottom</sprite>
-      <sprite>sprites\spr_uiDynamicBoxRight</sprite>
-      <sprite>sprites\spr_uiDynamicBoxTopRight</sprite>
       <sprite>sprites\spr_foodIcon</sprite>
       <sprite>sprites\scr_uiWindowCollider</sprite>
       <sprite>sprites\spr_uiWindowExit</sprite>
+      <sprites name="buttons">
+        <sprites name="Worker Build Icons">
+          <sprite>sprites\spr_uiIconHouse</sprite>
+          <sprite>sprites\spr_uiIconFarm</sprite>
+          <sprite>sprites\spr_uiIconStockPile</sprite>
+          <sprite>sprites\obj_uiIconEquipment</sprite>
+          <sprite>sprites\spr_uiIconBuild</sprite>
+          <sprite>sprites\spr_uiIconSettlementCenter</sprite>
+        </sprites>
+        <sprites name="Structure button icons">
+          <sprite>sprites\spr_buttonLevelUp</sprite>
+          <sprite>sprites\spr_sturctureInfoButton</sprite>
+          <sprite>sprites\spr_workerCreateButton</sprite>
+          <sprite>sprites\spr_buttonShowResources</sprite>
+          <sprite>sprites\spr_buttonFarmPatch</sprite>
+        </sprites>
+        <sprite>sprites\spr_uiButtonBase</sprite>
+      </sprites>
+      <sprites name="Window basic">
+        <sprite>sprites\spr_uiDynamicboxTopLeft</sprite>
+        <sprite>sprites\spr_uiDynamicBoxBottomLeft</sprite>
+        <sprite>sprites\spr_uiDynamicBoxTopRight</sprite>
+        <sprite>sprites\spr_uiDynamicBoxBottomRight</sprite>
+        <sprite>sprites\spr_uiDynamicBoxRight</sprite>
+        <sprite>sprites\spr_uiDynamicBoxLeft</sprite>
+        <sprite>sprites\spr_uiDynamicBoxBottom</sprite>
+        <sprite>sprites\spr_uiDynamicBoxTop</sprite>
+      </sprites>
     </sprites>
     <sprites name="non-visible">
       <sprite>sprites\spr_solid</sprite>
@@ -329,6 +337,7 @@
       <script>scripts\draw_background_tiled_hor.gml</script>
       <script>scripts\scr_object_is_in_view.gml</script>
       <script>scripts\scr_create_floating_message.gml</script>
+      <script>scripts\scr_mouse_over.gml</script>
     </scripts>
     <scripts name="Dev Tools">
       <script>scripts\dev_tool_create_object.gml</script>
@@ -384,6 +393,8 @@
         <object>objects\obj_uiWorkerButtonBuild</object>
         <object>objects\obj_uiWorkerButtonFarm</object>
         <object>objects\obj_uiWorkerButtonStockpile</object>
+        <object>objects\obj_uiWorkerButtonSettlementCenter</object>
+        <object>objects\obj_uiWorkerButtonHouse</object>
       </objects>
       <objects name="Structures">
         <object>objects\obj_structureButtonParent</object>
@@ -392,13 +403,14 @@
         <object>objects\obj_structureIconButtonCreateWorker</object>
         <object>objects\obj_structureButtonBuildingInfoSettlementCenter</object>
         <object>objects\obj_structureButtonWarehouseShowResources</object>
+        <object>objects\obj_structureButtonCreateFarmingPatch</object>
+        <object>objects\obj_structureButtonLevelUpHouse</object>
         <objects name="Windows">
           <object>objects\obj_uiWindowParent</object>
           <object>objects\obj_uiWindowExit</object>
           <object>objects\obj_uiWindowSettlementCenter</object>
           <object>objects\obj_uiWindowWarehouse</object>
         </objects>
-        <object>objects\obj_structureButtonCreateFarmingPatch</object>
       </objects>
     </objects>
     <objects name="Evironment">
@@ -453,6 +465,7 @@
       <object>objects\obj_warehouse</object>
       <object>objects\obj_farmVane</object>
       <object>objects\obj_farm1Pig</object>
+      <object>objects\obj_house</object>
     </objects>
     <objects name="non-visibles">
       <object>objects\obj_solidGround</object>
