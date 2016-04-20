@@ -197,7 +197,8 @@
     <sprites name="Structures">
       <sprite>sprites\spr_farmingPatch</sprite>
       <sprites name="towers">
-        <sprite>sprites\spr_towerArcher</sprite>
+        <sprite>sprites\spr_towerArcher5</sprite>
+        <sprite>sprites\spr_archerTower1</sprite>
       </sprites>
       <sprites name="farm">
         <sprite>sprites\spr_farm</sprite>
@@ -217,6 +218,9 @@
       <sprites name="Warehouse">
         <sprite>sprites\spr_warehouse2</sprite>
         <sprite>sprites\spr_warehouse1</sprite>
+      </sprites>
+      <sprites name="Blacksmith">
+        <sprite>sprites\spr_blacksmith1</sprite>
       </sprites>
     </sprites>
     <sprites name="Environment">
@@ -259,7 +263,9 @@
       <sprites name="buttons">
         <sprites name="Worker Build Icons">
           <sprite>sprites\spr_uiIconHouse</sprite>
+          <sprite>sprites\spr_uiIconBlacksmith</sprite>
           <sprite>sprites\spr_uiIconFarm</sprite>
+          <sprite>sprites\spr_uiIconArcherTower</sprite>
           <sprite>sprites\spr_uiIconStockPile</sprite>
           <sprite>sprites\obj_uiIconEquipment</sprite>
           <sprite>sprites\spr_uiIconBuild</sprite>
@@ -365,6 +371,7 @@
       <object>objects\obj_tileDraw</object>
       <object>objects\obj_debugDraw</object>
       <object>objects\obj_console</object>
+      <object>objects\obj_conOpeningScene</object>
     </objects>
     <objects name="NPC">
       <objects name="workers">
@@ -395,6 +402,8 @@
         <object>objects\obj_uiWorkerButtonStockpile</object>
         <object>objects\obj_uiWorkerButtonSettlementCenter</object>
         <object>objects\obj_uiWorkerButtonHouse</object>
+        <object>objects\obj_uiWorkerButtonBlacksmith</object>
+        <object>objects\obj_uiWorkerButtonArcherTower</object>
       </objects>
       <objects name="Structures">
         <object>objects\obj_structureButtonParent</object>
@@ -466,15 +475,11 @@
       <object>objects\obj_farmVane</object>
       <object>objects\obj_farm1Pig</object>
       <object>objects\obj_house</object>
+      <object>objects\obj_blacksmith</object>
+      <object>objects\spr_archerTower</object>
     </objects>
     <objects name="non-visibles">
       <object>objects\obj_solidGround</object>
-    </objects>
-    <objects name="Defences">
-      <object>objects\obj_towerArcherP1</object>
-      <objects name="Projectiles">
-        <object>objects\obj_arrow</object>
-      </objects>
     </objects>
   </objects>
   <rooms name="rooms">

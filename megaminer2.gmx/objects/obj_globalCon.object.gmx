@@ -158,6 +158,8 @@ farmButton = instance_create(x,35,obj_uiWorkerButtonFarm);
 stockpileButton = instance_create(x,35,obj_uiWorkerButtonStockpile);
 settlementCenterButton = instance_create(x,35,obj_uiWorkerButtonSettlementCenter);
 houseButton = instance_create(x,35,obj_uiWorkerButtonHouse);
+archerTowerButton = instance_create(x,35,obj_uiWorkerButtonArcherTower);
+blacksmithButton = instance_create(x,35,obj_uiWorkerButtonBlacksmith);
 global.workerBuildMenu = 0;
 global.workerBuild = 0;
 global.building = 0;
@@ -195,7 +197,7 @@ pickSoundTimer = 0;
 global.songPlaying[0] = 0;
 //audio_master_gain(0);
 global.sfxVol = .1;
-global.musicVol = .2;
+global.musicVol = .15;
 global.ambienceVol = .1;
 global.ambience[0] = audio_play_sound(sd_surfaceAmbience,9,1);
 audio_sound_gain(global.ambience[0],global.ambienceVol,0);
@@ -675,6 +677,30 @@ with(obj_tileSurfaceFlatParent){
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Scenes
+//Set the view up for the opening "cutscene"
+view_yview[0] = -1000;
+instance_create(0,0,obj_conOpeningScene);
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="3" enumb="0">
       <action>
@@ -948,6 +974,10 @@ settlementCenterButton.x = view_xview[0] + 470;
 settlementCenterButton.y = view_yview[0] + 60;
 houseButton.x = view_xview[0] + 630;
 houseButton.y = view_yview[0] + 60;
+archerTowerButton.x = view_xview[0] + 710;
+archerTowerButton.y = view_yview[0] + 60;
+blacksmithButton.x = view_xview[0] + 790;
+blacksmithButton.y = view_yview[0] + 60;
 
 
 </string>
@@ -1385,29 +1415,6 @@ ds_grid_destroy(global.surfaceHeightGrid);
         </arguments>
       </action>
     </event>
-    <event eventtype="8" enumb="64">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Mouse/keyboard Ui
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
     <event eventtype="8" enumb="0">
       <action>
         <libid>1</libid>
@@ -1431,8 +1438,9 @@ draw_background_tiled_hor(background7,view_xview[0]/1.03,(view_yview[0]+120)/1.0
 draw_background_tiled_hor(bg_mountains,view_xview[0]/1.1,(view_yview[0]+90)/1.2);
 draw_background_tiled_hor(bg_bushClose,view_xview[0]/6,570);
 
-draw_text(mouse_x,mouse_y-20,string(doubleClickTimer));
-draw_text(mouse_x,mouse_y-40,string(global.doubleClick));
+//Double click debug
+//draw_text(mouse_x,mouse_y-20,string(doubleClickTimer));
+//draw_text(mouse_x,mouse_y-40,string(global.doubleClick));
 
 
 
@@ -1516,7 +1524,7 @@ if (global.dev_mode){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//Show debug overlay
+            <string>///Show debug overlay
 show_debug_overlay(1);
 </string>
           </argument>
@@ -1570,10 +1578,10 @@ if (global.food &gt;= 400){
             <kind>1</kind>
             <string>///Clean up
 
-font_delete(global.fontDmg);
-part_system_destroy(global.partMining);
-surface_free(global.worldGenSurface);
-ds_grid_destroy(global.surfaceHeightGrid);
+//font_delete(global.fontDmg);
+//part_system_destroy(global.partMining);
+//surface_free(global.worldGenSurface);
+//ds_grid_destroy(global.surfaceHeightGrid);
 
 </string>
           </argument>

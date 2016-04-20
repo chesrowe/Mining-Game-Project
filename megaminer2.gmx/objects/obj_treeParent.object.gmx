@@ -109,7 +109,7 @@ if (place_meeting(x,y,obj_townCenter)){
             <kind>1</kind>
             <string>///Visibility
 if (x &gt;= (view_xview[0]-260)){
-    if (x &lt;= (view_xview[0]+1400)){
+    if (x &lt;= (view_xview[0]+1450)){
         visible = 1;
     }else{
         visible = 0;
@@ -221,7 +221,7 @@ if (woodLeft &lt;= 0){
             <kind>1</kind>
             <string>//Make the tree delete itself it a building is placed over it
 if (!falling &amp;&amp; other.placed == 1){
-    if (!fell){
+    if (!fell &amp;&amp; other.object_index != obj_warehouse){
         instance_destroy();
     }
 }
