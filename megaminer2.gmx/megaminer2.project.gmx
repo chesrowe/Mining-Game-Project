@@ -266,6 +266,7 @@
           <sprite>sprites\spr_uiIconBlacksmith</sprite>
           <sprite>sprites\spr_uiIconFarm</sprite>
           <sprite>sprites\spr_uiIconArcherTower</sprite>
+          <sprite>sprites\spr_uiIconWall</sprite>
           <sprite>sprites\spr_uiIconStockPile</sprite>
           <sprite>sprites\obj_uiIconEquipment</sprite>
           <sprite>sprites\spr_uiIconBuild</sprite>
@@ -307,15 +308,19 @@
     <sprites name="Dev">
       <sprite>sprites\spr_devModeSound</sprite>
     </sprites>
-    <sprite>sprites\spr_surface1</sprite>
-    <sprite>sprites\spr_surfaceHillUp</sprite>
-    <sprite>sprites\spr_surfaceHillUpUnder</sprite>
-    <sprite>sprites\spr_surfaceHillDownUnder</sprite>
-    <sprite>sprites\spr_surfaceHillDown</sprite>
-    <sprite>sprites\spr_surface2</sprite>
-    <sprite>sprites\spr_surface3</sprite>
-    <sprite>sprites\spr_surface4</sprite>
-    <sprite>sprites\spr_tileBlack</sprite>
+    <sprites name="Terrain">
+      <sprites name="Surface">
+        <sprite>sprites\spr_surfaceHillDownUnder</sprite>
+        <sprite>sprites\spr_surface1</sprite>
+        <sprite>sprites\spr_surface2</sprite>
+        <sprite>sprites\spr_surface3</sprite>
+        <sprite>sprites\spr_surface4</sprite>
+        <sprite>sprites\spr_surfaceHillUpUnder</sprite>
+        <sprite>sprites\spr_surfaceHillDown</sprite>
+        <sprite>sprites\spr_surfaceHillUp</sprite>
+      </sprites>
+      <sprite>sprites\spr_tileBlack</sprite>
+    </sprites>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_sky</background>
@@ -404,6 +409,7 @@
         <object>objects\obj_uiWorkerButtonHouse</object>
         <object>objects\obj_uiWorkerButtonBlacksmith</object>
         <object>objects\obj_uiWorkerButtonArcherTower</object>
+        <object>objects\obj_uiWorkerButtonWall</object>
       </objects>
       <objects name="Structures">
         <object>objects\obj_structureButtonParent</object>
@@ -472,11 +478,14 @@
       <object>objects\obj_farm</object>
       <object>objects\obj_farmingPatch</object>
       <object>objects\obj_warehouse</object>
-      <object>objects\obj_farmVane</object>
-      <object>objects\obj_farm1Pig</object>
       <object>objects\obj_house</object>
       <object>objects\obj_blacksmith</object>
-      <object>objects\spr_archerTower</object>
+      <object>objects\obj_archerTower</object>
+      <object>objects\obj_wall</object>
+      <objects name="Misc">
+        <object>objects\obj_farmVane</object>
+        <object>objects\obj_farm1Pig</object>
+      </objects>
     </objects>
     <objects name="non-visibles">
       <object>objects\obj_solidGround</object>

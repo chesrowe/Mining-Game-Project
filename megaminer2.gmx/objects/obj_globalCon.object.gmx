@@ -108,13 +108,13 @@ global.localCoop = 0;
 
 //Resources
 global.totalResourcesCollected = 0;
-global.gold = 5000;
-global.stone = 5000;
+global.gold = 91000;
+global.stone = 91000;
 global.crystal = 0;
 global.brimstone = 0;
 global.mushroom = 0;
-global.woodCommon = 5000;
-global.food = 5000;
+global.woodCommon = 91000;
+global.food = 9500;
 
 //Farming/Population
 global.pop = 2;
@@ -160,6 +160,7 @@ settlementCenterButton = instance_create(x,35,obj_uiWorkerButtonSettlementCenter
 houseButton = instance_create(x,35,obj_uiWorkerButtonHouse);
 archerTowerButton = instance_create(x,35,obj_uiWorkerButtonArcherTower);
 blacksmithButton = instance_create(x,35,obj_uiWorkerButtonBlacksmith);
+wallButton = instance_create(x,35,obj_uiWorkerButtonWall);
 global.workerBuildMenu = 0;
 global.workerBuild = 0;
 global.building = 0;
@@ -192,7 +193,7 @@ global.building = 0;
 
 //Sound Variables
 global.currentSong = irandom(1);
-global.mute = 1;
+global.mute = 0;
 pickSoundTimer = 0;
 global.songPlaying[0] = 0;
 //audio_master_gain(0);
@@ -978,6 +979,8 @@ archerTowerButton.x = view_xview[0] + 710;
 archerTowerButton.y = view_yview[0] + 60;
 blacksmithButton.x = view_xview[0] + 790;
 blacksmithButton.y = view_yview[0] + 60;
+wallButton.x = view_xview[0] + 870;
+wallButton.y = view_yview[0] + 60;
 
 
 </string>

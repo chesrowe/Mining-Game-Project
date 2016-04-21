@@ -112,7 +112,7 @@ if (!global.workerBuild &amp;&amp; visible){
     if (instance_exists(obj_townCenter)){
         //See if the towncenter has been built or not
         if (obj_townCenter.built == 1){
-            var struc = instance_create(mouse_x,mouse_y,obj_house);
+            var struc = instance_create(mouse_x,mouse_y,obj_archerTower);
             global.selected = struc;
             global.workerBuild = 1;
         }else{

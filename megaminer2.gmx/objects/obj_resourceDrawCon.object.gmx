@@ -51,8 +51,10 @@ myResource = 0;
             <kind>1</kind>
             <string>///Snap
 
-x = myResource.x;
-y = myResource.y;
+if (instance_exists(myResource)){
+    x = myResource.x;
+    y = myResource.y;
+}
 </string>
           </argument>
         </arguments>

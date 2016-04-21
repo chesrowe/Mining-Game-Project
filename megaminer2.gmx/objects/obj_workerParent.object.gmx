@@ -874,12 +874,6 @@ if (!dying){
                 }
                 //Makes miner take the resources to the stockpile
                 if (miningTimer &gt;= miningTime){
-                    //Set chance to drop a gem
-                    gemBonus = (((target.gemChance) * .01) * miningLevel);
-                    if (irandom(target.gemChance - gemBonus) == 1){
-                        instance_create(target.x,target.y-6,obj_ruby);
-                        show_debug_message("Ruby");
-                    }
                     goingTo = 0;
                     comingFrom = 1;
                     mineStart = 0;
@@ -1313,7 +1307,9 @@ if (state == 'woodcutting'){
 if (global.select &amp;&amp; selected == 0){
     insideSelectBox = point_in_rectangle(x,y,global.selectStartX,global.selectStartY,mouse_x,mouse_y);
     insideSelectBoxAlt = point_in_rectangle(x,y,mouse_x,mouse_y,global.selectStartX,global.selectStartY);
-    if (insideSelectBox || insideSelectBoxAlt){
+    var insideSelectBoxAlt2 = point_in_rectangle(global.selectStartX,global.selectStartY,mouse_x,mouse_y,x,y);
+    var insideSelectBoxAlt3 = point_in_rectangle(mouse_x,mouse_y,global.selectStartX,global.selectStartY,x,y);
+    if (insideSelectBox || insideSelectBoxAlt || insideSelectBoxAlt2 || insideSelectBoxAlt3 ){
         global.selectedNumber ++;
         global.unitSelected[global.selectedNumber - 1] = id;
         selected = 1;
