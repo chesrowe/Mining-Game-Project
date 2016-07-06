@@ -41,7 +41,7 @@ x += choose(irandom(16), -(irandom(16)));
 y -= choose(0,2,4);
 resource = 'wood';
 levelReq = 1;
-fall = 200;
+fall = 1000; 
 falling = 0;
 fallTimer = 80;
 fallDir = 'right';
@@ -159,6 +159,7 @@ if (falling){
     if (collision_line(x,y,x + lengthdir_x(220,image_angle+90),y + lengthdir_y(220,image_angle+90),obj_tileSurfaceParent,1,0)){
         falling = 0;
         fell = 1;
+        instance_destroy();
         midRandom += 10;
         midTime += 30;
     }
@@ -279,7 +280,7 @@ if (global.dev_mode &amp;&amp; !showDebug){
 //Makes the selected worker mine this resource
 
 //Set the selected workers to woodcutting
-if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
+if (!global.building &amp;&amp; !global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
     var tree = id;
     scr_unit_array_set_resource_target('woodcutting',tree);   
     scr_unit_array_clear();

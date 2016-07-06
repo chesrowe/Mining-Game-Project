@@ -28,6 +28,10 @@
             <string>///General
 event_inherited();
 
+if (instance_number(self) &gt; 1){
+    instance_destroy();
+}
+
 //Icon
 icon = spr_sturctureInfoButton;
 iconOffsetX = 14;
@@ -43,6 +47,7 @@ showInfoBox = 0;
 myWindow = -4;
 windowOpen = 0;
 hasWindow = 1;
+windowObject = obj_uiWindowSettlementCenter;
 </string>
           </argument>
         </arguments>

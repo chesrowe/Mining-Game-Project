@@ -116,75 +116,50 @@
       <sprite>sprites\spr_ft_small</sprite>
     </sprites>
     <sprites name="Charactors">
-      <sprites name="workers">
-        <sprites name="Worker Walk Regular">
-          <sprite>sprites\spr_miner1RegLeftWalkingEmpty</sprite>
-          <sprite>sprites\spr_miner1RegRightWalkingEmpty</sprite>
-          <sprite>sprites\spr_miner1RegRightWalkingFull</sprite>
-          <sprite>sprites\spr_miner1RegLeftWalkingFull</sprite>
-        </sprites>
-        <sprites name="Worker Mining REGULAR">
-          <sprite>sprites\spr_miner1RegLeftMining</sprite>
-          <sprite>sprites\spr_miner1RegRightMining</sprite>
-          <sprite>sprites\spr_workerDrawToolMiningLeft1</sprite>
-          <sprite>sprites\spr_workerDrawToolMiningRight1</sprite>
-        </sprites>
-        <sprites name="Worker Woodcut REGULAR">
-          <sprite>sprites\spr_workerWoodcutLeft1</sprite>
-          <sprite>sprites\spr_workerWoodcutRight1</sprite>
-          <sprite>sprites\spr_workerDrawToolWoodcutRight1</sprite>
-          <sprite>sprites\spr_workerDrawToolWoodcutLeft1</sprite>
-        </sprites>
-        <sprites name="Worker farming REGULAR1">
-          <sprite>sprites\spr_workerFarmingRight1</sprite>
-          <sprite>sprites\spr_workerFarmingLeft1</sprite>
-          <sprite>sprites\spr_workerDrawToolFarmingLeft1</sprite>
-          <sprite>sprites\spr_workerDrawToolFarmingRight1</sprite>
-        </sprites>
-        <sprites name="Worker idle regular 1">
-          <sprite>sprites\spr_workerIdleRight1</sprite>
-          <sprite>sprites\spr_workerIdleLeft1</sprite>
-        </sprites>
-        <sprites name="Worker Dying REGULAR 1">
-          <sprite>sprites\spr_workerDyingRightReg1</sprite>
-          <sprite>sprites\spr_workerDyingLeftReg1</sprite>
-        </sprites>
-        <sprites name="Worker supply carry REGULAR 1">
-          <sprite>sprites\spr_workerSupplyCarryRightReg1</sprite>
-          <sprite>sprites\spr_workerSupplyCarryLeftReg1</sprite>
-        </sprites>
-        <sprites name="Worker building REGULAR 1">
-          <sprite>sprites\spr_workerBuildingRightReg1</sprite>
-          <sprite>sprites\spr_workerBuildingLeftReg1</sprite>
-          <sprite>sprites\spr_workerPullOutHammerLeftReg1</sprite>
-          <sprite>sprites\spr_workerPullOutHammerRightReg1</sprite>
-        </sprites>
-        <sprites name="Worker Pickup REGULAR 1">
-          <sprite>sprites\spr_workerPickupRightReg1</sprite>
-          <sprite>sprites\spr_workerPickupLeftReg1</sprite>
-        </sprites>
-        <sprites name="Worker Supply drop REGULAR 1">
-          <sprite>sprites\spr_workerSupplyDropRightReg1</sprite>
-          <sprite>sprites\spr_workerSupplyDropLeftReg1</sprite>
-        </sprites>
-        <sprites name="Worker sitting down REGULAR 1">
-          <sprite>sprites\spr_workerSittingDownRightReg1</sprite>
-          <sprite>sprites\spr_workerSittingDownLeftReg1</sprite>
-        </sprites>
-        <sprites name="Worker running REGULAR 1">
-          <sprite>sprites\spr_workerRunningRightReg1</sprite>
-          <sprite>sprites\spr_workerRunningLeftReg1</sprite>
-        </sprites>
-        <sprites name="Worker damage frame REGULAR 1">
-          <sprite>sprites\spr_workerDamageFrameRightReg1</sprite>
-          <sprite>sprites\spr_workerDamageFrameLeftReg1</sprite>
+      <sprites name="Workers">
+        <sprites name="Worker Regular">
+          <sprites name="Worker Movement">
+            <sprites name="Worker Walking">
+              <sprite>sprites\spr_workerWalking</sprite>
+              <sprite>sprites\spr_workerWalkingResources</sprite>
+            </sprites>
+            <sprite>sprites\spr_workerRunning</sprite>
+          </sprites>
+          <sprites name="Worker Working">
+            <sprites name="Worker Mining">
+              <sprite>sprites\spr_workerMiningDrawTool</sprite>
+              <sprite>sprites\spr_workerMining</sprite>
+            </sprites>
+            <sprites name="Worker Woodcuting">
+              <sprite>sprites\spr_workerWoodcutingDrawTool</sprite>
+              <sprite>sprites\spr_workerWoodcuting</sprite>
+            </sprites>
+            <sprites name="Worker Farming">
+              <sprite>sprites\spr_workerFarmingDrawTool</sprite>
+              <sprite>sprites\spr_workerFarming</sprite>
+            </sprites>
+            <sprites name="Worker Building">
+              <sprite>sprites\spr_workerBuildingDrawTool</sprite>
+              <sprite>sprites\spr_workerBuilding</sprite>
+            </sprites>
+          </sprites>
+          <sprites name="Worker Damage">
+            <sprite>sprites\spr_workerDamageFrame</sprite>
+            <sprite>sprites\spr_workerDying</sprite>
+          </sprites>
+          <sprites name="Worker Other">
+            <sprites name="Worker Idleing">
+              <sprite>sprites\spr_workerIdle</sprite>
+              <sprite>sprites\spr_workerSittingDown</sprite>
+            </sprites>
+            <sprite>sprites\spr_workerDropResources</sprite>
+            <sprite>sprites\spr_workerPickup</sprite>
+          </sprites>
         </sprites>
       </sprites>
       <sprites name="enemies">
         <sprites name="wolf">
-          <sprite>sprites\spr_wolfWalkingLeft</sprite>
           <sprite>sprites\spr_wolfWalkingRight</sprite>
-          <sprite>sprites\spr_wolfAttackingLeft</sprite>
           <sprite>sprites\spr_wolfAttackingRight</sprite>
         </sprites>
         <sprites name="Misc">
@@ -202,6 +177,7 @@
       </sprites>
       <sprites name="farm">
         <sprite>sprites\spr_farm</sprite>
+        <sprite>sprites\spr_farmCover</sprite>
         <sprite>sprites\spr_farmVane</sprite>
         <sprite>sprites\spr_farmPig</sprite>
       </sprites>
@@ -221,6 +197,10 @@
       </sprites>
       <sprites name="Blacksmith">
         <sprite>sprites\spr_blacksmith1</sprite>
+      </sprites>
+      <sprites name="Lift">
+        <sprite>sprites\spr_liftMain1</sprite>
+        <sprite>sprites\spr_liftElevator1</sprite>
       </sprites>
     </sprites>
     <sprites name="Environment">
@@ -251,7 +231,6 @@
         <sprite>sprites\spr_flowers</sprite>
       </sprites>
       <sprite>sprites\spr_tree1Bottom</sprite>
-      <sprite>sprites\spr_gameFade</sprite>
     </sprites>
     <sprites name="Ui">
       <sprite>sprites\obj_uiIconBasic</sprite>
@@ -271,6 +250,7 @@
           <sprite>sprites\obj_uiIconEquipment</sprite>
           <sprite>sprites\spr_uiIconBuild</sprite>
           <sprite>sprites\spr_uiIconSettlementCenter</sprite>
+          <sprite>sprites\spr_uiIconLift</sprite>
         </sprites>
         <sprites name="Structure button icons">
           <sprite>sprites\spr_buttonLevelUp</sprite>
@@ -321,6 +301,7 @@
       </sprites>
       <sprite>sprites\spr_tileBlack</sprite>
     </sprites>
+    <sprite>sprites\sprite121</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_sky</background>
@@ -410,6 +391,7 @@
         <object>objects\obj_uiWorkerButtonBlacksmith</object>
         <object>objects\obj_uiWorkerButtonArcherTower</object>
         <object>objects\obj_uiWorkerButtonWall</object>
+        <object>objects\obj_uiWorkerButtonLift</object>
       </objects>
       <objects name="Structures">
         <object>objects\obj_structureButtonParent</object>
@@ -475,16 +457,19 @@
     <objects name="Structures">
       <object>objects\obj_buildingParent</object>
       <object>objects\obj_townCenter</object>
-      <object>objects\obj_farm</object>
       <object>objects\obj_farmingPatch</object>
+      <object>objects\obj_farm</object>
       <object>objects\obj_warehouse</object>
       <object>objects\obj_house</object>
       <object>objects\obj_blacksmith</object>
+      <object>objects\obj_lift</object>
       <object>objects\obj_archerTower</object>
       <object>objects\obj_wall</object>
       <objects name="Misc">
         <object>objects\obj_farmVane</object>
+        <object>objects\obj_farmCover</object>
         <object>objects\obj_farm1Pig</object>
+        <object>objects\obj_elevator</object>
       </objects>
     </objects>
     <objects name="non-visibles">

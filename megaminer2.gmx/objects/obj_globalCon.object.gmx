@@ -161,6 +161,8 @@ houseButton = instance_create(x,35,obj_uiWorkerButtonHouse);
 archerTowerButton = instance_create(x,35,obj_uiWorkerButtonArcherTower);
 blacksmithButton = instance_create(x,35,obj_uiWorkerButtonBlacksmith);
 wallButton = instance_create(x,35,obj_uiWorkerButtonWall);
+liftButton = instance_create(x,35,obj_uiWorkerButtonLift);
+
 global.workerBuildMenu = 0;
 global.workerBuild = 0;
 global.building = 0;
@@ -702,6 +704,75 @@ instance_create(0,0,obj_conOpeningScene);
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string></string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Hunger 
+
+hungerTimer = 0;
+eatTime = irandom_range(800, 1100);
+eatAmount = irandom_range(5, 15);
+hungerLevel = 0;
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Debug stuff
+
+global.autoBuild = 1;
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="3" enumb="0">
       <action>
@@ -963,24 +1034,27 @@ if (global.select){
           <argument>
             <kind>1</kind>
             <string>///Ui 
+var uiOffset = -60;
 
 //Snap worker buttons in place
-buildButton.x = view_xview[0] + 550;
+buildButton.x = (view_xview[0] + uiOffset) + 550;
 buildButton.y = view_yview[0] + 60;
-stockpileButton.x = view_xview[0] + 390
+stockpileButton.x = (view_xview[0] + uiOffset) + 390
 stockpileButton.y = view_yview[0] + 60;
-farmButton.x = view_xview[0] + 550;
+farmButton.x = (view_xview[0] + uiOffset) + 550;
 farmButton.y = view_yview[0] + 60;
-settlementCenterButton.x = view_xview[0] + 470;
+settlementCenterButton.x = (view_xview[0] + uiOffset) + 470;
 settlementCenterButton.y = view_yview[0] + 60;
-houseButton.x = view_xview[0] + 630;
+houseButton.x = (view_xview[0] + uiOffset) + 630;
 houseButton.y = view_yview[0] + 60;
-archerTowerButton.x = view_xview[0] + 710;
+archerTowerButton.x = (view_xview[0] + uiOffset) + 710;
 archerTowerButton.y = view_yview[0] + 60;
-blacksmithButton.x = view_xview[0] + 790;
+blacksmithButton.x = (view_xview[0] + uiOffset) + 790;
 blacksmithButton.y = view_yview[0] + 60;
-wallButton.x = view_xview[0] + 870;
+wallButton.x = (view_xview[0] + uiOffset) + 870;
 wallButton.y = view_yview[0] + 60;
+liftButton.x = (view_xview[0] + uiOffset) + 950;
+liftButton.y = view_yview[0] + 60;
 
 
 </string>
@@ -1054,8 +1128,6 @@ if (doubleClickTimer &gt;= 20){
           </argument>
         </arguments>
       </action>
-    </event>
-    <event eventtype="6" enumb="57">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -1072,22 +1144,22 @@ if (doubleClickTimer &gt;= 20){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Deselect
+            <string>///Hunger
 
-if (global.workerBuild){
-    with (global.selected){
-        global.woodCommon += costWoodCommon;
-        instance_destroy();
-        global.workerBuild = 0;
-    }
+hungerTimer ++;
+
+if (hungerTimer == eatTime){
+    global.food -= eatAmount * instance_number(obj_workerHumanP1);
+    eatTime = irandom_range(800, 1100);
+    eatAmount = irandom_range(5, 15);
+    hungerTimer = 0;
 }
-//scr_unit_array_clear();
-global.selected = noone;
-
 </string>
           </argument>
         </arguments>
       </action>
+    </event>
+    <event eventtype="6" enumb="57">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -1135,7 +1207,7 @@ if (doubleClickTimer &gt; 1){
             <kind>1</kind>
             <string>///Move units
 
-if (!position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_farmingPatch) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){ 
+if (!position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_farmingPatch) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !global.workerBuild &amp;&amp; !global.building){ 
     //Only move the units if there is not an unfinished building at the position
     //otherwise the worker will be set to building
     if (position_meeting(mouse_x,mouse_y,obj_buildingParent)){
@@ -1156,6 +1228,38 @@ if (!position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !position_m
     }
     
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Deselect
+
+if (global.workerBuild){
+    with (global.selected){
+        global.woodCommon += costWoodCommon;
+        instance_destroy();
+        global.workerBuild = 0;
+    }
+}
+//scr_unit_array_clear();
+global.selected = noone;
+
 </string>
           </argument>
         </arguments>
@@ -1184,11 +1288,15 @@ if (!position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !position_m
 if (global.workerBuild &amp;&amp; global.selected != noone &amp;&amp; !global.dev_mode_dupe){
     if ((global.selected).y == ((global.selected).groundY - (global.selected).originOffY)){
         with(global.selected){
-            if (!place_meeting(x,y,obj_buildingParent) &amp;&amp; scr_building_can_be_placed()){
+            if (!place_meeting(x,y,obj_buildingParent) &amp;&amp; scr_building_can_be_placed() &amp;&amp; !place_meeting(x, y, obj_treeParent) &amp;&amp; !place_meeting(x, y, obj_resourceParent)){
                 placed = 1;
                 //Set the selected units to building the structure
                 with (obj_workerParent){
                     scr_unit_array_set_resource_target('building',global.selected);
+                }
+                ///DEBUG: Auto Build
+                if (global.autoBuild){
+                    global.selected.built = 1;
                 }
                 
                 //Assign the selected workers to start building the structure
@@ -1198,19 +1306,22 @@ if (global.workerBuild &amp;&amp; global.selected != noone &amp;&amp; !global.de
                     global.workerBuildMenu = 0;
                     global.selected = noone;
                     global.building = 0;
+                    spriteColor = c_white;
                     scr_unit_array_clear();
                     //If the structure is a towncenter or warehouse, make the structure automatically build
                     }else if ((global.selected).object_index == obj_townCenter){
                         global.towncenterBuilt = 1;
                         global.workerBuild = 0;
-                        global.selected = -4;
+                        global.selected = noone;
                         global.building = 0;
+                        spriteColor = c_white;
                     }else if ((global.selected).object_index == obj_warehouse){
                         global.stockpileBuilt = 1;  
-                        global.selected  = -4;
+                        global.selected  = noone;
                         global.workerBuild = 0; 
-                        global.building = 0;     
-                }
+                        global.building = 0; 
+                        spriteColor = c_white;    
+                    }
               
             }else{
                 scr_create_floating_message(mouse_x,mouse_y,.1,2,30,"Can't build that there.");
@@ -1276,7 +1387,7 @@ if (global.dev_mode_dupe &amp;&amp; !global.building){
 
 if (global.selectBoxStart){
    //Clear selected units
-    //scr_unit_array_clear();
+    scr_unit_array_clear();
     global.selectBoxStart = 0;
     global.select = 1;
 }
@@ -1330,7 +1441,7 @@ moveTimer = 0;
             <string>/// Select box
 
 //if there is no selectable object underneath the mouse
-if (!global.workerBuild &amp;&amp; !global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowExit) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_treeParent)&amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent)){
+if (!global.workerBuild &amp;&amp; !global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_buildingParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowExit) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent)){
     global.selectBoxStart = 1;
     global.selectStartX = mouse_x;
     global.selectStartY = mouse_y;
@@ -1610,6 +1721,36 @@ if (global.food &gt;= 400){
 global.tileCount = 0;
 game_restart();
 audio_stop_all();
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="10" enumb="72">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Move camera to settlement center
+
+if (instance_exists(obj_townCenter)){
+    view_xview[0] = obj_townCenter.x - (view_wview[0] / 2);
+    if (view_xview[0] &lt; 0){
+        view_xview[0] = 0;
+    }
+}
 </string>
           </argument>
         </arguments>

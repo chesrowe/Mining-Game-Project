@@ -60,7 +60,7 @@ attack = 0; // NOT USED
 attackTimer = 0; // A tiemr that counts up between each attack(basicly used to set the attack speed)
 hillStart = 0;
 spriteAttackingRight = spr_wolfAttackingRight; // sets the sprite for when the enemy is attacking to the right
-spriteAttackingLeft = spr_wolfAttackingLeft; // sets the sprite for when the enemy is attacking to the right
+spriteAttackingLeft = spr_wolfAttackingRight; // sets the sprite for when the enemy is attacking to the right
 
 </string>
           </argument>

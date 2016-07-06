@@ -26,6 +26,8 @@
           <argument>
             <kind>1</kind>
             <string>///general variables
+image_xscale = -1;
+spriteColor = c_white;
 directional = 0;
 autoBuild = 0;
 placed = 0;
@@ -244,7 +246,7 @@ sprite_index = spriteLevel[(level-1)];
 
 
 
-//Make the building follow the curcer when it's not placed
+//Make the building follow the curser when it's not placed
 if (!placed){
     if !(position_meeting(x,y+16,obj_tileSurfaceFlatParent)){
         //groundY = (instance_nearest(mouse_x,mouse_y,obj_tileSurfaceFlatParent).y);
@@ -272,6 +274,12 @@ if (!placed){
             
         }
         
+    }
+    //Sprite color
+    if (!place_meeting(x, y, obj_buildingParent) &amp;&amp; !place_meeting(x, y, obj_resourceParent) &amp;&amp; !place_meeting(x, y, obj_treeParent) &amp;&amp; scr_building_can_be_placed()){
+        spriteColor = c_white
+    }else{
+        spriteColor = c_red;
     }
 }else if (built &amp;&amp; !upgrade){
     //play the place sound
@@ -536,7 +544,7 @@ if (!devMode){
             <kind>1</kind>
             <string>///Show buttons
 
-if (!instance_position(mouse_x,mouse_y,obj_workerParent) &amp;&amp; built){
+if (!instance_position(mouse_x,mouse_y,obj_workerParent) &amp;&amp; built &amp;&amp; !global.selectBoxStart){
     if (!showButtons){
         showButtons = 1;
         textPopUp = 0;
@@ -661,7 +669,9 @@ if (global.selectedNumber &gt; 0 &amp;&amp; scr_unit_array_check_for_worker() &a
           <argument>
             <kind>1</kind>
             <string>///Draw self/percent/pop-up
-draw_self();
+
+draw_sprite_ext(sprite_index, 0, x, y, 1, 1, 0, spriteColor, image_alpha); 
+
 
 //If the building is still being built, draw the percentage
 if (!built){
@@ -673,6 +683,7 @@ if (textPopUp){
     scr_draw_ui_box(popUpWidth ,0,x + textDrawX - 33 ,y + yOffset + textDrawY - 24);
     draw_text_colour(x + textDrawX + textXExtra, y + yOffset + textDrawY, buildingName + " Level  " + string(level),c_white,c_white,c_white,c_white,1);
 }
+
 </string>
           </argument>
         </arguments>

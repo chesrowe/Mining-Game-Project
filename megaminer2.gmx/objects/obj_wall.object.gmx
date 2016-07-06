@@ -120,7 +120,7 @@ for (i = 0; i &lt; 10; i++){
             <string>///Pop up text
 
 //Pop up text
-buildingName = "Archer Tower";
+buildingName = "Wall";
 textPopUp = 0;
 popUpX1 = 80
 popUpX2 = 89

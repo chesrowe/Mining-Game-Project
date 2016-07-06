@@ -27,10 +27,14 @@
             <kind>1</kind>
             <string>///Select box
 
+draw_set_colour(c_white);
+
 if (global.selectBoxStart){
     draw_rectangle(global.selectStartX, global.selectStartY,mouse_x,mouse_y,1);
     draw_rectangle(global.selectStartX+1, global.selectStartY-1,mouse_x-1,mouse_y-1,1);
 }
+
+draw_set_colour(c_black);
 </string>
           </argument>
         </arguments>

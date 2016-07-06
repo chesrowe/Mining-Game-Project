@@ -290,7 +290,7 @@ if (exhausted){
 
 //Makes the selected workers mine this resource
 
-if (!global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
+if (!global.building &amp;&amp; !global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
     var rock = id;
     scr_unit_array_set_resource_target('mining',rock);   
     scr_unit_array_clear();

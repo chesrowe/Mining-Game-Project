@@ -3,7 +3,7 @@
   <spriteName>spr_farmPig</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-1</depth>
+  <depth>-2</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -62,7 +62,7 @@ upTimer = 0;
 
 if (instance_exists(myFarm)){
     if (myFarm.placed != 1){
-        x = (myFarm.x - 152);
+        x = (myFarm.x - 145);
         y = (myFarm.y - 14);
     }
 }else{
