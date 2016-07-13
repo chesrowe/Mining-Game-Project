@@ -16,23 +16,23 @@
         <sounds name="Night">
           <sound>sound\sd_surfaceNightNeutral1</sound>
         </sounds>
+        <sounds name="Environment">
+          <sounds name="Ambiences">
+            <sounds name="Surface">
+              <sound>sound\sd_surfaceAmbience</sound>
+            </sounds>
+          </sounds>
+          <sounds name="Trees">
+            <sound>sound\sd_treeFalling1</sound>
+            <sound>sound\sd_treeFalling2</sound>
+            <sound>sound\sd_treeFalling3</sound>
+            <sound>sound\sd_treeFalling4</sound>
+          </sounds>
+        </sounds>
         <sounds name="Day">
           <sound>sound\sd_surfaceDayNeutral1</sound>
           <sound>sound\sd_surfaceDayNeutral2</sound>
         </sounds>
-      </sounds>
-    </sounds>
-    <sounds name="Environment">
-      <sounds name="Ambiences">
-        <sounds name="Surface">
-          <sound>sound\sd_surfaceAmbience</sound>
-        </sounds>
-      </sounds>
-      <sounds name="Trees">
-        <sound>sound\sd_treeFalling1</sound>
-        <sound>sound\sd_treeFalling2</sound>
-        <sound>sound\sd_treeFalling3</sound>
-        <sound>sound\sd_treeFalling4</sound>
       </sounds>
     </sounds>
     <sounds name="Workers">
@@ -233,6 +233,7 @@
       <sprite>sprites\spr_tree1Bottom</sprite>
     </sprites>
     <sprites name="Ui">
+      <sprite>sprites\spr_uiArrow</sprite>
       <sprite>sprites\obj_uiIconBasic</sprite>
       <sprite>sprites\spr_selectorP1</sprite>
       <sprite>sprites\obj_uiIconStats</sprite>
@@ -407,6 +408,12 @@
           <object>objects\obj_uiWindowExit</object>
           <object>objects\obj_uiWindowSettlementCenter</object>
           <object>objects\obj_uiWindowWarehouse</object>
+          <objects name="warehouse">
+            <object>objects\obj_uiWarehouseArrowRight</object>
+            <object>objects\obj_uiWarehouseArrowLeft</object>
+            <object>objects\obj_uiWarehouseResourseIconParent</object>
+            <object>objects\obj_uiWarehouseResourceIconWoodCommon</object>
+          </objects>
         </objects>
       </objects>
     </objects>

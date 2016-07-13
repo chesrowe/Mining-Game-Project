@@ -42,14 +42,89 @@
             <string>///Window setup
 
 //Window Size
-windowWidth = 5;
-windowHeight = 3;
+windowWidth = 9;
+windowHeight = 5;
 windowX = x;
 windowY = y;
 showShowWindow = 0;
 myButton = -4;
 image_xscale = windowWidth + 1;
 
+arrowRight = instance_create(x, y, obj_uiWarehouseArrowRight);
+arrowLeft = instance_create(x, y, obj_uiWarehouseArrowLeft);
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Resource icon array
+iconSet = 0;
+
+//First set of six
+iconArray[0,0] = -4;
+iconArray[0,1] = -4;
+iconArray[0,2] = -4;
+iconArray[0,3] = -4;
+iconArray[0,4] = -4;
+iconArray[0,5] = -4;
+
+//Create the first set
+for (i = 0; i &lt;= 5; i++){
+    iconArray[0,i] = instance_create(x, y, obj_uiWarehouseResourceIconWoodCommon);
+} 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="3" enumb="2">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Snap resource icons
+
+var a = x + 64;
+for (i = 0; i &lt;= 5; i++){
+    iconArray[iconSet,i].x = a;
+    a += 80;
+    if (i == 2){
+        a = x + 64;    
+    }
+    if (i &gt; 2){
+        iconArray[iconSet,i].y = y + 32 + 80;    
+    }else{
+        iconArray[iconSet,i].y = y + 32;    
+    }
+    
+}
 </string>
           </argument>
         </arguments>
@@ -93,6 +168,20 @@ if (instance_exists(obj_structureButtonBuildingInfoSettlementCenter)){
         windowOpen = 1;
     }
 }
+
+//Snap the right arrow to the window
+if (instance_exists(arrowRight)){
+    arrowRight.x = x + (windowWidth * 32) + 32;
+    arrowRight.y = y + ((windowHeight / 2) * 32) + 16;
+}
+
+//Snap the left arrow to the window
+if (instance_exists(arrowLeft)){
+    arrowLeft.x = x + 32;
+    arrowLeft.y = y + ((windowHeight / 2) * 32) + 16;
+}
+
+
 </string>
           </argument>
         </arguments>
@@ -131,11 +220,8 @@ if (instance_exists(obj_structureButtonBuildingInfoSettlementCenter)){
             <kind>1</kind>
             <string>///Draw text in window
 
-draw_text(x + 40, y + 16,"Settlement Resources.");
-draw_text(x + 20, y + 48,"Wood:  " + string(global.woodCommon) + "  Slot Size:  1");
-draw_text(x + 20, y + 64,"Stone:  " + string(global.stone) + "  Slot Size:  1");
-draw_text(x + 20, y + 80,"Gold:  " + string(global.gold) + "  Slot Size:  1");
-draw_text(x + 20, y + 96,"Food:  " + string(global.food) + "  Slot Size:  1");
+draw_text(x + 80, y + 16,"Settlement Resources.");
+
 
 </string>
           </argument>
