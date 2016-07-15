@@ -237,7 +237,6 @@
       <sprite>sprites\obj_uiIconBasic</sprite>
       <sprite>sprites\spr_selectorP1</sprite>
       <sprite>sprites\obj_uiIconStats</sprite>
-      <sprite>sprites\spr_foodIcon</sprite>
       <sprite>sprites\scr_uiWindowCollider</sprite>
       <sprite>sprites\spr_uiWindowExit</sprite>
       <sprites name="buttons">
@@ -261,6 +260,7 @@
           <sprite>sprites\spr_buttonFarmPatch</sprite>
         </sprites>
         <sprite>sprites\spr_uiButtonBase</sprite>
+        <sprite>sprites\spr_uiButtonBase2</sprite>
       </sprites>
       <sprites name="Window basic">
         <sprite>sprites\spr_uiDynamicboxTopLeft</sprite>
@@ -271,6 +271,14 @@
         <sprite>sprites\spr_uiDynamicBoxLeft</sprite>
         <sprite>sprites\spr_uiDynamicBoxBottom</sprite>
         <sprite>sprites\spr_uiDynamicBoxTop</sprite>
+      </sprites>
+      <sprites name="warehouse Resource icons">
+        <sprite>sprites\spr_uiWarehouseResourceIconWoodCommon</sprite>
+        <sprite>sprites\spr_uiWarehouseResourceIconWoodOak</sprite>
+        <sprite>sprites\spr_uiWarehouseResourceIconWoodBirch</sprite>
+        <sprite>sprites\spr_uiWarehouseResourceIconStone</sprite>
+        <sprite>sprites\spr_uiWarehouseResourceIconGold</sprite>
+        <sprite>sprites\spr_uiWarehouseResourceIconFood</sprite>
       </sprites>
     </sprites>
     <sprites name="non-visible">
@@ -411,8 +419,13 @@
           <objects name="warehouse">
             <object>objects\obj_uiWarehouseArrowRight</object>
             <object>objects\obj_uiWarehouseArrowLeft</object>
-            <object>objects\obj_uiWarehouseResourseIconParent</object>
+            <object>objects\obj_uiWarehouseResourceIconParent</object>
             <object>objects\obj_uiWarehouseResourceIconWoodCommon</object>
+            <object>objects\obj_uiWarehouseResourceIconWoodOak</object>
+            <object>objects\obj_uiWarehouseResourceIconWoodBirch</object>
+            <object>objects\obj_uiWarehouseResourceIconFood</object>
+            <object>objects\obj_uiWarehouseResourceIconStone</object>
+            <object>objects\obj_uiWarehouseResourceIconGold</object>
           </objects>
         </objects>
       </objects>

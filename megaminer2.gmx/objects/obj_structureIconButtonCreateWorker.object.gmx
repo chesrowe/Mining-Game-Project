@@ -143,7 +143,7 @@ if (showInfoBox){
     draw_text(infoBoxX + 76, infoBoxY + 24, "  -  Create  worker");
     draw_set_colour(c_yellow);
     draw_text(infoBoxX + 62,infoBoxY + 24,"50");
-    draw_sprite(spr_foodIcon,0,infoBoxX + 28,infoBoxY + 14);
+    draw_sprite(spr_uiWarehouseResourceIconFood,0,infoBoxX + 28,infoBoxY + 14);
 }
 </string>
           </argument>

@@ -1811,6 +1811,16 @@ if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60 &amp;&amp
                             global.woodCommon += inv[i,6] 
                             global.totalResourcesCollected += inv[i,6];
                         break;
+                        
+                        case 'woodBirch': 
+                            global.woodBirch += inv[i,6] 
+                            global.totalResourcesCollected += inv[i,6];
+                        break;
+                        
+                        case 'woodOak': 
+                            global.woodOak += inv[i,6] 
+                            global.totalResourcesCollected += inv[i,6];
+                        break;
                 
                         case 'food': 
                             global.food += inv[i,6]; 

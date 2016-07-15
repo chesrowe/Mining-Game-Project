@@ -27,6 +27,56 @@
             <kind>1</kind>
             <string>///General
 image_xscale = -1;
+myWindow = noone;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="7">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Change icon sets
+
+if (instance_exists(myWindow)){
+    if (myWindow.iconSet &gt; 0){
+        with(myWindow){
+            //Delete the other set of buttons
+            for (i = 0; i &lt;= 5; i++){
+                if (instance_exists(iconArray[iconSet,i])){
+                    with(iconArray[iconSet,i]){
+                        instance_destroy();    
+                    }
+                }
+            } 
+            //Change the icon set
+            iconSet --;
+            //Create new set of buttons
+            var a = -18;
+            for (i = 0; i &lt;= 5; i++){
+                iconArray[iconSet,i] = instance_create(x, y , (iconObjectArray[iconSet,i]) );
+                iconArray[iconSet,i].depth = a;
+                a++;
+            } 
+        }    
+    }
+}else{
+    instance_destroy();
+}
 </string>
           </argument>
         </arguments>

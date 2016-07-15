@@ -114,6 +114,8 @@ global.crystal = 0;
 global.brimstone = 0;
 global.mushroom = 0;
 global.woodCommon = 91000;
+global.woodOak = 91000;
+global.woodBirch= 91000;
 global.food = 9500;
 
 //Farming/Population
@@ -570,12 +572,12 @@ for (i = 0; i &lt;= worldWidth; i++;){
             break;
             //Spawn stone 
             case obj_stone:
-                instance_create(xPos,folY-10,foliage);
+                instance_create(xPos,folY-30,foliage);
                 gridPos += 3;
             break;
             //Spawn gold 
             case obj_gold:
-                instance_create(xPos,folY-10,foliage);
+                instance_create(xPos,folY-30,foliage);
                 gridPos += 3;
             break;
             //Spawn birch tree 
@@ -1441,7 +1443,7 @@ moveTimer = 0;
             <string>/// Select box
 
 //if there is no selectable object underneath the mouse
-if (!global.workerBuild &amp;&amp; !global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_buildingParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowExit) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent)){
+if (!global.workerBuild &amp;&amp; !global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_buildingParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWarehouseArrowRight) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWarehouseArrowLeft) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowExit) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWarehouseResourceIconParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent)){
     global.selectBoxStart = 1;
     global.selectStartX = mouse_x;
     global.selectStartY = mouse_y;

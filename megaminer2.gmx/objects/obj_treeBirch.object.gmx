@@ -38,7 +38,7 @@ fallYAdd = .12;
 fallXAdd = .03;
 
 xp = 30;
-resource = 'birchWood';
+resource = 'woodBirch';
 levelReq = 5;
 woodLeft = 1000;
 midTime = 2;
