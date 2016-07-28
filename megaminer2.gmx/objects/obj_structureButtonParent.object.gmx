@@ -143,7 +143,8 @@ if (soundRR &gt;= 3){
           <argument>
             <kind>1</kind>
             <string>///Create window 
-
+show_debug_message(string(myWindow));
+show_debug_message(string(windowOpen));
 if (hasWindow){
     if (!windowOpen &amp;&amp; myWindow == -4){
         myWindow = instance_create(x,y - 180,windowObject);
@@ -153,6 +154,10 @@ if (hasWindow){
         //Do nothing
     }
 }
+
+
+show_debug_message(string(myWindow));
+show_debug_message(string(windowOpen));
 </string>
           </argument>
         </arguments>

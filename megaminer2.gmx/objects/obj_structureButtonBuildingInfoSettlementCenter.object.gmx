@@ -28,10 +28,6 @@
             <string>///General
 event_inherited();
 
-if (instance_number(self) &gt; 1){
-    instance_destroy();
-}
-
 //Icon
 icon = spr_sturctureInfoButton;
 iconOffsetX = 14;
