@@ -26,7 +26,6 @@
           <argument>
             <kind>1</kind>
             <string>///general variables
-image_xscale = -1;
 spriteColor = c_white;
 directional = 0;
 autoBuild = 0;
@@ -40,8 +39,8 @@ originOffX = 0;
 originOffY = 0;
 mouseYOff = 50;
 placeSoundPlayed = 0;
-costWoodCommon = 500;
-costStone = 0;
+costWoodCommon = 300;
+costStone = 100;
 totalResourcesNeeded = 0;
 amountBuilt = 0;
 devMode = 0;
@@ -50,8 +49,8 @@ xp = 100; //xp a worker gets for building
 //Cost array table 
 //cost[0,0]
 cost[0,0] = 'woodCommon'; //Type
-cost[0,1] = 500; //Total amount needed
-cost[0,2] = 500; //Amount left
+cost[0,1] = 400; //Total amount needed
+cost[0,2] = 400; //Amount left
 cost[1,0] = -1; 
 cost[1,1] = -1; 
 cost[1,2] = -1; 
@@ -180,17 +179,17 @@ upgradeCost[0,0] = 'woodCommon'; //type
 upgradeCost[0,1] = 200; //Amount needed
 upgradeCost[0,2] = 200; //Amount left
 //Stone - 200
-//upgradeCost[1,0] = 'stone';
-//upgradeCost[1,1] = 200;
-//upgradeCost[1,2] = 200;
+upgradeCost[1,0] = 'stone';
+upgradeCost[1,1] = 200;
+upgradeCost[1,2] = 200;
 //food - 200
-//upgradeCost[2,0] = 'food';
-//upgradeCost[2,1] = 200;
-//upgradeCost[2,2] = 200;
+upgradeCost[2,0] = 'food';
+upgradeCost[2,1] = 200;
+upgradeCost[2,2] = 200;
 //next (empty)
-//upgradeCost[3,0] = -4;
-//upgradeCost[3,1] = -4;
-//upgradeCost[3,2] = -4;
+upgradeCost[3,0] = -4;
+upgradeCost[3,1] = -4;
+upgradeCost[3,2] = -4;
 </string>
           </argument>
         </arguments>
@@ -372,7 +371,7 @@ if (showButtons){
           <argument>
             <kind>1</kind>
             <string>///Building text popup
-if (instance_position(mouse_x,mouse_y,object_index)){
+if (instance_position(mouse_x,mouse_y,object_index) &amp;&amp; !instance_position(mouse_x, mouse_y, obj_workerParent)){
     if (!showButtons &amp;&amp; built){
         textPopUp = 1;
     }
@@ -572,7 +571,7 @@ if (!instance_position(mouse_x,mouse_y,obj_workerParent) &amp;&amp; built &amp;&
             <kind>1</kind>
             <string>///Play sounds
 
-if (built){
+if (built &amp;&amp; !instance_position(mouse_x, mouse_y, obj_workerParent)){
     audio_play_sound(sound[soundRR],999,0);
     
     //Randomize round robins
@@ -670,7 +669,7 @@ if (global.selectedNumber &gt; 0 &amp;&amp; scr_unit_array_check_for_worker() &a
             <kind>1</kind>
             <string>///Draw self/percent/pop-up
 
-draw_sprite_ext(sprite_index, 0, x, y, 1, 1, 0, spriteColor, image_alpha); 
+draw_sprite_ext(sprite_index, 0, x, y, image_xscale, image_yscale, 0, spriteColor, image_alpha); 
 
 
 //If the building is still being built, draw the percentage
@@ -684,60 +683,6 @@ if (textPopUp){
     draw_text_colour(x + textDrawX + textXExtra, y + yOffset + textDrawY, buildingName + " Level  " + string(level),c_white,c_white,c_white,c_white,1);
 }
 
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Dev mode
-
-if (devMode &amp;&amp; global.dev_mode){
-    draw_text(x-50,y-200,"totalResourcesNeeded_" + string(totalResourcesNeeded));
-    draw_text(x-50,y-190,"amountBuilt_" + string(amountBuilt));
-    
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Upgrade debug text
-
-
-if (upgrade){
-    var currentStuff = scr_building_find_resource_needed_upgrade(id);
-    draw_text(x , y -50,string(upgradeCost[currentStuff,2]) + " " + string(upgradeCost[currentStuff,0]) + " / " + string(upgradeCost[currentStuff,1]));
-}
 </string>
           </argument>
         </arguments>

@@ -106,17 +106,7 @@ global.layersDiscovered = 0;
 global.gamepad = 0;
 global.localCoop = 0;
 
-//Resources
-global.totalResourcesCollected = 0;
-global.gold = 91000;
-global.stone = 91000;
-global.crystal = 0;
-global.brimstone = 0;
-global.mushroom = 0;
-global.woodCommon = 91000;
-global.woodOak = 91000;
-global.woodBirch= 91000;
-global.food = 9500;
+
 
 //Farming/Population
 global.pop = 2;
@@ -126,11 +116,41 @@ global.maxPop = 5;
 global.fontDmg = font_add_sprite(spr_ft_small,ord(' '),1,1);
 draw_set_font(global.fontDmg);
 
-//make obj to draw debug text 
-instance_create(x,y,obj_debugDraw);
 
 
 
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Resources
+global.totalResourcesCollected = 0;
+global.gold = 200;
+global.stone = 200;
+global.crystal = 0;
+global.brimstone = 0;
+global.mushroom = 0;
+global.woodCommon = 100;
+global.woodOak = 0;
+global.woodBirch = 0;
+global.food = 200;
 </string>
           </argument>
         </arguments>
@@ -156,6 +176,8 @@ instance_create(x,y,obj_debugDraw);
 //New ui
 workerButtonMenu = 0;
 buildButton = instance_create(x,35,obj_uiWorkerButtonBuild);
+workerInventoryButton = instance_create(x,35,obj_uiWorkerButtonInventory);
+workerSkillsButton = instance_create(x,35,obj_uiWorkerButtonSkills);
 farmButton = instance_create(x,35,obj_uiWorkerButtonFarm);
 stockpileButton = instance_create(x,35,obj_uiWorkerButtonStockpile);
 settlementCenterButton = instance_create(x,35,obj_uiWorkerButtonSettlementCenter);
@@ -338,10 +360,10 @@ gridPos = 0;
 tileIndex = 0;
 worldWidth = 1000//In tiles (32x32)
 global.surfaceHeightGrid = ds_grid_create(worldWidth*2,1000);
-hillChance = irandom(1);
+hillChance = irandom(5);
 hillDistance = irandom_range(20,150);
 hillLength = 0;
-hillHeightLimit = 200;
+hillHeightLimit = 100;
 
 //Put tiles into arrays
 surfaceFlatTile[0] = obj_tileSurfaceFlat1;
@@ -722,26 +744,6 @@ instance_create(0,0,obj_conOpeningScene);
         <arguments>
           <argument>
             <kind>1</kind>
-            <string></string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
             <string>///Hunger 
 
 hungerTimer = 0;
@@ -770,7 +772,21 @@ hungerLevel = 0;
             <kind>1</kind>
             <string>///Debug stuff
 
-global.autoBuild = 1;
+global.autoBuild = 0;
+global.debugNoTrees = 0;
+global.debugClickDeleteTrees = 1;
+
+if (global.debugNoTrees){
+    with(obj_treeParent){
+        instance_destroy();
+    }
+}
+
+//list to hold frame rates
+
+fpsAverageList = ds_list_create();
+fpsAverage = 0;
+
 </string>
           </argument>
         </arguments>
@@ -1041,6 +1057,10 @@ var uiOffset = -60;
 //Snap worker buttons in place
 buildButton.x = (view_xview[0] + uiOffset) + 550;
 buildButton.y = view_yview[0] + 60;
+workerSkillsButton.x = (view_xview[0] + uiOffset) + 630;
+workerSkillsButton.y = view_yview[0] + 60;
+workerInventoryButton.x = (view_xview[0] + uiOffset) + 470;
+workerInventoryButton.y = view_yview[0] + 60;
 stockpileButton.x = (view_xview[0] + uiOffset) + 390
 stockpileButton.y = view_yview[0] + 60;
 farmButton.x = (view_xview[0] + uiOffset) + 550;
@@ -1151,10 +1171,44 @@ if (doubleClickTimer &gt;= 20){
 hungerTimer ++;
 
 if (hungerTimer == eatTime){
-    global.food -= eatAmount * instance_number(obj_workerHumanP1);
+    global.food -= eatAmount * instance_number(obj_workerParent);
     eatTime = irandom_range(800, 1100);
     eatAmount = irandom_range(5, 15);
     hungerTimer = 0;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///DEV stuff
+
+ds_list_add(fpsAverageList, fps_real);
+
+if (ds_list_size(fpsAverageList) &gt;= 31){
+    var averageTotal = 0
+    var a = 0;
+    for (i = 0; i &lt;= 29; i++){
+        averageTotal += ds_list_find_value(fpsAverageList, a);
+        a++;
+    }
+    fpsAverage = floor((averageTotal / 30));
+    ds_list_clear(fpsAverageList);
 }
 </string>
           </argument>
@@ -1290,7 +1344,7 @@ global.selected = noone;
 if (global.workerBuild &amp;&amp; global.selected != noone &amp;&amp; !global.dev_mode_dupe){
     if ((global.selected).y == ((global.selected).groundY - (global.selected).originOffY)){
         with(global.selected){
-            if (!place_meeting(x,y,obj_buildingParent) &amp;&amp; scr_building_can_be_placed() &amp;&amp; !place_meeting(x, y, obj_treeParent) &amp;&amp; !place_meeting(x, y, obj_resourceParent)){
+            if (!place_meeting(x,y,obj_buildingParent) &amp;&amp; scr_building_can_be_placed() &amp;&amp; !place_meeting(x, y, obj_farmingPatch) &amp;&amp; !place_meeting(x, y, obj_treeParent) &amp;&amp; !place_meeting(x, y, obj_resourceParent)){
                 placed = 1;
                 //Set the selected units to building the structure
                 with (obj_workerParent){
@@ -1443,7 +1497,7 @@ moveTimer = 0;
             <string>/// Select box
 
 //if there is no selectable object underneath the mouse
-if (!global.workerBuild &amp;&amp; !global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_buildingParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWarehouseArrowRight) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWarehouseArrowLeft) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowExit) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWarehouseResourceIconParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent)){
+if (!global.workerBuild &amp;&amp; !global.building &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_buildingParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWarehouseArrowRight) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWarehouseArrowLeft) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowExit) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWorkerButtonParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_resourceParent) &amp;&amp; !global.selectBoxStart &amp;&amp; !global.shiftSelect &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiDebugWindowParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWarehouseResourceIconParent) &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_uiWindowParent)){
     global.selectBoxStart = 1;
     global.selectStartX = mouse_x;
     global.selectStartY = mouse_y;
@@ -1525,7 +1579,37 @@ if (position_meeting(mouse_x,mouse_y,obj_workerParent)){
 font_delete(global.fontDmg);
 part_system_destroy(global.partMining);
 ds_grid_destroy(global.surfaceHeightGrid);
+ds_list_destroy(fpsAverageList);
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="64">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///DEV Stuff
+
+if (window_get_fullscreen()){
+    draw_text(1254 * 2, 4, string(fpsAverage));
+}else{
+    draw_text(1254, 4, string(fpsAverage));
+}
 </string>
           </argument>
         </arguments>
@@ -1564,6 +1648,45 @@ draw_background_tiled_hor(bg_bushClose,view_xview[0]/6,570);
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Debug
+
+///Dev mode 
+
+//Draw dev mode on the side of the screen
+
+if (global.dev_mode){
+    draw_set_colour(c_white);
+    draw_set_font(global.fontDmg);
+    draw_text(view_xview[0]+1130,view_yview[0]+695,"Dev mode on");
+    
+    if (global.dev_mode_dupe){
+        draw_text(view_xview[0]+1060,view_yview[0]+670,"Object to create: "+string(global.dupeObject));
+        if (global.dupeObject != noone){
+            draw_text(view_xview[0]+1010,view_yview[0]+650,"Selected Object count: "+string(instance_number(global.dupeObject)));    
+        }
+    }
+}
+
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="9" enumb="17">
       <action>
@@ -1582,7 +1705,7 @@ draw_background_tiled_hor(bg_bushClose,view_xview[0]/6,570);
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Object Duplicate 
+            <string>///Object Duplicate ON
 
 if (global.dev_mode){
     global.dev_mode_dupe = 1;
@@ -1623,30 +1746,6 @@ if (global.dev_mode){
         </arguments>
       </action>
     </event>
-    <event eventtype="9" enumb="13">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Show debug overlay
-show_debug_overlay(1);
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
     <event eventtype="10" enumb="85">
       <action>
         <libid>1</libid>
@@ -1664,11 +1763,11 @@ show_debug_overlay(1);
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Create worker
+            <string>///DEBUG Create worker
 
-if (global.food &gt;= 400){
+if (global.food &gt;= -1 &amp;&amp; instance_exists(obj_townCenter)){
     instance_create(obj_townCenter.x,obj_townCenter.y-50,obj_workerHumanP1);
-    global.food -= 400;
+    global.food -= 0;
 }
 </string>
           </argument>
@@ -1728,6 +1827,38 @@ audio_stop_all();
         </arguments>
       </action>
     </event>
+    <event eventtype="10" enumb="78">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>//Snap camera to nearest IDLE worker
+
+if (instance_exists(obj_workerParent)){
+    var viewMiddle = (view_wview[0] / 2);
+    view_xview[0] = instance_nearest(view_xview[0] + viewMiddle, 720, obj_workerParent).x - viewMiddle;
+    //If part of the view goes too far left. fix it 
+    if (view_xview[0] &lt; 0){
+        view_xview[0] = 0;
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="10" enumb="72">
       <action>
         <libid>1</libid>
@@ -1775,11 +1906,21 @@ if (instance_exists(obj_townCenter)){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
+            <string>///DEV Mode
 if (global.dev_mode){
     global.dev_mode = 0;
+    show_debug_overlay(0);
+    //Destroy any open debug windows
+    if (instance_exists(obj_uiDebugWindowParent)){
+        with(obj_uiDebugWindowParent){
+            instance_destroy();
+        }
+    }
 }else{
     global.dev_mode = 1;
+    show_debug_overlay(1);
+    //Create the global variables debug window
+    instance_create(view_xview[0] + 30, view_yview[0] + 30, obj_uiDebugWindowGlobal);
 }
 </string>
           </argument>

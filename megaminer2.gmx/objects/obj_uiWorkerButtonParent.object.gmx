@@ -29,6 +29,14 @@
 iconSprite = spr_uiIconBuild;
 iconOffsetX = 0;
 iconOffsetY = 0;
+locked = 0;
+
+//infobox
+infoBoxWidth = 3;
+infoBoxHeight = 3;
+infoBoxX = x;
+infoBoxY = y - 168;
+showInfoBox = 0;
 </string>
           </argument>
         </arguments>
@@ -53,10 +61,41 @@ iconOffsetY = 0;
             <kind>1</kind>
             <string>///visibility
 
-if (global.unitSelected[0] == -4){
+if (global.unitSelected[0] == -4 &amp;&amp; !global.workerBuild){
     visible = 0;
 }
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Info box
+
+if (position_meeting(mouse_x,mouse_y,self)){
+    showInfoBox = 1;   
+    infoBoxX = mouse_x;
+    infoBoxY = mouse_y;
+    depth = -100;
+}else{
+    showInfoBox = 0;
+    depth = -5;    
+}
 </string>
           </argument>
         </arguments>
@@ -82,10 +121,48 @@ if (global.unitSelected[0] == -4){
             <string>///Draw icon and self
 draw_self(); 
 
-//Draw icon on the button
-draw_sprite(iconSprite,0,x + iconOffsetX, y + iconOffsetY);
+//Draw icon on the button if the button is not locked, otherwise 
+if (!locked){
+    draw_sprite(iconSprite,0,x + iconOffsetX, y + iconOffsetY);
+}else{
+    draw_sprite(spr_uiIconLocked,0,x + iconOffsetX, y + iconOffsetY)
+}
 
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///info-box
+ 
+//Ui box
+if (showInfoBox){
+    scr_draw_ui_box(infoBoxWidth,infoBoxHeight,infoBoxX,infoBoxY);
+}
+
+//Info text
+
+if (showInfoBox){
+    draw_set_colour(c_white);
+    
+    
+}
 </string>
           </argument>
         </arguments>

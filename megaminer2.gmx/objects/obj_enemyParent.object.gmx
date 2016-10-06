@@ -5,7 +5,7 @@
   <visible>0</visible>
   <depth>0</depth>
   <persistent>0</persistent>
-  <parentName>obj_parentMaster</parentName>
+  <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -257,73 +257,6 @@ madeContact = 1;
 contactTarget = other.id;
 jumping = 0;
 
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="4" ename="obj_parentMaster">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>//destroy the arrow when it hits the enemy
-if (!other.stuck){
-    madeContact = 0;
-    attackTimer = 0;
-    with(other){
-        //instance_destroy();
-    }
-    //Transfers the dmg info from the arrow
-    dmgNumber = instance_create(x,y-10,obj_enemyDrawCon);
-    dmgNumber.myEnemy = id;
-    dmgNumber.dmg = other.dmg;
-    //Makes sure the hp doesn't go into the negatives
-    if (hp &gt; 0){
-        hp -= other.dmg;
-    }else{
-        hp = 0;
-    }
-    //Creates the knockback effect
-    if (other.x &gt; x){
-        knockBackLeft = 1;
-        knockBackRight = 0;
-        knockTimer = 0;
-    }else{
-        knockBackLeft = 0;
-        knockBackRight = 1;
-        knockTimer = 0;    
-    }
-    //creates blood effects
-    part_particles_create(global.partEnemyBlood,x,y,global.partBloodRed,20);
-    
-    other.stuck = 1;
-    other.xoff = x - other.x;
-    other.yOff = y - other.y;
-    other.myEnemy = id;
-    other.image_angle += choose(irandom(5),irandom(-5));
-    if (other.x &gt; x){
-        other.xOff += 10;
-    }else{
-        other.xOff -= 10;
-    }
-}
-//starts the dying animation after the enemy runs out of hp
-if (hp &lt;= 0){
-    dying = 1;
-}
 </string>
           </argument>
         </arguments>

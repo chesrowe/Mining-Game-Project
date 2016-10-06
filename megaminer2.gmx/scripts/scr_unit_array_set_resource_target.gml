@@ -31,11 +31,11 @@ for(i = 0;i < 100;i++){
                 if (x > target.x){
                     resourcePosition = 2;
                     positionTime = target.posTime;
-                    sprite_index = spriteWalkingResources;
+                    sprite_index = spriteWalking;
                 }else{
                     resourcePosition = 1;
                     positionTime = target.posTime;
-                    sprite_index = spriteWalkingResources;
+                    sprite_index = spriteWalking;
                 }
                 goingTo = 0;
             }

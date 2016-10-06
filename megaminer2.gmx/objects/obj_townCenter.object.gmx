@@ -28,7 +28,7 @@
             <string>///General
 event_inherited();
 
-costWoodCommon = 0;
+costWoodCommon = 500;
 costStone = 0;
 originOffY = -5;
 spriteLevel[0] = spr_townCenter1;

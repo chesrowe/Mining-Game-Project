@@ -112,16 +112,17 @@ if (spriteMade){
     var surf = surface_create(32 + (32*myTile.flatNumber)+32,50);
     surface_set_target(surf);
     for (i = 0; i &lt; myTile.flatNumber; i++){
-        draw_sprite(myTile.grass[i,2],myTile.grass[i,0],i*32,0
+        draw_sprite_ext(myTile.grass[i,2], myTile.grass[i,0], i*32, 0, choose(1,1), 1, 0, c_white, 1);
         
-        );
     }   
     scenerySprite = sprite_create_from_surface(surf,0,0,surface_get_width(surf),50,0,0,0,0);
     surface_reset_target();
     surface_free(surf);
     spriteMade = 1; 
 }else{
-    sprite_delete(scenerySprite);
+    if (sprite_exists(scenerySprite)){
+        sprite_delete(scenerySprite);
+    }
     spriteMade = 0;
     scenerySprite = -4;
 }

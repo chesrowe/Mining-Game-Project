@@ -80,10 +80,6 @@ exPopUp = 0;
 midTime = 40;
 midRandom = 60;
 
-//Create obj to handle debug drawing
-myDraw = instance_create(x,y,obj_resourceDrawCon);
-myDraw.myResource = id;
-
 //Sprites for the buildings
 spriteLevel[0] = spr_farmingPatch;
 

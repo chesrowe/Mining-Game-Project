@@ -85,8 +85,10 @@ if (position_meeting(mouse_x,mouse_y,self)){
     showInfoBox = 1;   
     infoBoxX = mouse_x;
     infoBoxY = mouse_y;
+    depth = -100;
 }else{
     showInfoBox = 0;
+    depth = -5;
 }
 </string>
           </argument>

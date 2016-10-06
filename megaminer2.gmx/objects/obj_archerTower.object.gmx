@@ -51,6 +51,7 @@ originOffY = -4;
 menuY = y+300;
 costWoodCommon = 500;
 costStone = 0;
+directional = 1;
 
 //Sprites
 spriteLevel[0] = spr_archerTower1;

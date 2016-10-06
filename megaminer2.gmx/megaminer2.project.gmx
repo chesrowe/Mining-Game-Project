@@ -5,6 +5,19 @@
   </Configs>
   <NewExtensions/>
   <sounds name="sound">
+    <sounds name="Environment">
+      <sounds name="Trees">
+        <sound>sound\sd_treeFalling1</sound>
+        <sound>sound\sd_treeFalling2</sound>
+        <sound>sound\sd_treeFalling3</sound>
+        <sound>sound\sd_treeFalling4</sound>
+      </sounds>
+      <sounds name="Ambiences">
+        <sounds name="Surface">
+          <sound>sound\sd_surfaceAmbience</sound>
+        </sounds>
+      </sounds>
+    </sounds>
     <sounds name="Music">
       <sounds name="Special">
         <sound>sound\sd_mainTheme</sound>
@@ -15,19 +28,6 @@
       <sounds name="Surface">
         <sounds name="Night">
           <sound>sound\sd_surfaceNightNeutral1</sound>
-        </sounds>
-        <sounds name="Environment">
-          <sounds name="Ambiences">
-            <sounds name="Surface">
-              <sound>sound\sd_surfaceAmbience</sound>
-            </sounds>
-          </sounds>
-          <sounds name="Trees">
-            <sound>sound\sd_treeFalling1</sound>
-            <sound>sound\sd_treeFalling2</sound>
-            <sound>sound\sd_treeFalling3</sound>
-            <sound>sound\sd_treeFalling4</sound>
-          </sounds>
         </sounds>
         <sounds name="Day">
           <sound>sound\sd_surfaceDayNeutral1</sound>
@@ -159,8 +159,8 @@
       </sprites>
       <sprites name="enemies">
         <sprites name="wolf">
-          <sprite>sprites\spr_wolfWalkingRight</sprite>
-          <sprite>sprites\spr_wolfAttackingRight</sprite>
+          <sprite>sprites\spr_wolfWalking</sprite>
+          <sprite>sprites\spr_wolfAttacking</sprite>
         </sprites>
         <sprites name="Misc">
           <sprite>sprites\spr_arrow</sprite>
@@ -236,22 +236,10 @@
       <sprite>sprites\spr_uiArrow</sprite>
       <sprite>sprites\obj_uiIconBasic</sprite>
       <sprite>sprites\spr_selectorP1</sprite>
-      <sprite>sprites\obj_uiIconStats</sprite>
+      <sprite>sprites\spr_uiIconWorkerSkills</sprite>
       <sprite>sprites\scr_uiWindowCollider</sprite>
       <sprite>sprites\spr_uiWindowExit</sprite>
       <sprites name="buttons">
-        <sprites name="Worker Build Icons">
-          <sprite>sprites\spr_uiIconHouse</sprite>
-          <sprite>sprites\spr_uiIconBlacksmith</sprite>
-          <sprite>sprites\spr_uiIconFarm</sprite>
-          <sprite>sprites\spr_uiIconArcherTower</sprite>
-          <sprite>sprites\spr_uiIconWall</sprite>
-          <sprite>sprites\spr_uiIconStockPile</sprite>
-          <sprite>sprites\obj_uiIconEquipment</sprite>
-          <sprite>sprites\spr_uiIconBuild</sprite>
-          <sprite>sprites\spr_uiIconSettlementCenter</sprite>
-          <sprite>sprites\spr_uiIconLift</sprite>
-        </sprites>
         <sprites name="Structure button icons">
           <sprite>sprites\spr_buttonLevelUp</sprite>
           <sprite>sprites\spr_sturctureInfoButton</sprite>
@@ -261,6 +249,23 @@
         </sprites>
         <sprite>sprites\spr_uiButtonBase</sprite>
         <sprite>sprites\spr_uiButtonBase2</sprite>
+        <sprites name="Worker">
+          <sprites name="Worker Build Icons">
+            <sprite>sprites\spr_uiIconHouse</sprite>
+            <sprite>sprites\spr_uiIconBlacksmith</sprite>
+            <sprite>sprites\spr_uiIconFarm</sprite>
+            <sprite>sprites\spr_uiIconArcherTower</sprite>
+            <sprite>sprites\spr_uiIconWall</sprite>
+            <sprite>sprites\spr_uiIconStockPile</sprite>
+            <sprite>sprites\obj_uiIconEquipment</sprite>
+            <sprite>sprites\spr_uiIconBuild</sprite>
+            <sprite>sprites\spr_uiIconSettlementCenter</sprite>
+            <sprite>sprites\spr_uiIconLift</sprite>
+            <sprite>sprites\spr_uiIconLocked</sprite>
+          </sprites>
+          <sprite>sprites\spr_uiIconWorkerInventory</sprite>
+          <sprite>sprites\sprite110</sprite>
+        </sprites>
       </sprites>
       <sprites name="Window basic">
         <sprite>sprites\spr_uiDynamicboxTopLeft</sprite>
@@ -310,7 +315,6 @@
       </sprites>
       <sprite>sprites\spr_tileBlack</sprite>
     </sprites>
-    <sprite>sprites\sprite121</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_sky</background>
@@ -355,8 +359,8 @@
   </fonts>
   <objects name="objects">
     <objects name="Global Parents">
-      <object>objects\obj_parentMaster</object>
       <object>objects\obj_dupeParent</object>
+      <object>objects\obj_debugWindowGlobalParent</object>
     </objects>
     <objects name="Controllers">
       <object>objects\obj_globalCon</object>
@@ -364,7 +368,6 @@
       <object>objects\obj_selectBoxDraw</object>
       <object>objects\obj_drawMessage</object>
       <object>objects\obj_tileDraw</object>
-      <object>objects\obj_debugDraw</object>
       <object>objects\obj_console</object>
       <object>objects\obj_conOpeningScene</object>
     </objects>
@@ -374,7 +377,6 @@
         <object>objects\obj_workerParent</object>
         <objects name="worker controllers">
           <object>objects\obj_workerDrawTimed</object>
-          <object>objects\obj_workerCon</object>
         </objects>
       </objects>
       <objects name="enemies">
@@ -389,10 +391,14 @@
     <objects name="UI">
       <objects name="Dev mode">
         <object>objects\obj_devModeSound</object>
+        <object>objects\obj_uiDebugWindowParent</object>
+        <object>objects\obj_uiDebugWindowGlobal</object>
       </objects>
       <objects name="Workers">
         <object>objects\obj_uiWorkerButtonParent</object>
         <object>objects\obj_uiWorkerButtonBuild</object>
+        <object>objects\obj_uiWorkerButtonSkills</object>
+        <object>objects\obj_uiWorkerButtonInventory</object>
         <object>objects\obj_uiWorkerButtonFarm</object>
         <object>objects\obj_uiWorkerButtonStockpile</object>
         <object>objects\obj_uiWorkerButtonSettlementCenter</object>
@@ -403,7 +409,6 @@
         <object>objects\obj_uiWorkerButtonLift</object>
       </objects>
       <objects name="Structures">
-        <object>objects\obj_structureButtonParent</object>
         <object>objects\obj_structureButtonLevelUpTowncenter</object>
         <object>objects\obj_structureButtonLevelUpWarehouse</object>
         <object>objects\obj_structureIconButtonCreateWorker</object>
@@ -428,6 +433,7 @@
             <object>objects\obj_uiWarehouseResourceIconGold</object>
           </objects>
         </objects>
+        <object>objects\obj_structureButtonParent</object>
       </objects>
     </objects>
     <objects name="Evironment">
@@ -453,11 +459,9 @@
           <object>objects\obj_gold</object>
           <object>objects\obj_stone</object>
           <object>objects\obj_resourceParent</object>
-          <object>objects\obj_resourceDrawCon</object>
         </objects>
         <objects name="Woodcutting">
           <object>objects\obj_treeParent</object>
-          <object>objects\obj_treeDrawCon</object>
           <object>objects\obj_treeCommon</object>
           <object>objects\obj_oakTree</object>
           <object>objects\obj_treeBirch</object>

@@ -78,12 +78,14 @@ if (global.dev_mode){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
-global.sfxVol = get_integer("Sfx Vol", 1);
-global.musicVol = get_integer("Music Vol", 1);
-
-//audio_group_set_gain(sfx,global.sfxVol,10);
-audio_sound_gain(global.songPlaying[0],global.musicVol,10);
+            <string>///Edit sound levels
+if (visible){
+    global.sfxVol = get_integer("Sfx Vol", 1);
+    global.musicVol = get_integer("Music Vol", 1);
+    
+    //audio_group_set_gain(sfx,global.sfxVol,10);
+    audio_sound_gain(global.songPlaying[0],global.musicVol,10);
+}
 
 
 </string>
