@@ -360,10 +360,10 @@ gridPos = 0;
 tileIndex = 0;
 worldWidth = 1000//In tiles (32x32)
 global.surfaceHeightGrid = ds_grid_create(worldWidth*2,1000);
-hillChance = irandom(5);
+hillChance = irandom(1);
 hillDistance = irandom_range(20,150);
 hillLength = 0;
-hillHeightLimit = 100;
+hillHeightLimit = 200;
 
 //Put tiles into arrays
 surfaceFlatTile[0] = obj_tileSurfaceFlat1;

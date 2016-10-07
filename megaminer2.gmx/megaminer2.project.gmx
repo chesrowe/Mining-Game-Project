@@ -393,6 +393,7 @@
         <object>objects\obj_devModeSound</object>
         <object>objects\obj_uiDebugWindowParent</object>
         <object>objects\obj_uiDebugWindowGlobal</object>
+        <object>objects\obj_uiDebugWindowWorker</object>
       </objects>
       <objects name="Workers">
         <object>objects\obj_uiWorkerButtonParent</object>

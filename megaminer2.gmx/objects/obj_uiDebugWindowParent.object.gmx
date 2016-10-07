@@ -46,6 +46,10 @@ viewYOff = y - view_yview[0];
 myExit = instance_create(x + (windowWidth * 32),y + 32, obj_uiWindowExit);
 myExit.myWindow = id;
 
+//debug array stuff
+pages = 1;
+page = 0;
+
 
 
 </string>
@@ -111,6 +115,43 @@ if (!dragging){
 
     x = view_xview[0] + viewXOff;
     y = view_yview[0] + viewYOff;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Changing debug pages
+
+var yyy = (windowHeight + 2) * 32;
+var xxx = (windowWidth + 2) * 32;
+
+if (point_in_rectangle(mouse_x, mouse_y, x, y, x + xxx, y + yyy)){  
+    if (pages &gt; 1){
+        if (mouse_wheel_up() &amp;&amp; page != 0){
+            page --;
+        }
+        
+        if (mouse_wheel_down() &amp;&amp; page != (pages - 1)){
+            page ++;
+        }
+    }
+
 }
 </string>
           </argument>
@@ -285,16 +326,80 @@ draw_text(x + xx, y + 2, windowName);
 if (instance_exists(myInstance)){
     draw_text(x + xx, y + 16, "ID:  " + string(myInstance.id));
 }
+//Draw the page number
+draw_text(x + xx + 90, y + 2, "Page:  " + string(page + 1) + " / " + string(pages)); 
 
 //Draw variables
-for (i = 0; i &lt; 50; i++){
-    if (debugList[i,0] != -1){
-        draw_text(x + xx, y + yy, string(debugList[i, 0] + debugList[i, 1]) );
-        yy += 20;        
-    }else{
-        break;
-    }
+
+switch(page){
+    //Draw page 1
+    case 0:
+        for (i = 0; i &lt;= 20; i++){
+            if (debugList[i,0] != -1){
+                draw_text(x + xx, y + yy, string(debugList[i, 0] + " " + debugList[i, 1]) );
+                yy += 20;        
+            }else{
+                break;
+            }
+        }
+    break;
+    //Draw page 2
+    case 1:
+        for (i = 21; i &lt;= 40; i++){
+            if (debugList[i,0] != -1){
+                draw_text(x + xx, y + yy, string(debugList[i, 0] + debugList[i, 1]) );
+                yy += 20;        
+            }else{
+                break;
+            }
+        }
+    break;
+    //Draw page 3
+    case 2:
+        for (i = 41; i &lt;= 60; i++){
+            if (debugList[i,0] != -1){
+                draw_text(x + xx, y + yy, string(debugList[i, 0] + debugList[i, 1]) );
+                yy += 20;        
+            }else{
+                break;
+            }
+        }
+    break;
+    //Draw page 4
+    case 3:
+        for (i = 61; i &lt;= 80; i++){
+            if (debugList[i,0] != -1){
+                draw_text(x + xx, y + yy, string(debugList[i, 0] + debugList[i, 1]) );
+                yy += 20;        
+            }else{
+                break;
+            }
+        }
+    break;
+    //Draw page 5
+    case 4:
+        for (i = 81; i &lt;= 100; i++){
+            if (debugList[i,0] != -1){
+                draw_text(x + xx, y + yy, string(debugList[i, 0] + debugList[i, 1]) );
+                yy += 20;        
+            }else{
+                break;
+            }
+        }
+    break;
+    //Draw page 6
+     case 5:
+        for (i = 101; i &lt;= 120; i++){
+            if (debugList[i,0] != -1){
+                draw_text(x + xx, y + yy, string(debugList[i, 0] + debugList[i, 1]) );
+                yy += 20;        
+            }else{
+                break;
+            }
+        }
+    break;
 }
+
 
 
 
@@ -303,6 +408,30 @@ draw_set_colour(c_black);
 
 
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Debug draw
+
+//Draw a rectagle around the window to show the area the mouse can change the pages in.
+//draw_rectangle(x, y, x + ((windowWidth + 2) * 32), y + ((windowHeight + 2) * 32), 1);
 </string>
           </argument>
         </arguments>

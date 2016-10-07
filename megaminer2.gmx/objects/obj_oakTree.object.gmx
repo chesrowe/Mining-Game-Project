@@ -25,7 +25,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//set up variables for this tree
+            <string>///set up variables for this tree
 event_inherited();
 
 spriteTop = spr_oakTree;
@@ -41,6 +41,8 @@ xp = 100;
 resource = 'woodOak';
 levelReq = 10;
 woodLeft = 2400;
+posDistance = 60;
+posTime = 60;
 
 
 

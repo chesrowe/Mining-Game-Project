@@ -39,8 +39,8 @@ fallXAdd = .18;
 
 
 
-posDistance = 30;
-posTime = 40;
+posDistance = 45;
+posTime = 45;
 midTime = 0;
 midRandom = 10;
 resource = 'woodCommon';
