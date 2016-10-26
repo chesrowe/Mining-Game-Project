@@ -86,7 +86,7 @@ hillStart = 0;
 //Stats
 hp = 100;
 hpMax = 100;
-maxStamina = 100;
+maxStamina = 400;
 stamina = maxStamina;
 staminaRegen = 0;
 staminaTimer = 0;

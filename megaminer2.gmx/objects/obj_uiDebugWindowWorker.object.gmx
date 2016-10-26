@@ -332,7 +332,7 @@ if (debugVarNumber &gt; 20){
 var widestDebug = 0; //in pixels
 
 //Find the widest variable in the debugList
-for (a = 0; a &lt; 50; a++){
+for (a = 0; a &lt; 100; a++){
     if (debugList[a, 0] != -1){
         if ((string_width(debugList[a, 0] + debugList[a, 1])) &gt; widestDebug){
             widestDebug = string_width(debugList[a, 0] + debugList[a, 1] );    

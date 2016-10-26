@@ -111,9 +111,10 @@ if (visible){
           <argument>
             <kind>1</kind>
             <string>draw_self();
+draw_set_colour(c_white);
 draw_text(x+70,y,"Sfx volume: "+ string(global.sfxVol));
 draw_text(x+70,y+10,"Music volume: "+ string(global.musicVol));
-
+draw_set_colour(c_black);
 </string>
           </argument>
         </arguments>

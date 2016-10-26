@@ -337,14 +337,16 @@ if (global.debugClickDeleteTrees &amp;&amp; global.dev_mode){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//Draw self and bottom
+            <string>///Draw self and bottom
 
 draw_self();
 draw_sprite(spriteBottom,0,stumpX,stumpY);
 
 //draw_line for collision checking
 if (global.dev_mode){
+    draw_set_colour(c_white);
     draw_line_width(x,y,x + lengthdir_x(200,image_angle+90),y + lengthdir_y(200,image_angle+90),10);
+    draw_set_colour(c_black);
 }
 </string>
           </argument>

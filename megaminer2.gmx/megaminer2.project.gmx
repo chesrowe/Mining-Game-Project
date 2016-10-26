@@ -368,6 +368,7 @@
       <object>objects\obj_selectBoxDraw</object>
       <object>objects\obj_drawMessage</object>
       <object>objects\obj_tileDraw</object>
+      <object>objects\obj_consoleCon</object>
       <object>objects\obj_console</object>
       <object>objects\obj_conOpeningScene</object>
     </objects>
