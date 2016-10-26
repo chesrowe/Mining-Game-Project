@@ -10,7 +10,7 @@ var dur = argument[4];
 var msg = argument[5];
 
 //Create the instance to display the message
-with(instance_create(xx,yy,obj_drawMessage)){
+with(instance_create(xx, yy, obj_drawMessage)){
     message = argument[5];
     duration = argument[4];
 }

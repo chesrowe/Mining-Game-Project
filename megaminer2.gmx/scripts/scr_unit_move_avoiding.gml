@@ -16,33 +16,33 @@ if (!runOn){
 //Make the worker go up or down a hill
 //Right
 if (dir == 1){
-    if ( (position_meeting(x+16,y+10,obj_tileSurfaceHillUp) || position_meeting(x+16,y+26,obj_tileSurfaceHillUpUnder)) || position_meeting(x-16,y+26,obj_tileSurfaceFlatParent) || position_meeting(x,y+30,obj_tileSurfaceHillParent) ){
+    if ( (position_meeting(x + 8, y + 5, obj_tileSurfaceHillUp) || position_meeting(x + 8 ,y + 13 ,obj_tileSurfaceHillUpUnder)) || position_meeting(x - 8 ,y + 13 ,obj_tileSurfaceFlatParent) || position_meeting(x ,y + 15 ,obj_tileSurfaceHillParent) ){
         if (!runOn){
             y -= yMoveSpeed+.3;
         }else{
             y -= (yMoveSpeed+.3)*2;    
         }
-    }else if ( (position_meeting(x+16,y+26,obj_tileSurfaceHillDown) || position_meeting(x,y+30,obj_tileSurfaceHillDownUnder) || position_meeting(x,y+30,obj_tileSurfaceHillDown) || place_meeting(x,y+4,obj_tileSurfaceHillDown))){
+    }else if ( (position_meeting(x + 8 ,y + 13 ,obj_tileSurfaceHillDown) || position_meeting(x ,y + 15 ,obj_tileSurfaceHillDownUnder) || position_meeting(x ,y + 15 ,obj_tileSurfaceHillDown) || place_meeting(x ,y + 2 ,obj_tileSurfaceHillDown))){
         if (!runOn){
-            y += yMoveSpeed+.2;
+            y += yMoveSpeed + .2;
         }else{
-            y += (yMoveSpeed+.2)*2;   
+            y += (yMoveSpeed + .2) * 2;   
         }
     }
 }else{
     //Left and up
-    if ( (position_meeting(x-16,y+10,obj_tileSurfaceHillDown) || position_meeting(x-16,y+26,obj_tileSurfaceHillDownUnder) || position_meeting(x+16,y+26,obj_tileSurfaceFlatParent) || (position_meeting(x,y+30,obj_tileSurfaceHillParent) && !position_meeting(x+6,y+30,obj_tileSurfaceFlatParent)) ) ){
+    if ( (position_meeting(x - 8 ,y + 5 ,obj_tileSurfaceHillDown) || position_meeting(x - 8 ,y + 13 ,obj_tileSurfaceHillDownUnder) || position_meeting(x + 8 ,y + 13 ,obj_tileSurfaceFlatParent) || (position_meeting(x ,y + 15 ,obj_tileSurfaceHillParent) && !position_meeting(x + 3 ,y + 15 ,obj_tileSurfaceFlatParent)) ) ){
         if (!runOn){
-            y -= yMoveSpeed+.3;
+            y -= yMoveSpeed + .3;
         }else{
-            y -= (yMoveSpeed+.3)*2;    
+            y -= (yMoveSpeed + .3) * 2;    
         }
         //left and DOWN
-    }else if ( (position_meeting(x+24,y+26,obj_tileSurfaceHillUp) || position_meeting(x,y+30,obj_tileSurfaceHillUpUnder) || place_meeting(x+10,y,obj_tileSurfaceHillUp)) && (!position_meeting(x-16,y+26,obj_tileSurfaceFlatParent)) ){
+    }else if ( (position_meeting(x + 12 ,y + 13 ,obj_tileSurfaceHillUp) || position_meeting(x ,y + 15 ,obj_tileSurfaceHillUpUnder) || place_meeting(x + 5 ,y ,obj_tileSurfaceHillUp)) && (!position_meeting(x - 8 ,y + 13 ,obj_tileSurfaceFlatParent)) ){
         if (!runOn){
-            y += yMoveSpeed+.2;
+            y += yMoveSpeed + .2;
         }else{
-            y += (yMoveSpeed+.2)*2;   
+            y += (yMoveSpeed + .2) * 2;   
         }
     }    
 }

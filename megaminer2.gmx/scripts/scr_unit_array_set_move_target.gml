@@ -2,7 +2,7 @@
 //Sets all selected units to move toward the current mouse position 
 
 randomize();
-unitMoveX = mouse_x + round(((global.selectedNumber/2))*32+irandom(argument0))
+unitMoveX = mouse_x + round(((global.selectedNumber/2)) * 16 + irandom(argument0))
 
 for(i = 0;i < 100;i++;){
     if (global.unitSelected[i] != noone){
