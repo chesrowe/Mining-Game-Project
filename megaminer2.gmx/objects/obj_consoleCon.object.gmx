@@ -256,7 +256,7 @@ if (commandGot){
     var i = 0;
     repeat(commandLen){
         if (string_char_at(command,i) == "("){
-            commandType = string_copy(command,1,i-1);
+            commandType = string_copy(command,1,i - 1);
             show_debug_message(commandType);
             break;
         } 
@@ -266,7 +266,7 @@ if (commandGot){
     switch(commandType){
         //instance_create(x,y,object)
         case "instance_create":
-            var a = i+1;
+            var a = i + 1;
             var arg1 = "";
             //find first arg
             repeat(commandLen){
@@ -279,7 +279,7 @@ if (commandGot){
                 }      
             }
             //find second arg
-            var e = a+1;
+            var e = a + 1;
             var arg2 = "";
             repeat(commandLen){
                 if (string_char_at(command,e) != ","){
@@ -291,7 +291,7 @@ if (commandGot){
                 }      
             }
             //Find the third arg
-            var r = e+1;
+            var r = e + 1;
             var arg3 = "";
             repeat(commandLen){
                 if (string_char_at(command,r) != ")"){

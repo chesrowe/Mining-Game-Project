@@ -30,15 +30,15 @@
 if (place_meeting(x,y,obj_tileSurfaceHillParent)){
     instance_destroy();
 }
-if (!place_meeting(x,y,obj_tileSurfaceParent)){
+if (!place_meeting(x,y + 8,obj_tileSurfaceParent)){
     instance_destroy();
 }
 if (y &gt; instance_nearest(x,y,obj_tileSurfaceFlatParent)){
-    y = ((instance_nearest(x,y,obj_tileSurfaceFlatParent)).y)+6;
+    y = ((instance_nearest(x,y,obj_tileSurfaceFlatParent)).y) + 3;
 }
 //sets the sprites to use for the tree
-x += choose(irandom(16), -(irandom(16)));
-y -= choose(0,2,4);
+x += choose(irandom(16), - (irandom(16)));
+y -= choose(0,-1,-2);
 resource = 'wood';
 levelReq = 1;
 fall = 500; 
@@ -63,7 +63,7 @@ midRandom = 10;
 spriteTop = spr_treeCommonTop;
 spriteBottom = spr_treeCommonStump;
 bottomX = -2;
-bottomY = 4;
+bottomY = 2;
 stumpX = x + bottomX;
 stumpY = y + bottomY;
 
@@ -109,7 +109,7 @@ if (place_meeting(x,y,obj_townCenter)){
             <kind>1</kind>
             <string>///Visibility
 if (x &gt;= (view_xview[0]-260)){
-    if (x &lt;= (view_xview[0]+1450)){
+    if (x &lt;= (view_xview[0] + 1450)){
         visible = 1;
     }else{
         visible = 0;
@@ -156,7 +156,7 @@ if (falling){
     if (fallSpeed &lt; 5){
         fallSpeed += fallIncrement;
     }
-    if (collision_line(x,y,x + lengthdir_x(220,image_angle+90),y + lengthdir_y(220,image_angle+90),obj_tileSurfaceParent,1,0)){
+    if (collision_line(x, y, x + lengthdir_x(220, image_angle + 90), y + lengthdir_y(220,image_angle + 90),obj_tileSurfaceParent,1,0)){
         falling = 0;
         fell = 1;
         instance_destroy();
@@ -345,7 +345,7 @@ draw_sprite(spriteBottom,0,stumpX,stumpY);
 //draw_line for collision checking
 if (global.dev_mode){
     draw_set_colour(c_white);
-    draw_line_width(x,y,x + lengthdir_x(200,image_angle+90),y + lengthdir_y(200,image_angle+90),10);
+    draw_line_width(x,y,x + lengthdir_x(100, image_angle + 90), y + lengthdir_y(100,image_angle + 90),10);
     draw_set_colour(c_black);
 }
 </string>

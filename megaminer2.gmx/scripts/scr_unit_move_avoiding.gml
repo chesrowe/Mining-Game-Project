@@ -5,13 +5,13 @@ var yMoveSpeed = moveSpeed;
 var runOn = argument[1]; // Whether the object is "running" or not (doubles speed)
 var dir = argument[2]; // 1 - right, 0 - left
 if (dir == 0){
-    var moveSpeed = moveSpeed*-1;
+    var moveSpeed = moveSpeed * -1;
 }
 
 if (!runOn){
     x += moveSpeed;
 }else{
-    x += moveSpeed*2;    
+    x += moveSpeed * 2;    
 }
 //Make the worker go up or down a hill
 //Right

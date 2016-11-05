@@ -30,7 +30,7 @@ event_inherited();
 
 var height = ((view_xview[0] + 720) + x);
 
-draw_sprite_stretched(spr_tileBlack,0,x,y+32,sprite_width,height);
+draw_sprite_stretched(spr_tileBlack,0,x,y + 8,sprite_width,height);
 
 </string>
           </argument>

@@ -43,7 +43,7 @@ viewXOff = x - view_xview[0];
 viewYOff = y - view_yview[0];
 
 //Exit button
-myExit = instance_create(x + (windowWidth * 32),y + 32, obj_uiWindowExit);
+myExit = instance_create(x + (windowWidth * 16), y + 16, obj_uiWindowExit);
 myExit.myWindow = id;
 
 //debug array stuff
@@ -74,7 +74,8 @@ page = 0;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (instance_exists(myExit)){
+            <string>///Exit stuff
+if (instance_exists(myExit)){
     with(myExit){
         instance_destroy();
     }
@@ -138,8 +139,8 @@ if (!dragging){
             <kind>1</kind>
             <string>///Changing debug pages
 
-var yyy = (windowHeight + 2) * 32;
-var xxx = (windowWidth + 2) * 32;
+var yyy = (windowHeight + 2) * 16;
+var xxx = (windowWidth + 2) * 16;
 
 if (point_in_rectangle(mouse_x, mouse_y, x, y, x + xxx, y + yyy)){  
     if (pages &gt; 1){
@@ -178,7 +179,7 @@ if (point_in_rectangle(mouse_x, mouse_y, x, y, x + xxx, y + yyy)){
             <string>///Exit button sync
 
 if (instance_exists(myExit)){
-    myExit.x = x + (windowWidth * 32) + 32;
+    myExit.x = x + (windowWidth * 16) + 16;
     myExit.y = y ;
 }
 </string>
@@ -457,7 +458,7 @@ draw_set_colour(c_black);
             <string>///Draw the window 
 draw_self();
 
-scr_draw_ui_box(windowWidth,windowHeight,x,y);
+scr_draw_ui_box(windowWidth,windowHeight, x, y);
 
 draw_self();
 </string>

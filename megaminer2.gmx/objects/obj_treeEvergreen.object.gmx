@@ -31,7 +31,7 @@ event_inherited();
 spriteTop = spr_treeEvergreen;
 spriteBottom = spr_treeEvergreenStump;
 bottomX = 1;
-bottomY = 10;
+bottomY = 5;
 stumpX = x + bottomX;
 stumpY = y + bottomY;
 fallYAdd = .2;

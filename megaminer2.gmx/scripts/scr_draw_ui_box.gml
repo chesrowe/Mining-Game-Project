@@ -10,22 +10,22 @@ var backgroundColor = make_colour_rgb(75,85,88);
 bottomRightX = startX + 16 + (16 * rightTiles) - 2  ;
 bottomRightY = startY + 16 + (16 * downTiles) + 8;
 draw_set_colour(backgroundColor);
-draw_rectangle(startX+2,startY+2,bottomRightX + 16,bottomRightY,0);
+draw_rectangle(startX + 1, startY + 1, bottomRightX + 16, bottomRightY, 0);
 draw_set_colour(c_white);
 
 //////Draw ui tiles
 //Draw top left corner tile
-draw_sprite(spr_uiDynamicboxTopLeft,0,startX,startY);
+draw_sprite(spr_uiDynamicboxTopLeft, 0, startX, startY);
 
 //draw connecting tiles to the right top corner 
 var xx = startX + 16;
 repeat(rightTiles){
-    draw_sprite(spr_uiDynamicBoxTop,0,xx,startY);
+    draw_sprite(spr_uiDynamicBoxTop, 0, xx, startY);
     xx += 16;
 }
 
 //Draw right corner tile
-draw_sprite(spr_uiDynamicBoxTopRight,0,startX + (16 * rightTiles) + 16, startY);
+draw_sprite(spr_uiDynamicBoxTopRight, 0, startX + (16 * rightTiles) + 16, startY);
 
 //Draw down left connecting tiles
 var yy = startY + 16;
@@ -38,7 +38,7 @@ repeat(downTiles){
 draw_sprite(spr_uiDynamicBoxBottomLeft,0,startX,startY + (16 * downTiles) + 16); 
 
 //Draw right down connecting tiles 
-var yyy = startY + 32;
+var yyy = startY + 16;
 repeat(downTiles){
     draw_sprite(spr_uiDynamicBoxRight,0,startX + 16 + (16 * rightTiles) + 8,yyy);
     yyy += 16;
@@ -48,7 +48,7 @@ repeat(downTiles){
 draw_sprite(spr_uiDynamicBoxBottomRight,0,startX + 16 + (16 * rightTiles),startY + 16 + (16 * downTiles));
 
 //Draw bottom connecting tiles
-var xxx = startX + 32;
+var xxx = startX + 16;
 repeat(rightTiles){
     draw_sprite(spr_uiDynamicBoxBottom,0,xxx,startY + 16 + (16 * downTiles) + 8);
     xxx += 16;

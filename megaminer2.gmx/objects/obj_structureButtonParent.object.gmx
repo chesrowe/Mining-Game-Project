@@ -115,7 +115,7 @@ if (position_meeting(mouse_x,mouse_y,self)){
             <string>///Play sounds
 
 //Play button sound
-audio_play_sound(sound[soundRR],999,0);
+audio_play_sound(sound[soundRR], 999, 0);
 
 //randomize round robins
 if (soundRR &gt;= 3){
@@ -149,7 +149,7 @@ show_debug_message(string(myWindow));
 show_debug_message(string(windowOpen));
 if (hasWindow){
     if (!windowOpen &amp;&amp; myWindow == -4){
-        myWindow = instance_create(x,y - 180,windowObject);
+        myWindow = instance_create(x, y - 180, windowObject);
         windowOpen = 1;
         myWindow.myButton = id;
     }else{
@@ -185,7 +185,7 @@ show_debug_message(string(windowOpen));
             <string>///Draw button and image
 draw_self();
 
-draw_sprite(icon,0,x+iconOffsetX,y+iconOffsetY);
+draw_sprite(icon, 0, x + iconOffsetX, y + iconOffsetY);
 
 </string>
           </argument>
@@ -211,7 +211,7 @@ draw_sprite(icon,0,x+iconOffsetX,y+iconOffsetY);
  
 //Ui box
 if (showInfoBox){
-    scr_draw_ui_box(infoBoxWidth,infoBoxHeight,infoBoxX,infoBoxY);
+    scr_draw_ui_box(infoBoxWidth, infoBoxHeight, infoBoxX, infoBoxY);
 }
 
 //Info text

@@ -51,7 +51,9 @@ myWindow = -4;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>x = myWindow.x + (myWindow.windowWidth * 32) + 32;
+            <string>///Snap
+
+x = myWindow.x + (myWindow.windowWidth * 16) + 16;
 y = myWindow.y;
 </string>
           </argument>
@@ -75,8 +77,7 @@ y = myWindow.y;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
-///Delete window
+            <string>///Delete window
 
 if (instance_exists(myWindow)){
     with(myWindow){

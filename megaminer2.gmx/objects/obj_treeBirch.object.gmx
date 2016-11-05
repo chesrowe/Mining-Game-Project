@@ -31,7 +31,7 @@ event_inherited();
 spriteTop = spr_treeBirch1;
 spriteBottom = spr_treeBirchStump;
 bottomX = 0;
-bottomY = 14;
+bottomY = 7;
 stumpX = x + bottomX;
 stumpY = y + bottomY;
 fallYAdd = .12;

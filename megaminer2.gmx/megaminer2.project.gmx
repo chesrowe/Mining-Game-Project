@@ -319,7 +319,7 @@
   <backgrounds name="background">
     <background>background\bg_sky</background>
     <background>background\bg_mountains</background>
-    <background>background\background7</background>
+    <background>background\bg_farMountains</background>
     <background>background\bg_bushClose</background>
   </backgrounds>
   <paths name="paths"/>

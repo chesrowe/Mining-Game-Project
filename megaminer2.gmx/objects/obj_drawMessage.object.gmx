@@ -97,7 +97,7 @@ if (alpha &lt;= 0){
             <string>///Draw the message
 
 draw_set_alpha(alpha);
-draw_text(x+xAdd,y-yAdd,string(message));
+draw_text(x + xAdd,y - yAdd,string(message));
 draw_set_alpha(1);
 
 </string>

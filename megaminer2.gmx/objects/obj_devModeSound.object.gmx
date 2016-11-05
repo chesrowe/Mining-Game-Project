@@ -25,9 +25,9 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
-x = view_xview[0]+ 800;
-y = view_yview[0]+ 30;
+            <string>///Snap
+x = view_xview[0] + 800;
+y = view_yview[0] + 30;
 </string>
           </argument>
         </arguments>
@@ -51,11 +51,8 @@ y = view_yview[0]+ 30;
           <argument>
             <kind>1</kind>
             <string>///Set visible
-if (global.dev_mode){
-    visible = 1;
-}else{
-    visible = 0;
-}
+
+visible = global.dev_mode;
 </string>
           </argument>
         </arguments>
@@ -110,7 +107,8 @@ if (visible){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_self();
+            <string>///Draw
+draw_self();
 draw_set_colour(c_white);
 draw_text(x+70,y,"Sfx volume: "+ string(global.sfxVol));
 draw_text(x+70,y+10,"Music volume: "+ string(global.musicVol));

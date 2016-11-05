@@ -357,7 +357,7 @@ land = -4;
 gridPos = 0;
 tileIndex = 0;
 worldWidth = 1000//In tiles (32x32)
-global.surfaceHeightGrid = ds_grid_create(worldWidth*2,1000);
+global.surfaceHeightGrid = ds_grid_create(worldWidth * 2, 1000);
 hillChance = irandom(1);
 hillDistance = irandom_range(20,150);
 hillLength = 0;
@@ -386,80 +386,80 @@ for (i = 0; i &lt;= worldWidth; i++;){
             hillLength = 0;
         }
         if (surfaceHeight &lt;= (696-64)){
-            var hillHeight = choose(32,64,-32,-64);
+            var hillHeight = choose(16,32,-16,-32);
         }else if (surfaceHeight &lt; (hillHeightLimit)){
-            var hillHeight = choose(-32,-64,-32,-64);
+            var hillHeight = choose(-16,-32,-16,-32);
         }else{
-            var hillHeight = choose(32,64);
+            var hillHeight = choose(16,32);
         }
         
         surfaceHeight -= hillHeight;    
         //Add the sloped tiles based on hill height
         switch(hillHeight){
             //Add one slope if the height is 32
-            case 32:
+            case 16:
                 ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight);
                 instance_create(xPos,surfaceHeight,obj_tileSurfaceHillUp);
                 //Create one flat tile after slope
-                ds_grid_add(global.surfaceHeightGrid,gridPos+1,0,surfaceHeight);
-                instance_create(xPos+32,surfaceHeight,surfaceFlatTile[tileIndex]);
+                ds_grid_add(global.surfaceHeightGrid,gridPos + 1,0,surfaceHeight);
+                instance_create(xPos + 16,surfaceHeight,surfaceFlatTile[tileIndex]);
                 tileIndex ++;
                 if (tileIndex &gt; 3){
                     tileIndex = choose(0,1,2);
                 }
-                xPos += 64;
+                xPos += 32;
                 gridPos += 2;
                 global.tileCount += 3;
             break;
             
             //Add 2 if the height is 64
-            case 64:
-                ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight+32);
-                instance_create(xPos,surfaceHeight+32,obj_tileSurfaceHillUp);
+            case 32:
+                ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight + 16);
+                instance_create(xPos,surfaceHeight + 16,obj_tileSurfaceHillUp);
                 ds_grid_add(global.surfaceHeightGrid,gridPos+1,0,surfaceHeight);
-                instance_create(xPos+32,surfaceHeight,obj_tileSurfaceHillUp);
+                instance_create(xPos + 16,surfaceHeight,obj_tileSurfaceHillUp);
                 //Create one flat tile after slope
                 ds_grid_add(global.surfaceHeightGrid,gridPos+2,0,surfaceHeight);
-                instance_create(xPos+64,surfaceHeight,surfaceFlatTile[tileIndex]);
+                instance_create(xPos + 32,surfaceHeight,surfaceFlatTile[tileIndex]);
                 tileIndex ++;
                 if (tileIndex &gt; 3){
                     tileIndex = choose(0,1,2);
                 }
-                xPos+= 96;
+                xPos+= 48;
                 gridPos += 3;
                 global.tileCount += 5;
             break;
             
             //Add one slope if the height is -32
-            case -32:
-                ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight-32);
-                instance_create(xPos,surfaceHeight-32,obj_tileSurfaceHillDown);
+            case -16:
+                ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight - 16);
+                instance_create(xPos,surfaceHeight - 16,obj_tileSurfaceHillDown);
                 //Create one flat tile after slope
-                ds_grid_add(global.surfaceHeightGrid,gridPos+1,0,surfaceHeight);
-                instance_create(xPos+32,surfaceHeight,surfaceFlatTile[tileIndex]);
+                ds_grid_add(global.surfaceHeightGrid,gridPos + 1,0,surfaceHeight);
+                instance_create(xPos + 16,surfaceHeight,surfaceFlatTile[tileIndex]);
                 tileIndex ++;
                 if (tileIndex &gt; 3){
                     tileIndex = choose(0,1,2);
                 }
-                xPos += 64;
+                xPos += 32;
                 gridPos += 2;
                 global.tileCount += 3;
             break;
             
             //Add 2 if the height is -64
-            case -64:
-                ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight-64);
-                instance_create(xPos,surfaceHeight-64,obj_tileSurfaceHillDown);
-                ds_grid_add(global.surfaceHeightGrid,gridPos+1,0,surfaceHeight-32);
-                instance_create(xPos+32,surfaceHeight-32,obj_tileSurfaceHillDown);
+            case -32:
+                ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight - 32);
+                instance_create(xPos,surfaceHeight - 32,obj_tileSurfaceHillDown);
+                ds_grid_add(global.surfaceHeightGrid,gridPos+1,0,surfaceHeight - 16);
+                instance_create(xPos + 16,surfaceHeight - 16,obj_tileSurfaceHillDown);
                 //Create one flat tile after slope
-                ds_grid_add(global.surfaceHeightGrid,gridPos+2,0,surfaceHeight);
-                instance_create(xPos+64,surfaceHeight,surfaceFlatTile[tileIndex]);
+                ds_grid_add(global.surfaceHeightGrid,gridPos + 2,0,surfaceHeight);
+                instance_create(xPos + 32,surfaceHeight,surfaceFlatTile[tileIndex]);
                 tileIndex ++;
                 if (tileIndex &gt; 3){
                     tileIndex = choose(0,1,2);
                 }
-                xPos+= 96;
+                xPos += 48;
                 gridPos += 3;
                 global.tileCount += 5;
             break;
@@ -486,7 +486,7 @@ for (i = 0; i &lt;= worldWidth; i++;){
         }
         ds_grid_add(global.surfaceHeightGrid,gridPos,0,surfaceHeight);
         global.tileCount += 1;
-        xPos += 32;
+        xPos += 16;
         gridPos += 1;
         tileIndex ++;
         if (tileIndex &gt; 3){
@@ -515,7 +515,7 @@ with (obj_tileSurfaceFlatParent){
         var tilePos = 0;
         //Destroy the extra flat tiles
         repeat(flatNumber){
-            with(instance_position(x+((tilePos*32)+16),y+16,obj_tileSurfaceFlatParent)){
+            with(instance_position(x + ((tilePos * 16) + 8),y + 8,obj_tileSurfaceFlatParent)){
                 if (flatNumber == 0){
                     instance_destroy();
                 }
@@ -525,20 +525,20 @@ with (obj_tileSurfaceFlatParent){
         }        
     }
     if (flatNumber &gt; 0){
-        image_xscale = (image_xscale*flatNumber);
+        image_xscale = (image_xscale * flatNumber);
     }
     //////Generate scenery\\\\\\\\
     //Tall grass and flowers
     for(i = 0; i &lt;= flatNumber; i++){
         grass[i,0] = irandom(3);//image_index
-        grass[i,1] = irandom_range(-30,0);//X pos randomization
+        grass[i,1] = irandom_range(-15,0);//X pos randomization
         grass[i,2] = choose(spr_bush,spr_blank,spr_blank,spr_bush,spr_bush,spr_bush,spr_bush,spr_blank);
         grass[i,3] = choose(1,-2);
         flowers[i,0] = irandom(7);//image_index
-        flowers[i,1] = irandom_range(-30,0);//X pos randomization
+        flowers[i,1] = irandom_range(-15,0);//X pos randomization
         flowers[i,2] = choose(spr_flowers,spr_blank,spr_flowers,spr_flowers,spr_flowers,spr_blank,spr_blank);
         flowers[i,3] = choose(1,-2);
-        if (position_meeting(x + (i*32) + 48,y - 16,obj_tileSurfaceHillParent) || position_meeting(x + (i*32) + 48,y + 16,obj_tileSurfaceHillParent)){
+        if (position_meeting(x + (i * 16) + 24,y - 8,obj_tileSurfaceHillParent) || position_meeting(x + (i * 16) + 24,y + 8,obj_tileSurfaceHillParent)){
             grass[i,2] = spr_blank;        
         } 
     }
@@ -571,7 +571,7 @@ gridPos = 0;
 var spawnChance = 2;
 //Generate foliage/resources
 for (i = 0; i &lt;= worldWidth; i++;){
-    xPos = (gridPos * 32);
+    xPos = (gridPos * 16);
     //Chance to spawn foliage/resource
     if (irandom(spawnChance) == 1){
         
@@ -582,32 +582,32 @@ for (i = 0; i &lt;= worldWidth; i++;){
         switch(foliage){
             //spawn common tree
             case obj_treeCommon: 
-                instance_create(xPos,folY-16,foliage);
+                instance_create(xPos,folY - 4,foliage);
                 gridPos += 3;
             break;
             //spawn oak tree
             case obj_oakTree:
-                instance_create(xPos+96,folY-10,foliage);
+                instance_create(xPos + 48,folY - 5,foliage);
                 gridPos += 6;
             break;
             //Spawn stone 
             case obj_stone:
-                instance_create(xPos,folY-30,foliage);
+                instance_create(xPos,folY - 15,foliage);
                 gridPos += 3;
             break;
             //Spawn gold 
             case obj_gold:
-                instance_create(xPos,folY-30,foliage);
+                instance_create(xPos,folY - 15,foliage);
                 gridPos += 3;
             break;
             //Spawn birch tree 
             case obj_treeBirch:
-                instance_create(xPos,folY-16,foliage);
+                instance_create(xPos,folY - 8,foliage);
                 gridPos += 3;
             break;
             //Spawn evergreen
             case obj_treeEvergreen: 
-                instance_create(xPos,folY-6,foliage);
+                instance_create(xPos,folY - 3,foliage);
                 gridPos += 3;
             break;
         }
@@ -673,7 +673,7 @@ global.doubleClick = 0;
             <string>///Initial world update
 
 with(obj_tileSurfaceFlatParent){
-    if (x &gt;= (view_xview[0]-(96+(flatNumber*32))) &amp;&amp; x &lt;= (view_xview[0]+1302)){
+    if (x &gt;= (view_xview[0]-(96 + (flatNumber * 16))) &amp;&amp; x &lt;= (view_xview[0] + 1302)){
             canDraw = 1;
             visible = 1;
             if (!instance_exists(drawObj)){
@@ -1606,11 +1606,9 @@ ds_list_destroy(fpsAverageList);
             <kind>1</kind>
             <string>///DEV Stuff
 
-if (window_get_fullscreen()){
-    draw_text(1254 * 2, 4, string(fpsAverage));
-}else{
-    draw_text(1254, 4, string(fpsAverage));
-}
+draw_text(1254 * (window_get_fullscreen() + 1), 4, string(fpsAverage));
+
+
 </string>
           </argument>
         </arguments>
@@ -1635,9 +1633,9 @@ if (window_get_fullscreen()){
             <kind>1</kind>
             <string>///Background
 
-draw_background_tiled_hor(background7,view_xview[0]/1.03,(view_yview[0]+120)/1.03);
-draw_background_tiled_hor(bg_mountains,view_xview[0]/1.1,(view_yview[0]+90)/1.2);
-draw_background_tiled_hor(bg_bushClose,view_xview[0]/6,570);
+draw_background_tiled_hor(bg_farMountains,view_xview[0] / 1.03, (view_yview[0] + 400) / 1.03);
+draw_background_tiled_hor(bg_mountains,view_xview[0] / 1.1, (view_yview[0] + 490) / 1.2);
+draw_background_tiled_hor(bg_bushClose,view_xview[0] / 6, 700);
 
 //Double click debug
 //draw_text(mouse_x,mouse_y-20,string(doubleClickTimer));
@@ -1674,12 +1672,12 @@ draw_background_tiled_hor(bg_bushClose,view_xview[0]/6,570);
 if (global.dev_mode){
     draw_set_colour(c_white);
     draw_set_font(global.fontDmg);
-    draw_text(view_xview[0]+1130,view_yview[0]+695,"Dev mode on");
+    draw_text(view_xview[0]+1130,view_yview[0] + 695,"Dev mode on");
     
     if (global.dev_mode_dupe){
-        draw_text(view_xview[0]+1060,view_yview[0]+670,"Object to create: " + string(global.dupeObject));
+        draw_text(view_xview[0]+1060,view_yview[0] + 670,"Object to create: " + string(global.dupeObject));
         if (global.dupeObject != noone){
-            draw_text(view_xview[0]+1010,view_yview[0]+650,"Selected Object count: "+string(instance_number(global.dupeObject)));    
+            draw_text(view_xview[0]+1010,view_yview[0] + 650,"Selected Object count: "+string(instance_number(global.dupeObject)));    
         }
     }
     draw_set_colour(c_black);
@@ -1768,7 +1766,7 @@ if (global.dev_mode &amp;&amp; !global.consoleOn){
             <string>///DEBUG Create worker
 
 if (global.food &gt;= -1 &amp;&amp; instance_exists(obj_townCenter)){
-    instance_create(obj_townCenter.x,obj_townCenter.y-50,obj_workerHumanP1);
+    instance_create(obj_townCenter.x, obj_townCenter.y - 50, obj_workerHumanP1);
     global.food -= 0;
 }
 </string>

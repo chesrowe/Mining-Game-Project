@@ -96,18 +96,18 @@ miningLevel = 1;
 farmingLevel = 1;
 transportingLevel = 1;
 xpOverall = 0;
-xpNeededOverall = floor(level+300 * power(2,(level/7)));;
-xpNeededWoodcutting = floor(woodcuttingLevel+300 * power(2,(woodcuttingLevel/7)));;
-xpNeededMining = floor(miningLevel+300 * power(2,(miningLevel/7)));;
-xpNeededFarming = floor(farmingLevel+300 * power(2,(farmingLevel/7)));;
+xpNeededOverall = floor(level + 300 * power(2, (level / 7)));;
+xpNeededWoodcutting = floor(woodcuttingLevel + 300 * power(2,(woodcuttingLevel / 7)));;
+xpNeededMining = floor(miningLevel + 300 * power(2, (miningLevel / 7)));;
+xpNeededFarming = floor(farmingLevel + 300 * power(2, (farmingLevel / 7)));;
 xpWoodcutting = 0;
 xpMining = 0;
 xpFarming = 0;
 hpBar = instance_create(x,y,obj_enemyHpDraw);
 hpBar.myEnemy = id;
 hpBar.hp = hp;
-hpBar.hpMult = (hp/10);
-walkSpeed = 1;
+hpBar.hpMult = (hp / 10);
+walkSpeed = .5;
 walkSpeedHill = .8;
 leveled = 0;
 
@@ -137,8 +137,8 @@ foodHeld = 0;
 maxFood = 50;
 
 //Working general
-workingLenDirX = lengthdir_x(40,point_direction(x,y,x,y));
-workingLenDirY = lengthdir_y(26,point_direction(x,y,x,y));
+workingLenDirX = lengthdir_x(40 ,point_direction(x,y,x,y));
+workingLenDirY = lengthdir_y(26 ,point_direction(x,y,x,y));
 walkingImageSpeed = .12;
 drawTool = 0;
 drawToolTimer = 0;
@@ -153,7 +153,7 @@ workStart = 0;
 workTimer = 0;
 workMiddleTime = 0;
 baseWorkTime = 300;
-workTimeAdd = irandom(round(baseWorkTime/3));
+workTimeAdd = irandom(round(baseWorkTime / 3));
 workTime = (baseWorkTime + workTimeAdd);
 
 //Building
@@ -164,7 +164,7 @@ currentResource = -1;
 
 //mining
 baseMiningTime = 400;
-mineTimeAdd = irandom(round(baseMiningTime/3));
+mineTimeAdd = irandom(round(baseMiningTime / 3));
 miningTime = (baseMiningTime + mineTimeAdd);
 miningTimer = 0;
 mineStart = 0;
@@ -487,15 +487,15 @@ windowObject = obj_uiDebugWindowWorker;
 //x = x + lengthdir_x(2,70); 
 
 if (falling){
-    if (place_meeting(x,y+3,obj_groundParent)){
+    if (place_meeting(x, y + 3, obj_groundParent)){
         falling = 0;
-        if (place_meeting(x,y+3,obj_tileSurfaceFlatParent) &amp;&amp; !place_meeting(x,y,obj_tileSurfaceHillParent)){
-            y = (instance_place(x,y+3,obj_tileSurfaceFlatParent).y) - 24;
+        if (place_meeting(x, y + 3, obj_tileSurfaceFlatParent) &amp;&amp; !place_meeting(x, y, obj_tileSurfaceHillParent)){
+            y = (instance_place(x, y + 3, obj_tileSurfaceFlatParent).y) - 12;
         }
     }else if (!hillStart){
         falling = 1;
     }
-}else if (!place_meeting(x,y+3,obj_groundParent) &amp;&amp; !hillStart){
+}else if (!place_meeting(x, y + 3, obj_groundParent) &amp;&amp; !hillStart){
     falling = 1;
 }
 
@@ -549,7 +549,7 @@ if (moveToTimer &gt; moveToTime){
         
     if ( (state == "moveToTarget" &amp;&amp; moveTargetX &gt;= x) &amp;&amp; (moveToTimer &gt; moveToTime)){
          image_xscale = 1;
-         scr_unit_move_avoiding(walkSpeed,run,1);
+         scr_unit_move_avoiding(walkSpeed, run, 1);
     }else if (state == 'moveToTarget' &amp;&amp; moveTargetX &lt;= x){
         image_xscale = -1;
         scr_unit_move_avoiding(walkSpeed,run,0); 
@@ -653,10 +653,8 @@ if (!dying){
         if (moveToTimer &gt; moveToTime){
             sprite_index = spriteWalking;
             if (target.x &gt; x &amp;&amp; !farmStart &amp;&amp; goingTo){
-                image_xscale = 1;
                 scr_unit_move_avoiding(walkSpeed,0,1);
             }else if(!farmStart &amp;&amp; goingTo){
-                image_xscale = -1;
                 scr_unit_move_avoiding(walkSpeed,0,0);
             }
         }
@@ -1083,10 +1081,8 @@ if (state == 'woodcutting'){
      if (moveToTimer &gt; moveToTime){
          sprite_index = spriteWalking;
          if (instance_exists(target)&amp;&amp; target.x &gt; x &amp;&amp; !cutStart &amp;&amp; goingTo){
-            image_xscale = 1;
             scr_unit_move_avoiding(walkSpeed,0,1);
          }else if(!cutStart &amp;&amp; goingTo){
-            image_xscale = -1;
             scr_unit_move_avoiding(walkSpeed,0,0);
          }
      }
@@ -1327,11 +1323,7 @@ if (global.select &amp;&amp; selected == 1){
 if (comingFrom &amp;&amp; !instance_exists(dropOffTarget)){
     state = 'idle';
     sprite_index = spriteIdle;
-    if (target.x &gt; x){
-        image_xscale = 1;
-    }else{
-        image_xscale = -1;
-    }
+    image_xscale = !sign(x - dropOffTarget.x);
 }
 //Moves the worker in position to work, if he is directly on top of the resource
 //1 = left, 2 = right
@@ -1360,6 +1352,12 @@ if (goingTo &amp;&amp; state != 'building'){
         goingTo = 0;
         comingFrom = 1;
     }    
+}
+
+///Make the worker face the target they are going to
+
+if ((goingTo || !comingFrom) &amp;&amp; instance_exists(target) &amp;&amp; !resourcePosition){
+    image_xscale = !sign(x - target.x);
 }
 
 </string>
@@ -2268,11 +2266,6 @@ if (state == 'woodcutting'){
             msg.amount = "Can't do that."
             image_speed = idleImageSpeed;
             sprite_index = spriteIdle;
-            if (target.x &gt; x){
-                image_xscale = 1;
-            }else{
-                image_yscale = -1;
-            }
         }
     }
     if (instance_exists(target)){
@@ -2281,6 +2274,7 @@ if (state == 'woodcutting'){
         }
     }
 }
+falling = 0;
 </string>
           </argument>
         </arguments>
@@ -2352,9 +2346,9 @@ if (state == 'mining' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp
             <string>//Put the worker at the right y pos, when they are on flat ground
 
 
-if (y != other.y-24){
+if (y != other.y - 12){
     if (!place_meeting(x,y,obj_tileSurfaceHillParent)){
-        y = (other.y-24);
+        y = (other.y - 12);
     }
 }
     
@@ -2485,7 +2479,7 @@ if (global.shiftSelect){
 draw_self();
 
 if (selected){
-    draw_sprite(spr_selectorP1, 0, x - 36, y - 32);
+    draw_sprite(spr_selectorP1, 0, x - 18, y - 16);
 }
 </string>
           </argument>
@@ -2511,10 +2505,10 @@ if (selected){
 
 //If the worker is running , draw the stamina bar
 if (run || staminaRegen){
-    draw_rectangle_colour(x-6,y-38,x+16,y-42,c_black,c_black,c_black,c_black,0);
-    var stPercent = ((stamina/maxStamina)*10)*10;
-    var drawPercent = round( ((stPercent/100) * 20) ); 
-    draw_rectangle_colour(x-6,y-38,(x-6)+drawPercent,y-42,c_green,c_green,c_green,c_green,0);
+    draw_rectangle_colour(x - 3, y - 19, x + 8, y - 21, c_black, c_black, c_black, c_black,0);
+    var stPercent = ((stamina / maxStamina) * 10) * 10;
+    var drawPercent = round(((stPercent / 100) * 20)); 
+    draw_rectangle_colour(x - 3, y - 19, (x - 3) + drawPercent, y - 21, c_green, c_green, c_green, c_green, 0);
 } 
 
 
@@ -2542,7 +2536,7 @@ if (run || staminaRegen){
 
 if (windowOpen){
     draw_set_colour(c_white);
-    draw_text(x - 24, y - 50, string(id));
+    draw_text(x - 6, y - 13, string(id));
     draw_set_colour(c_black);
 }
 </string>

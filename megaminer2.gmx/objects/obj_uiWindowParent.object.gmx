@@ -43,7 +43,7 @@ viewXOff = x - view_xview[0];
 viewYOff = y - view_yview[0];
 
 //Exit button
-myExit = instance_create(x + (windowWidth * 32),y + 32, obj_uiWindowExit);
+myExit = instance_create(x + (windowWidth * 16), y + 16, obj_uiWindowExit);
 myExit.myWindow = id;
 
 
@@ -103,7 +103,7 @@ if (!dragging){
             <string>///Exit button sync
 
 if (instance_exists(myExit)){
-    myExit.x = x + (windowWidth * 32) + 32;
+    myExit.x = x + (windowWidth * 16) + 16;
     myExit.y = y ;
 }
 </string>
@@ -244,7 +244,7 @@ yOff = y - mouse_y;
             <string>///Draw the window 
 draw_self();
 
-scr_draw_ui_box(windowWidth,windowHeight,x,y);
+scr_draw_ui_box(windowWidth, windowHeight, x, y);
 
 draw_self();
 </string>

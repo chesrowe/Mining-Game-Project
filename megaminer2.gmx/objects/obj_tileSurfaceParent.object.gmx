@@ -34,13 +34,13 @@ if (y &lt; 696){
     tileNumber = 0;
     i = 0;
     var diff = (696 - y);
-    var tileAmount = (ceil(diff / 32));
-    var yy = (y + 32);
+    var tileAmount = (ceil(diff / 16));
+    var yy = (y + 16);
     //create the tiles
     repeat(tileAmount){
         tileArray[i] = yy;       
         i++;
-        yy += 32;
+        yy += 16;
         tileNumber++; 
     }
 
