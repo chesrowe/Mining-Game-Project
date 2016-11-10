@@ -338,7 +338,7 @@ switch(page){
         for (i = 0; i &lt;= 20; i++){
             if (debugList[i,0] != -1){
                 draw_text(x + xx, y + yy, string(debugList[i, 0] + " " + debugList[i, 1]) );
-                yy += 20;        
+                yy += 10;        
             }else{
                 break;
             }
@@ -349,7 +349,7 @@ switch(page){
         for (i = 21; i &lt;= 40; i++){
             if (debugList[i,0] != -1){
                 draw_text(x + xx, y + yy, string(debugList[i, 0] + debugList[i, 1]) );
-                yy += 20;        
+                yy += 10;        
             }else{
                 break;
             }
@@ -360,7 +360,7 @@ switch(page){
         for (i = 41; i &lt;= 60; i++){
             if (debugList[i,0] != -1){
                 draw_text(x + xx, y + yy, string(debugList[i, 0] + debugList[i, 1]) );
-                yy += 20;        
+                yy += 10;        
             }else{
                 break;
             }
@@ -371,7 +371,7 @@ switch(page){
         for (i = 61; i &lt;= 80; i++){
             if (debugList[i,0] != -1){
                 draw_text(x + xx, y + yy, string(debugList[i, 0] + debugList[i, 1]) );
-                yy += 20;        
+                yy += 10;        
             }else{
                 break;
             }
@@ -382,7 +382,7 @@ switch(page){
         for (i = 81; i &lt;= 100; i++){
             if (debugList[i,0] != -1){
                 draw_text(x + xx, y + yy, string(debugList[i, 0] + debugList[i, 1]) );
-                yy += 20;        
+                yy += 10;        
             }else{
                 break;
             }
@@ -393,7 +393,7 @@ switch(page){
         for (i = 101; i &lt;= 120; i++){
             if (debugList[i,0] != -1){
                 draw_text(x + xx, y + yy, string(debugList[i, 0] + debugList[i, 1]) );
-                yy += 20;        
+                yy += 10;        
             }else{
                 break;
             }

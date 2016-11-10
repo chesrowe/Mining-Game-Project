@@ -511,7 +511,7 @@ if (falling){
         </arguments>
       </action>
     </event>
-    <event eventtype="3" enumb="1">
+    <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -576,8 +576,6 @@ if (state == 'moveToTarget' &amp;&amp; ceil(point_distance(x,y,moveTargetX,y)) &
           </argument>
         </arguments>
       </action>
-    </event>
-    <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -2343,7 +2341,7 @@ if (state == 'mining' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//Put the worker at the right y pos, when they are on flat ground
+            <string> //Put the worker at the right y pos, when they are on flat ground
 
 
 if (y != other.y - 12){

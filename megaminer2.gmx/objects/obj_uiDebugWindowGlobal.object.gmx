@@ -255,13 +255,13 @@ for (a = 0; a &lt; 100; a++){
 
 
 //Find the width needed for the window
-var width = ceil( (widestDebug / 32) ) + 1;
+var width = ceil( (widestDebug / 32) ) + 3;
 
 windowWidth = width;
 if (debugVarNumber &gt;= 20){
-    windowHeight = 13;     
+    windowHeight = 13 + 1;     
 }else{
-    windowHeight = debugVarNumber - 1; 
+    windowHeight = debugVarNumber + 2; 
 }
 
 //Set the dragbar's width

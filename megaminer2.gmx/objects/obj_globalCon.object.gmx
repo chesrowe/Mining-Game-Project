@@ -111,7 +111,7 @@ global.pop = 2;
 global.maxPop = 5;
 
 //Fonts
-global.fontDmg = font_add_sprite(spr_ft_small,ord(' '),1,1);
+global.fontDmg = font_add_sprite(spr_ftSmall,ord(' '),1,1);
 draw_set_font(global.fontDmg);
 
 

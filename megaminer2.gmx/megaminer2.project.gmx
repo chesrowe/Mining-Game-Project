@@ -113,7 +113,8 @@
   <sprites name="sprites">
     <sprites name="fonts">
       <sprite>sprites\spr_dmgFont</sprite>
-      <sprite>sprites\spr_ft_small</sprite>
+      <sprite>sprites\spr_ftSmall</sprite>
+      <sprite>sprites\spr_fntBasic</sprite>
     </sprites>
     <sprites name="Charactors">
       <sprites name="Workers">
