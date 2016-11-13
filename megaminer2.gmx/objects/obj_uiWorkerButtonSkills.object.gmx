@@ -43,13 +43,13 @@
 infoBoxWidth = 1;
 infoBoxHeight = 0;
 infoBoxX = x;
-infoBoxY = y - 168;
+infoBoxY = y - 84;
 showInfoBox = 0;
 
 ///General
 iconSprite = spr_uiIconWorkerSkills;
-iconOffsetX = 20;
-iconOffsetY = 20;
+iconOffsetX = 10;
+iconOffsetY = 10;
 
 </string>
           </argument>
@@ -98,7 +98,7 @@ if (showInfoBox){
 
 if (showInfoBox){
     draw_set_colour(c_white);
-    draw_text(infoBoxX + 30, infoBoxY + 24, "Skills");
+    draw_text(infoBoxX + 15, infoBoxY + 12, "Skills");
     
 }
 </string>

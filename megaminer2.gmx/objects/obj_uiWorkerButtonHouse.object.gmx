@@ -208,13 +208,13 @@ if (showInfoBox){
         infoBoxWidth = 4;
         infoBoxHeight = 1;
         draw_set_colour(c_white);
-        draw_text(infoBoxX + 30, infoBoxY + 24, "House");
-        draw_text(infoBoxX + 30, infoBoxY + 48, "Cost:                 wood");
+        draw_text(infoBoxX + 15, infoBoxY + 12, "House");
+        draw_text(infoBoxX + 15, infoBoxY + 24, "Cost:                 wood");
         draw_set_colour(c_yellow);
-        draw_text(infoBoxX + 30, infoBoxY + 48, "                   400");
+        draw_text(infoBoxX + 15, infoBoxY + 24, "                   400");
         draw_set_colour(c_white);
     }else{
-        draw_text(infoBoxX + 34, infoBoxY + 24, "Locked");
+        draw_text(infoBoxX + 17, infoBoxY + 12, "Locked");
         infoBoxWidth = 2;
         infoBoxHeight = 0;
     }

@@ -6,17 +6,17 @@
   Event :   draw event
  ***************************************************/
  
- var back,width,xx,yy,left,right,i;
+ var back,width,xx,yy,_left,_right,i;
  
  back=argument0;
  width=background_get_width(back);
  xx=argument1;
  yy=argument2;
- left=-1;
- right=view_xview[view_current]/width+view_wview[view_current]/width+1;
+ _left=-1;
+ _right=view_xview[view_current]/width+view_wview[view_current]/width+1;
  if (view_enabled)
  {
-    for (i=left; i<right; i+=1)
+    for (i=_left; i<_right; i+=1)
     {
         draw_background(back,xx mod width+width*i,yy);
     };

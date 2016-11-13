@@ -41,8 +41,8 @@
             <kind>1</kind>
             <string>///Icon
 icon = spr_buttonShowResources;
-iconOffsetX = 14;
-iconOffsetY = 14;
+iconOffsetX = 7;
+iconOffsetY = 7;
 </string>
           </argument>
         </arguments>
@@ -132,7 +132,7 @@ windowObject = obj_uiWindowWarehouse;
 
 if (showInfoBox){
     draw_set_colour(c_white);
-    draw_text(infoBoxX + 42, infoBoxY + 24,"Show Resources");
+    draw_text(infoBoxX + 21, infoBoxY + 12, "Show Resources");
 }
 </string>
           </argument>

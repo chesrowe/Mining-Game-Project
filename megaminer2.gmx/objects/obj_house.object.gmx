@@ -48,7 +48,7 @@ groundY = 615;
 surfaceOnly = 1;
 originOffX = 0;
 originOffY = -8;
-menuY = y+300;
+menuY = y + 150;
 costWoodCommon = 500;
 costStone = 0;
 
@@ -82,8 +82,8 @@ spriteLevel[4] = spr_house1;
             <string>///Buttons
 
 button[0,0] = obj_structureButtonLevelUpHouse;
-button[0,1] = 50;
-button[0,2] = 250;
+button[0,1] = 25;
+button[0,2] = 125;
 button[1,0] = -4;
 
 
@@ -121,14 +121,14 @@ for (i = 0; i &lt; 10; i++){
 //Pop up text
 buildingName = "House";
 textPopUp = 0;
-popUpX1 = 80
-popUpX2 = 89
-popUpY1 = -290;
-popUpY2 = -302;
-textDrawX = - 60;
-textDrawY = -300;
-yOffset = 100;
-textXExtra = 6; 
+popUpX1 = 40
+popUpX2 = 45
+popUpY1 = -145;
+popUpY2 = -151;
+textDrawX = -30;
+textDrawY = -150;
+yOffset = 50;
+textXExtra = 3; 
 popUpWidth = 3;
 </string>
           </argument>

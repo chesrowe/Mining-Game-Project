@@ -32,13 +32,13 @@ xx = 0;
 yy = 0;
 //icon
 icon = spr_buttonLevelUp;
-iconOffsetX = 14;
-iconOffsetY = 14;
+iconOffsetX = 7;
+iconOffsetY = 7;
 //infobox
 infoBoxWidth = 3;
 infoBoxHeight = 3;
 infoBoxX = x;
-infoBoxY = y - 168;
+infoBoxY = y - 84;
 showInfoBox = 0;
 
 //sounds
@@ -149,7 +149,7 @@ show_debug_message(string(myWindow));
 show_debug_message(string(windowOpen));
 if (hasWindow){
     if (!windowOpen &amp;&amp; myWindow == -4){
-        myWindow = instance_create(x, y - 180, windowObject);
+        myWindow = instance_create(x, y - 45, windowObject);
         windowOpen = 1;
         myWindow.myButton = id;
     }else{

@@ -602,12 +602,12 @@ for (i = 0; i &lt;= worldWidth; i++;){
             break;
             //Spawn birch tree 
             case obj_treeBirch:
-                instance_create(xPos,folY - 8,foliage);
+                instance_create(xPos,folY - 4,foliage);
                 gridPos += 3;
             break;
             //Spawn evergreen
             case obj_treeEvergreen: 
-                instance_create(xPos,folY - 3,foliage);
+                instance_create(xPos,folY - 1,foliage);
                 gridPos += 3;
             break;
         }
@@ -773,6 +773,7 @@ hungerLevel = 0;
 global.autoBuild = 0;
 global.debugNoTrees = 0;
 global.debugClickDeleteTrees = 1;
+global.debugSkipIntro = 1;
 
 if (global.debugNoTrees){
     with(obj_treeParent){
@@ -1056,28 +1057,28 @@ if (global.select){
 var uiOffset = -60;
 
 //Snap worker buttons in place
-buildButton.x = (view_xview[0] + uiOffset) + 550;
-buildButton.y = view_yview[0] + 60;
-workerSkillsButton.x = (view_xview[0] + uiOffset) + 630;
-workerSkillsButton.y = view_yview[0] + 60;
-workerInventoryButton.x = (view_xview[0] + uiOffset) + 470;
-workerInventoryButton.y = view_yview[0] + 60;
-stockpileButton.x = (view_xview[0] + uiOffset) + 390
-stockpileButton.y = view_yview[0] + 60;
-farmButton.x = (view_xview[0] + uiOffset) + 550;
-farmButton.y = view_yview[0] + 60;
-settlementCenterButton.x = (view_xview[0] + uiOffset) + 470;
-settlementCenterButton.y = view_yview[0] + 60;
-houseButton.x = (view_xview[0] + uiOffset) + 630;
-houseButton.y = view_yview[0] + 60;
-archerTowerButton.x = (view_xview[0] + uiOffset) + 710;
-archerTowerButton.y = view_yview[0] + 60;
-blacksmithButton.x = (view_xview[0] + uiOffset) + 790;
-blacksmithButton.y = view_yview[0] + 60;
-wallButton.x = (view_xview[0] + uiOffset) + 870;
-wallButton.y = view_yview[0] + 60;
-liftButton.x = (view_xview[0] + uiOffset) + 950;
-liftButton.y = view_yview[0] + 60;
+buildButton.x = (view_xview[0] + uiOffset) + 275;
+buildButton.y = view_yview[0] + 30;
+workerSkillsButton.x = (view_xview[0] + uiOffset) + 315;
+workerSkillsButton.y = view_yview[0] + 30;
+workerInventoryButton.x = (view_xview[0] + uiOffset) + 235;
+workerInventoryButton.y = view_yview[0] + 30;
+stockpileButton.x = (view_xview[0] + uiOffset) + 195
+stockpileButton.y = view_yview[0] + 30;
+farmButton.x = (view_xview[0] + uiOffset) + 275;
+farmButton.y = view_yview[0] + 30;
+settlementCenterButton.x = (view_xview[0] + uiOffset) + 235;
+settlementCenterButton.y = view_yview[0] + 30;
+houseButton.x = (view_xview[0] + uiOffset) + 315;
+houseButton.y = view_yview[0] + 30;
+archerTowerButton.x = (view_xview[0] + uiOffset) + 355;
+archerTowerButton.y = view_yview[0] + 30;
+blacksmithButton.x = (view_xview[0] + uiOffset) + 395;
+blacksmithButton.y = view_yview[0] + 30;
+wallButton.x = (view_xview[0] + uiOffset) + 435;
+wallButton.y = view_yview[0] + 30;
+liftButton.x = (view_xview[0] + uiOffset) + 475;
+liftButton.y = view_yview[0] + 30;
 
 
 </string>
@@ -1633,13 +1634,11 @@ draw_text(1254 * (window_get_fullscreen() + 1), 4, string(fpsAverage));
             <kind>1</kind>
             <string>///Background
 
-draw_background_tiled_hor(bg_farMountains,view_xview[0] / 1.03, (view_yview[0] + 400) / 1.03);
-draw_background_tiled_hor(bg_mountains,view_xview[0] / 1.1, (view_yview[0] + 490) / 1.2);
-draw_background_tiled_hor(bg_bushClose,view_xview[0] / 6, 700);
+draw_background_tiled_hor(bg_farMountains,view_xview[0] / 1.03, (view_yview[0] + 45) / 1.03);
+draw_background_tiled_hor(bg_mountains,view_xview[0] / 1.1, (view_yview[0] + 110) / 1.2);
+//draw_background_tiled_hor(bg_bushClose,view_xview[0] / 6, 700);
 
-//Double click debug
-//draw_text(mouse_x,mouse_y-20,string(doubleClickTimer));
-//draw_text(mouse_x,mouse_y-40,string(global.doubleClick));
+
 
 
 

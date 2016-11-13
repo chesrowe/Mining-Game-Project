@@ -155,6 +155,7 @@ workMiddleTime = 0;
 baseWorkTime = 300;
 workTimeAdd = irandom(round(baseWorkTime / 3));
 workTime = (baseWorkTime + workTimeAdd);
+waitingToWork = 0;
 
 //Building
 buildingImageSpeed = .11;
@@ -464,6 +465,37 @@ windowObject = obj_uiDebugWindowWorker;
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///States
+
+enum STATES_WORKER{
+    woodcutting,
+    mining, 
+    building,
+    farming, 
+    idle,
+    moveToTarget,
+    upgrading
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="3" enumb="2">
       <action>
@@ -529,7 +561,7 @@ if (falling){
           <argument>
             <kind>1</kind>
             <string>///Move to target
-if (state == 'moveToTarget' &amp;&amp; !global.workerBuild){
+if (state == STATES_WORKER.moveToTarget &amp;&amp; !global.workerBuild){
     moveToTimer ++;
     image_speed = walkingImageSpeed;
 }
@@ -547,19 +579,17 @@ if (moveToTimer &gt; moveToTime){
             sprite_index = spriteWalking;
         }
         
-    if ( (state == "moveToTarget" &amp;&amp; moveTargetX &gt;= x) &amp;&amp; (moveToTimer &gt; moveToTime)){
-         image_xscale = 1;
+    if ( (state == STATES_WORKER.moveToTarget &amp;&amp; moveTargetX &gt;= x) &amp;&amp; (moveToTimer &gt; moveToTime)){
          scr_unit_move_avoiding(walkSpeed, run, 1);
-    }else if (state == 'moveToTarget' &amp;&amp; moveTargetX &lt;= x){
-        image_xscale = -1;
+    }else if (state == STATES_WORKER.moveToTarget &amp;&amp; moveTargetX &lt;= x){
         scr_unit_move_avoiding(walkSpeed,run,0); 
     }
-}else if (state == 'moveToTarget'){
+}else if (state == STATES_WORKER.moveToTarget){
     image_index = 0;
 }
 
 //Stop when the target is reached
-if (state == 'moveToTarget' &amp;&amp; ceil(point_distance(x,y,moveTargetX,y)) &lt;= 1 &amp;&amp; moveToTimer &gt; moveToTime){
+if (state == STATES_WORKER.moveToTarget &amp;&amp; ceil(point_distance(x,y,moveTargetX,y)) &lt;= 1 &amp;&amp; moveToTimer &gt; moveToTime){
     state = 'idle';
     run = 0;
     moveToTimer = 0;
@@ -567,9 +597,9 @@ if (state == 'moveToTarget' &amp;&amp; ceil(point_distance(x,y,moveTargetX,y)) &
     sprite_index = spriteIdle;
     
     if (moveXStart == 'less'){
-        image_xscale = 1;
+        scr_sprite_face_right();
     }else{
-        image_xscale = -1;
+        scr_sprite_face_left();
     }
 }
 </string>
@@ -644,7 +674,7 @@ if (state != "idle"){
             <string>///Farming
 if (!dying){
     
-    if (state == 'farming'){
+    if (state == STATES_WORKER.farming){
         moveToTimer ++;
         image_speed = walkingImageSpeed;
         //Workers walks to the resource to farm it
@@ -827,7 +857,7 @@ if (!dying){
             <string>///Mining
 if (!dying){
     
-    if (state == 'mining'){
+    if (state == STATES_WORKER.mining){
         moveToTimer ++;
         image_speed = walkingImageSpeed;
         //Workers walks to the resource to mine it
@@ -1072,7 +1102,7 @@ if (!dying){
           <argument>
             <kind>1</kind>
             <string>///Woodcutting
-if (state == 'woodcutting'){
+if (state == STATES_WORKER.woodcutting){
     image_speed = walkingImageSpeed;
     moveToTimer ++;
      //makes the worker walk to the tree
@@ -1318,21 +1348,18 @@ if (global.select &amp;&amp; selected == 1){
             <kind>1</kind>
             <string>///Working general
 
-if (comingFrom &amp;&amp; !instance_exists(dropOffTarget)){
-    state = 'idle';
+if (comingFrom &amp;&amp; !instance_exists(dropOffTarget) &amp;&amp; state != STATES_WORKER.moveToTarget){
+    state = STATES_WORKER.idle;
     sprite_index = spriteIdle;
-    image_xscale = !sign(x - dropOffTarget.x);
 }
 //Moves the worker in position to work, if he is directly on top of the resource
 //1 = left, 2 = right
 if (resourcePosition == 1){
     positionTimer ++;
-    scr_unit_move_avoiding(walkSpeed,0,0);   
-    image_xscale = -1;         
+    scr_unit_move_avoiding(walkSpeed, 0, left);           
 }else if (resourcePosition == 2){
     positionTimer ++;
-    scr_unit_move_avoiding(walkSpeed,0,1);
-    image_xscale = 1;
+    scr_unit_move_avoiding(walkSpeed, 0, right);
 }
 // stop the movement
 if (positionTimer &gt;= positionTime &amp;&amp; (resourcePosition == 1 || resourcePosition == 2)){
@@ -1354,8 +1381,8 @@ if (goingTo &amp;&amp; state != 'building'){
 
 ///Make the worker face the target they are going to
 
-if ((goingTo || !comingFrom) &amp;&amp; instance_exists(target) &amp;&amp; !resourcePosition){
-    image_xscale = !sign(x - target.x);
+if ((goingTo || !comingFrom) &amp;&amp; instance_exists(target) &amp;&amp; !resourcePosition &amp;&amp; state != STATES_WORKER.moveToTarget &amp;&amp; state != STATES_WORKER.idle){
+    scr_sprite_face_xpoint(target.x);
 }
 
 </string>
@@ -1475,7 +1502,7 @@ if (state == 'sitting'){
 
 if (!dying){
     
-    if (state == 'building'){
+    if (state == STATES_WORKER.building){
         if (!gettingResources){
             moveToTimer ++;
             image_speed = walkingImageSpeed;
@@ -1484,10 +1511,10 @@ if (!dying){
                 sprite_index = spriteWalkingResources;
                 if (target.x &gt; x &amp;&amp; !workStart &amp;&amp; goingTo){
                     image_xscale = 1;    
-                    scr_unit_move_avoiding(walkSpeed,0,1);  
+                    scr_unit_move_avoiding(walkSpeed,0,right);  
                 }else if(!workStart &amp;&amp; goingTo){
                     image_xscale = -1;
-                    scr_unit_move_avoiding(walkSpeed,0,0); 
+                    scr_unit_move_avoiding(walkSpeed,0,left); 
                 }
             }
         }else{
@@ -1498,10 +1525,10 @@ if (!dying){
                 sprite_index = spriteWalking;
                 if (obj_warehouse.x &gt; x &amp;&amp; !workStart &amp;&amp; gettingResources){
                     image_xscale = 1;
-                    scr_unit_move_avoiding(walkSpeed,0,1);  
+                    scr_unit_move_avoiding(walkSpeed,0,right);  
                 }else if(!workStart &amp;&amp; gettingResources){
                     image_xscale = -1;
-                    scr_unit_move_avoiding(walkSpeed,0,0);  
+                    scr_unit_move_avoiding(walkSpeed,0,left);  
                 }
             }
         }
@@ -1512,11 +1539,6 @@ if (!dying){
                 workTimer ++;
                 //set the sprite
                 sprite_index = spriteBuilding;
-                if (x &gt; target.x){
-                    image_xscale = -1;
-                }else{
-                    image_xscale = 1;
-                } 
                 //Triggers sound and particles
                 if (round(image_index) == 5 &amp;&amp; cutSound == 0){
                     var sound = audio_play_sound_at(pickSound[workRRPosition],x,y,0,1000,200,1,0,999999);  
@@ -1533,7 +1555,6 @@ if (!dying){
                 }
                 //Makes miner take the resources to the stockpile
                 if (workTimer &gt;= workTime){
-                    randomize();
                     goingTo = 0;
                     gettingResources = 1;
                     workStart = 0;
@@ -1567,21 +1588,10 @@ if (!dying){
                         }   
                     }
                     
-                    if (xpMining &gt;= xpNeededMining){
-                        //miningLevel ++;
-                        //xpNeededMining += floor(miningLevel+300 * power(2,(miningLevel/7)));
-                        //baseMiningTime -= (10 + irandom(5));
-                    }
-                    
                 }
             }else{
             //starts the pulling out tool animation
-                sprite_index = spriteBuildingDrawTool;
-                if (target.x &gt; x){
-                    image_xscale = 1;    
-                }else{
-                    image_xscale = -1;    
-                }
+                    sprite_index = spriteBuildingDrawTool;
                     drawToolTimer ++;
                 if (drawToolTimer &gt;= drawToolTimeWoodcutting){
                     drawTool = 0;
@@ -1597,12 +1607,7 @@ if (!dying){
             middleTimer = 0;
             goingTo = 0;
             gettingResources = 0;
-            state = 'idle';
-            if (x &gt; target.x){
-                image_xscale = -1;
-            }else{
-                image_xscale = 1;  
-            }
+            state = STATES_WORKER.idle;
         }            
     }
 }
@@ -1789,6 +1794,93 @@ if (staminaRegen &amp;&amp; stamina == maxStamina){
     staminaRegen = 0;    
     staminaTimer ++;
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Snap worker to ground
+
+//If the worker is not falling and it is supposed be on the ground, put it there.
+if (!falling &amp;&amp; place_meeting(x, y + 4, obj_tileSurfaceFlatParent) &amp;&amp; !place_meeting(x, y, obj_tileSurfaceHillParent)){
+    var tileUnderneath = instance_place(x, y + 4, obj_tileSurfaceFlatParent);
+    y = tileUnderneath.y - 12;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Middle timer for all resources
+
+if (state == "mining" || state == "woodcutting" &amp;&amp; instance_exists(target)){ 
+    if (goingTo &amp;&amp; (scr_findXDiff(x, target.x) &lt; target.midDistance)){
+        middleTimer ++;
+    }
+}
+
+//Woodcutting specific 
+
+if (state == "woodcutting" &amp;&amp; instance_exists(target) &amp;&amp; (scr_findXDiff(x, target.x) &lt; target.midDistance)){
+    if (goingTo &amp;&amp; (middleTimer &gt;= middleTime) &amp;&amp; woodcuttingLevel &gt;= target.levelReq){
+        drawTool = 1;
+        cutStart = 1;
+        cutTimeAdd = irandom(round(baseCuttingTime/3));
+        cuttingTime = (baseCuttingTime + cutTimeAdd);
+        moveToTimer = 0;
+        image_index = 0; 
+        goingTo = 0;
+        comingFrom = 0; 
+        middleTimer = 0;
+        workingLenDirX = lengthdir_x(20,point_direction(x,y,target.x,target.y));
+        workingLenDirY = lengthdir_y(13,point_direction(x,y,target.x,target.y));    
+    }else if (woodcuttingLevel &lt; target.levelReq){
+        goingTo = 0;
+        middleTimer = 0;
+        state = 'idle';
+        var msg = instance_create(x,y,obj_workerDrawTimed);
+        msg.col = c_red;
+        msg.amount = "Can't do that."
+        image_speed = idleImageSpeed;
+        sprite_index = spriteIdle;    
+    }  
+    if (!drawTool &amp;&amp; cutSound){
+        other.animationTimer = 0;
+    }
+}
+
+
+
 </string>
           </argument>
         </arguments>
@@ -2216,68 +2308,6 @@ if (state == 'upgrading' &amp;&amp; middleTimer &gt;= workMiddleTime &amp;&amp; 
         </arguments>
       </action>
     </event>
-    <event eventtype="4" ename="obj_treeParent">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Woodcut
-//Starts the worker woodcutting
-if (state == 'woodcutting'){
-    if (instance_exists(target)){
-        if (other.id == target &amp;&amp; goingTo){
-            middleTimer ++;
-        }   
-    }
-    if (instance_exists(target)){
-        if (other.id == target &amp;&amp; goingTo &amp;&amp; (middleTimer &gt;= middleTime) &amp;&amp; woodcuttingLevel &gt;= target.levelReq){
-            drawTool = 1;
-            cutStart = 1;
-            randomize();
-            cutTimeAdd = irandom(round(baseCuttingTime/3));
-            cuttingTime = (baseCuttingTime + cutTimeAdd);
-            moveToTimer = 0;
-            image_index = 0; 
-            goingTo = 0;
-            comingFrom = 0; 
-            middleTimer = 0;
-            workingLenDirX = lengthdir_x(40,point_direction(x,y,target.x,target.y));
-            workingLenDirY = lengthdir_y(26,point_direction(x,y,target.x,target.y));
-        }else if (woodcuttingLevel &lt; target.levelReq &amp;&amp; other.id == target.id &amp;&amp; state == 'woodcutting'){
-            goingTo = 0;
-            middleTimer = 0;
-            state = 'idle';
-            var msg = instance_create(x,y,obj_workerDrawTimed);
-            msg.col = c_red;
-            msg.amount = "Can't do that."
-            image_speed = idleImageSpeed;
-            sprite_index = spriteIdle;
-        }
-    }
-    if (instance_exists(target)){
-        if (other.id == target &amp;&amp; !drawTool &amp;&amp; cutSound){
-            other.animationTimer = 0;
-        }
-    }
-}
-falling = 0;
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
     <event eventtype="4" ename="obj_resourceParent">
       <action>
         <libid>1</libid>
@@ -2505,7 +2535,7 @@ if (selected){
 if (run || staminaRegen){
     draw_rectangle_colour(x - 3, y - 19, x + 8, y - 21, c_black, c_black, c_black, c_black,0);
     var stPercent = ((stamina / maxStamina) * 10) * 10;
-    var drawPercent = round(((stPercent / 100) * 20)); 
+    var drawPercent = round(((stPercent / 100) * 10)); 
     draw_rectangle_colour(x - 3, y - 19, (x - 3) + drawPercent, y - 21, c_green, c_green, c_green, c_green, 0);
 } 
 

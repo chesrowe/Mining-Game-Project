@@ -29,8 +29,8 @@
 event_inherited();
 
 iconSprite = spr_uiWarehouseResourceIconStone;
-iconX = 26;
-iconY = 26;
+iconX = 13;
+iconY = 13;
 resourceAmount = 0;
 
 infoBoxText = "Stone";

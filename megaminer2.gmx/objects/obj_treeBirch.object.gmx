@@ -41,10 +41,11 @@ xp = 30;
 resource = 'woodBirch';
 levelReq = 5;
 woodLeft = 1000;
-midTime = 2;
-midRandom = 3;
-posDistance = 15;
-posTime = 30;
+midDistance = 16;
+midTime = 0;
+midRandom = 1;
+posDistance = 16;
+posTime = 20;
 </string>
           </argument>
         </arguments>

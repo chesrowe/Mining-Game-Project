@@ -43,7 +43,7 @@
 infoBoxWidth = 3;
 infoBoxHeight = 0;
 infoBoxX = x;
-infoBoxY = y - 168;
+infoBoxY = y - 64;
 showInfoBox = 0;
 
 ///General
@@ -98,7 +98,7 @@ if (showInfoBox){
 
 if (showInfoBox){
     draw_set_colour(c_white);
-    draw_text(infoBoxX + 30, infoBoxY + 24, "Open Inventory");
+    draw_text(infoBoxX + 15, infoBoxY + 12, "Open Inventory");
     
 }
 </string>

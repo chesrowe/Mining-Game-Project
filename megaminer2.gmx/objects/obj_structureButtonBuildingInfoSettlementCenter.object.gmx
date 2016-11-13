@@ -30,13 +30,13 @@ event_inherited();
 
 //Icon
 icon = spr_sturctureInfoButton;
-iconOffsetX = 14;
-iconOffsetY = 20;
+iconOffsetX = 7;
+iconOffsetY = 10;
 //infobox
 infoBoxWidth = 6;
 infoBoxHeight = 0;
-infoBoxX = x - 100;
-infoBoxY = y - 100;
+infoBoxX = x - 50;
+infoBoxY = y - 50;
 showInfoBox = 0;
 
 //Window
@@ -83,7 +83,7 @@ windowObject = obj_uiWindowSettlementCenter;
             <string>///Draw info 
 
 if (showInfoBox){
-    draw_text(infoBoxX + 28,infoBoxY + 24,"Show settlement information");    
+    draw_text(infoBoxX + 14, infoBoxY + 12, "Show settlement information");    
 }
 </string>
           </argument>

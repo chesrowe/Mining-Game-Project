@@ -43,7 +43,8 @@ levelReq = 5;
 woodLeft = 1000;
 midTime = 2;
 midRandom = 3;
-posDistance = 30;
+midDistance = 18;
+posDistance = 16;
 posTime = 30;
 </string>
           </argument>

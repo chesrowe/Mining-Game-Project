@@ -27,7 +27,7 @@
             <kind>1</kind>
             <string>///Init
 // if the tree is on a slope or not in the corrent place, delete it 
-if (place_meeting(x,y,obj_tileSurfaceHillParent)){
+if (place_meeting(x,y + 12,obj_tileSurfaceHillParent)){
     instance_destroy();
 }
 if (!place_meeting(x,y + 8,obj_tileSurfaceParent)){
@@ -56,10 +56,11 @@ beingCut = 0;
 animationTimer = 0;
 showDebug = 0;
 xp = 25;
-posDistance = 24;
-posTime = 30;
+posDistance = 12;
+posTime = 12;
 midTime = 0;
-midRandom = 10;
+midRandom = 5;
+midDistance = 20;
 spriteTop = spr_treeCommonTop;
 spriteBottom = spr_treeCommonStump;
 bottomX = -2;
@@ -282,7 +283,7 @@ if (global.dev_mode &amp;&amp; !showDebug){
 //Set the selected workers to woodcutting
 if (!global.building &amp;&amp; !global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
     var tree = id;
-    scr_unit_array_set_resource_target('woodcutting',tree);   
+    scr_unit_array_set_resource_target(STATES_WORKER.woodcutting,tree);   
     scr_unit_array_clear();
 }else{
     scr_unit_array_clear();

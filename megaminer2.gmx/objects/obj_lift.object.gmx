@@ -48,7 +48,7 @@ groundY = 615;
 surfaceOnly = 1;
 originOffX = 0;
 originOffY = -4;
-menuY = y+300;
+menuY = y + 150;
 costWoodCommon = 600;
 costStone = 200;
 
@@ -96,14 +96,14 @@ cost[2,2] = -1;
 //Pop up text
 buildingName = "Lift";
 textPopUp = 0;
-popUpX1 = 80
-popUpX2 = 89
-popUpY1 = -290;
-popUpY2 = -302;
-textDrawX = - 60;
-textDrawY = -300;
-yOffset = 100;
-textXExtra = 6; 
+popUpX1 = 40
+popUpX2 = 45
+popUpY1 = -145;
+popUpY2 = -151;
+textDrawX = - 30;
+textDrawY = -150;
+yOffset = 50;
+textXExtra = 3; 
 popUpWidth = 3;
 </string>
           </argument>
@@ -133,13 +133,13 @@ myElevator = instance_create(x, y, obj_elevator);
 myElevator.myLift = id;
 ropeColor = make_colour_rgb(173, 145, 112);
 
-enum STATES{
+enum STATES_LIFT{
     idle,
     movingUp,
-    movingDown,
+    movingDown
 }
 
-state = STATES.idle;
+state = STATES_LIFT.idle;
 </string>
           </argument>
         </arguments>

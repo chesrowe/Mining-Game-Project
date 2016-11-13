@@ -6,6 +6,9 @@ var runOn = argument[1]; // Whether the object is "running" or not (doubles spee
 var dir = argument[2]; // 1 - right, 0 - left
 if (dir == 0){
     var moveSpeed = moveSpeed * -1;
+    scr_sprite_face_left();
+}else{
+    scr_sprite_face_right();    
 }
 
 if (!runOn){

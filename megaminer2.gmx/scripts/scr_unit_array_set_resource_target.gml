@@ -11,7 +11,7 @@ for(i = 0;i < 100;i++){
             target = argument1.id;
             targetType = argument1.object_index;
             state = argument0;
-            if (state == 'building' || state == 'upgrading'){
+            if (state == STATES_WORKER.building || STATES_WORKER.upgrading){
                 gettingResources = 1;
                 goingTo = 0;
             }else{
@@ -26,6 +26,7 @@ for(i = 0;i < 100;i++){
             selected = 0;
             moveToTimer = 0;
             workStart = 0;
+            middleTimer = 0;
             middleTime = (target.midTime + irandom(target.midRandom));
             if (point_distance(x,y,target.x,target.y) < target.posDistance){
                 if (x > target.x){

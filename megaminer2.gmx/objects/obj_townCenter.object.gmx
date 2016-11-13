@@ -39,14 +39,14 @@ sprite_index = spr_townCenter1;
 
 //Buttons
 button[0,0] = obj_structureButtonLevelUpTowncenter;
-button[0,1] = 80; // x
-button[0,2] = 260; // y
+button[0,1] = 40; // x
+button[0,2] = 130; // y
 button[1,0] = obj_structureIconButtonCreateWorker;
 button[1,1] = 0;
-button[1,2] = 260;
+button[1,2] = 130;
 button[2,0] = obj_structureButtonBuildingInfoSettlementCenter;
-button[2,1] = -80;
-button[2,2] = 260;
+button[2,1] = -40;
+button[2,2] = 130;
 button[3,0] = -4;
 
 //Get the number of buttons the structure has

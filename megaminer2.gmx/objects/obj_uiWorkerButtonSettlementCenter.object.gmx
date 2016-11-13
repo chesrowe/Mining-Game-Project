@@ -66,7 +66,7 @@ iconSprite = spr_uiIconSettlementCenter;
 infoBoxWidth = 4;
 infoBoxHeight = 1;
 infoBoxX = x;
-infoBoxY = y - 168;
+infoBoxY = y - 84;
 showInfoBox = 0;
 </string>
           </argument>
@@ -159,7 +159,7 @@ if (instance_exists(obj_townCenter)){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//Start building stockpile
+            <string>///Start building stockpile
 if (visible &amp;&amp; !global.workerBuild){
     var struc = instance_create(mouse_x,mouse_y,obj_townCenter);
     global.workerBuild = 1;
@@ -216,13 +216,13 @@ if (showInfoBox){
         infoBoxWidth = 4;
         infoBoxHeight = 1;
         draw_set_colour(c_white);
-        draw_text(infoBoxX + 30, infoBoxY + 24, "Settlement  Center");
-        draw_text(infoBoxX + 30, infoBoxY + 48, "Cost:                 wood");
+        draw_text(infoBoxX + 15, infoBoxY + 12, "Settlement  Center");
+        draw_text(infoBoxX + 15, infoBoxY + 24, "Cost:                 wood");
         draw_set_colour(c_yellow);
-        draw_text(infoBoxX + 30, infoBoxY + 48, "                   400");
+        draw_text(infoBoxX + 15, infoBoxY + 24, "                   400");
         draw_set_colour(c_white);
     }else{
-        draw_text(infoBoxX + 34, infoBoxY + 24, "Locked");
+        draw_text(infoBoxX + 17, infoBoxY + 12, "Locked");
         infoBoxWidth = 2;
         infoBoxHeight = 0;
     }

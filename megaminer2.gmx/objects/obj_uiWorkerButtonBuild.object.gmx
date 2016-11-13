@@ -43,7 +43,7 @@
 infoBoxWidth = 3;
 infoBoxHeight = 0;
 infoBoxX = x;
-infoBoxY = y - 168;
+infoBoxY = y - 84;
 showInfoBox = 0;
 </string>
           </argument>
@@ -135,7 +135,7 @@ if (showInfoBox){
 
 if (showInfoBox){
     draw_set_colour(c_white);
-    draw_text(infoBoxX + 30, infoBoxY + 24, "Build  Structure");
+    draw_text(infoBoxX + 15, infoBoxY + 12, "Build  Structure");
     
 }
 </string>

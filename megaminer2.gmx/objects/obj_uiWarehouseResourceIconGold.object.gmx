@@ -29,8 +29,8 @@
 event_inherited();
 
 iconSprite = spr_uiWarehouseResourceIconGold;
-iconX = 26;
-iconY = 26;
+iconX = 13;
+iconY = 13;
 resourceAmount = 0;
 
 infoBoxText = "gold";

@@ -28,14 +28,14 @@
             <string>event_inherited();
 //Icon
 icon = spr_workerCreateButton;
-iconOffsetX = 4;
-iconOffsetY = 4;
+iconOffsetX = 2;
+iconOffsetY = 2;
 
 //Info box
 infoBoxWidth = 5;
 infoBoxHeight = 0;
 infoBoxX = x;
-infoBoxY = y - 100;
+infoBoxY = y - 50;
 
 
 </string>
@@ -140,10 +140,10 @@ event_inherited();
 
 //draw all of the text
 if (showInfoBox){
-    draw_text(infoBoxX + 76, infoBoxY + 24, "  -  Create  worker");
+    draw_text(infoBoxX + 38, infoBoxY + 12, "  -  Create  worker");
     draw_set_colour(c_yellow);
-    draw_text(infoBoxX + 62,infoBoxY + 24,"50");
-    draw_sprite(spr_uiWarehouseResourceIconFood,0,infoBoxX + 28,infoBoxY + 14);
+    draw_text(infoBoxX + 31,infoBoxY + 12,"50");
+    draw_sprite(spr_uiWarehouseResourceIconFood, 0, infoBoxX + 14, infoBoxY + 7);
 }
 </string>
           </argument>

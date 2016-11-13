@@ -130,9 +130,9 @@ if (instance_exists(obj_structureButtonBuildingInfoSettlementCenter)){
             <kind>1</kind>
             <string>///Draw text in window
 
-draw_text(x + 58, y + 16,"Settlement Info.");
-draw_text(x + 20, y + 48,"Population:  " + string(global.pop) + " / " + string(global.maxPop));
-draw_text(x + 20, y + 64,"Resources Collected: " + string(global.totalResourcesCollected));
+draw_text(x + 28, y + 8,"Settlement Info.");
+draw_text(x + 10, y + 24,"Population:  " + string(global.pop) + " / " + string(global.maxPop));
+draw_text(x + 10, y + 32,"Resources Collected: " + string(global.totalResourcesCollected));
 </string>
           </argument>
         </arguments>

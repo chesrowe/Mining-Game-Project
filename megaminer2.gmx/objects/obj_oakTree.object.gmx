@@ -41,8 +41,11 @@ xp = 100;
 resource = 'woodOak';
 levelReq = 10;
 woodLeft = 2400;
-posDistance = 60;
-posTime = 60;
+posDistance = 20;
+posTime = 25;
+midTime = 0;
+midRandom = 5;
+midDistance = 20;
 
 
 

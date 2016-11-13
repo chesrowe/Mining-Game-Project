@@ -26,6 +26,8 @@
           <argument>
             <kind>1</kind>
             <string>alpha = 1;
+
+
 </string>
           </argument>
         </arguments>
@@ -52,6 +54,10 @@
 alpha -= .0020;
 
 if (alpha &lt;= 0){
+    instance_destroy();
+}
+
+if (global.debugSkipIntro){
     instance_destroy();
 }
 </string>

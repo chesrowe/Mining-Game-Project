@@ -94,8 +94,8 @@ buttonNumber = 0;
 buttonsDelete = 0;
 
 button[0,0] = obj_structureButtonLevelUpTowncenter;
-button[0,1] = 90;
-button[0,2] = 260;
+button[0,1] = 45;
+button[0,2] = 130;
 button[1,0] = -4;
 button[1,1] = -4;
 button[1,2] = -4;
@@ -113,14 +113,14 @@ for (i = 0; i &lt; 10; i++){
 //Pop up text
 buildingName = "Settlement Center "
 textPopUp = 0;
-popUpX1 = -44
-popUpX2 = 89
-popUpY1 = -284;
-popUpY2 = -302;
-textDrawX = -70;
-textDrawY = -300;
-yOffset = 100;
-textXExtra = 15;
+popUpX1 = -22
+popUpX2 = 44
+popUpY1 = -142;
+popUpY2 = -151;
+textDrawX = -35;
+textDrawY = -150;
+yOffset = 50;
+textXExtra = 7;
 popUpWidth = 6;
 </string>
           </argument>
@@ -247,17 +247,17 @@ sprite_index = spriteLevel[(level-1)];
 
 //Make the building follow the curser when it's not placed
 if (!placed){
-    if !(position_meeting(x,y+16,obj_tileSurfaceFlatParent)){
+    if !(position_meeting(x, y + 8, obj_tileSurfaceFlatParent)){
         //groundY = (instance_nearest(mouse_x,mouse_y,obj_tileSurfaceFlatParent).y);
         groundY = mouse_y;
     }else{
-        groundY = (instance_position(x,y+16,obj_tileSurfaceFlatParent).y);
+        groundY = (instance_position(x, y + 8, obj_tileSurfaceFlatParent).y);
     }
     placeX = mouse_x;
     placeY = mouse_y
     image_alpha = .5;
     x = placeX-originOffX;
-    if (placeY &gt; groundY - 50){
+    if (placeY &gt; groundY - 25){
         y = groundY-originOffY;
     }else{
         y = placeY+mouseYOff;
@@ -679,7 +679,7 @@ if (!built){
 
 //Text pop up
 if (textPopUp){
-    scr_draw_ui_box(popUpWidth ,0,x + textDrawX - 33 ,y + yOffset + textDrawY - 24);
+    scr_draw_ui_box(popUpWidth ,0,x + textDrawX - 16 ,y + yOffset + textDrawY - 12);
     draw_text_colour(x + textDrawX + textXExtra, y + yOffset + textDrawY, buildingName + " Level  " + string(level),c_white,c_white,c_white,c_white,1);
 }
 

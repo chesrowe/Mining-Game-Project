@@ -193,17 +193,17 @@ for (i = 0; i &lt;= 5; i++){
             <kind>1</kind>
             <string>///Snap resource icons
 
-var a = x + 64;
+var a = x + 32;
 for (i = 0; i &lt;= 5; i++){
     iconArray[iconSet,i].x = a;
-    a += 80;
+    a += 40;
     if (i == 2){
-        a = x + 64;    
+        a = x + 32;    
     }
     if (i &gt; 2){
-        iconArray[iconSet,i].y = y + 32 + 80;    
+        iconArray[iconSet,i].y = y + 16 + 40;    
     }else{
-        iconArray[iconSet,i].y = y + 32;    
+        iconArray[iconSet,i].y = y + 16;    
     }
     
 }
@@ -253,14 +253,14 @@ if (instance_exists(obj_structureButtonWarehouseShowResources)){
 
 //Snap the right arrow to the window
 if (instance_exists(arrowRight)){
-    arrowRight.x = x + (windowWidth * 32) + 32;
-    arrowRight.y = y + ((windowHeight / 2) * 32) + 16;
+    arrowRight.x = x + (windowWidth * 16) + 16;
+    arrowRight.y = y + ((windowHeight / 2) * 16) + 8;
 }
 
 //Snap the left arrow to the window
 if (instance_exists(arrowLeft)){
-    arrowLeft.x = x + 32;
-    arrowLeft.y = y + ((windowHeight / 2) * 32) + 16;
+    arrowLeft.x = x + 16;
+    arrowLeft.y = y + ((windowHeight / 2) * 16) + 8;
 }
 
 
@@ -294,7 +294,7 @@ if (instance_exists(arrowLeft)){
         <exetype>2</exetype>
         <functionname></functionname>
         <codestring></codestring>
-        <whoName>self</whoName>
+        <whoName>obj_uiWindowWarehouse</whoName>
         <relative>0</relative>
         <isnot>0</isnot>
         <arguments>
@@ -302,7 +302,7 @@ if (instance_exists(arrowLeft)){
             <kind>1</kind>
             <string>///Draw text in window
 
-draw_text(x + 80, y + 16,"Settlement Resources.");
+draw_text(x + 40, y + 8,"Settlement Resources.");
 
 
 </string>

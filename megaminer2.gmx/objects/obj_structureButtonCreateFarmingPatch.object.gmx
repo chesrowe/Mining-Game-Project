@@ -43,8 +43,8 @@
 
 //Icon
 icon = spr_buttonFarmPatch;
-iconOffsetX = 14;
-iconOffsetY = 14;
+iconOffsetX = 7;
+iconOffsetY = 7;
 
 //infobox
 infoBoxWidth = 5;
@@ -136,8 +136,8 @@ if (global.woodCommon &gt;= 200){
 
 if (showInfoBox){
     draw_set_colour(c_white);
-    draw_text(infoBoxX + 24, infoBoxY + 32,"Create Basic Farm Patch");
-    draw_text(infoBoxX + 24, infoBoxY + 48,"Cost:  150  Wood");
+    draw_text(infoBoxX + 12, infoBoxY + 16,"Create Basic Farm Patch");
+    draw_text(infoBoxX + 12, infoBoxY + 24,"Cost:  150  Wood");
 }
 </string>
           </argument>

@@ -36,7 +36,7 @@ resourceAmount = 0;
 infoBoxWidth = 3;
 infoBoxHeight = 0;
 infoBoxX = x;
-infoBoxY = y - 168;
+infoBoxY = y - 84;
 infoBoxXOffset = 0;
 showInfoBox = 0;
 infoBoxText = "Common Wood";
@@ -98,11 +98,11 @@ if (position_meeting(mouse_x,mouse_y,self)){
 
 draw_self();
 draw_sprite(iconSprite, 0, x + iconX, y + iconY);
-draw_text(x + 36 ,y + 58, string(resourceAmount));
+draw_text(x + 18 ,y + 29, string(resourceAmount));
 
 if (showInfoBox){
     scr_draw_ui_box(infoBoxWidth, infoBoxHeight, infoBoxX, infoBoxY);
-    draw_text(infoBoxX + 32 ,infoBoxY + 24 ,infoBoxText);
+    draw_text(infoBoxX + 16 ,infoBoxY + 12 ,infoBoxText);
 }
 </string>
           </argument>

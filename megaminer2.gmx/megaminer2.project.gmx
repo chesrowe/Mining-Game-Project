@@ -344,6 +344,7 @@
       <script>scripts\scr_object_is_in_view.gml</script>
       <script>scripts\scr_create_floating_message.gml</script>
       <script>scripts\scr_mouse_over.gml</script>
+      <script>scripts\scr_findXDiff.gml</script>
     </scripts>
     <scripts name="Dev Tools">
       <script>scripts\dev_tool_create_object.gml</script>
@@ -352,6 +353,11 @@
       <script>scripts\scr_building_can_be_placed.gml</script>
       <script>scripts\scr_building_find_resource_needed.gml</script>
       <script>scripts\scr_building_find_resource_needed_upgrade.gml</script>
+    </scripts>
+    <scripts name="Sprites">
+      <script>scripts\scr_sprite_face_xpoint.gml</script>
+      <script>scripts\scr_sprite_face_right.gml</script>
+      <script>scripts\scr_sprite_face_left.gml</script>
     </scripts>
   </scripts>
   <fonts name="fonts">
@@ -412,6 +418,7 @@
         <object>objects\obj_uiWorkerButtonLift</object>
       </objects>
       <objects name="Structures">
+        <object>objects\obj_structureButtonParent</object>
         <object>objects\obj_structureButtonLevelUpTowncenter</object>
         <object>objects\obj_structureButtonLevelUpWarehouse</object>
         <object>objects\obj_structureIconButtonCreateWorker</object>
@@ -436,7 +443,6 @@
             <object>objects\obj_uiWarehouseResourceIconGold</object>
           </objects>
         </objects>
-        <object>objects\obj_structureButtonParent</object>
       </objects>
     </objects>
     <objects name="Evironment">
@@ -509,8 +515,8 @@
     </rooms>
   </rooms>
   <constants number="2">
-    <constant name="GM_build_date">41949.4053481018</constant>
-    <constant name="GM_version">'1.0.0.2'</constant>
+    <constant name="left">-1</constant>
+    <constant name="right">1</constant>
   </constants>
   <help>
     <rtf>help.rtf</rtf>
