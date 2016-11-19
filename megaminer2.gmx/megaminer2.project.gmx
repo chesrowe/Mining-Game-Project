@@ -359,6 +359,8 @@
       <script>scripts\scr_sprite_face_right.gml</script>
       <script>scripts\scr_sprite_face_left.gml</script>
     </scripts>
+    <script>scripts\scr_check_for_clickable_instances_under_mouse.gml</script>
+    <script>scripts\scr_instance_under_mouse.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\ft_gameFont</font>

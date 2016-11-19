@@ -6,7 +6,7 @@
 for (i = 0; i < 100; i++;){
     if (global.unitSelected[i] == noone){
         global.unitSelected[i] = id;
-        (global.unitSelected[i]).selected = 1;
+        (global.unitSelected[i]).selected = true;
         exit;
     }
 }

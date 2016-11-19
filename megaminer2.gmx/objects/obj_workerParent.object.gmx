@@ -149,12 +149,13 @@ supplyDropOff = 0;
 dropOffTimer = 0;
 dropX = 0;
 dropY = 0;
-workStart = 0;
+workStart = false;
 workTimer = 0;
 workMiddleTime = 0;
 baseWorkTime = 300;
 workTimeAdd = irandom(round(baseWorkTime / 3));
 workTime = (baseWorkTime + workTimeAdd);
+workingSound = false;
 waitingToWork = 0;
 
 //Building
@@ -180,16 +181,11 @@ gemBonus = 0//(((1000) * .01) * miningLevel);
 
 
 //woodcutting
-baseCuttingTime = 500;
-cuttingTime = 500;
 falling = 0;
 cuttingTimer = 0;
 cutStart = 0;
 move = 0;
 moveTimer = 0;
-cutSound = 0;
-cutTimeAdd = irandom(round(baseCuttingTime/3));
-middleTimeWoodcutting =  (2 + irandom(10));
 woodcuttingImageSpeed = .11;
 drawToolTimeWoodcutting = 45;
 
@@ -1108,82 +1104,80 @@ if (state == STATES_WORKER.woodcutting){
      //makes the worker walk to the tree
      if (moveToTimer &gt; moveToTime){
          sprite_index = spriteWalking;
-         if (instance_exists(target)&amp;&amp; target.x &gt; x &amp;&amp; !cutStart &amp;&amp; goingTo){
-            scr_unit_move_avoiding(walkSpeed,0,1);
-         }else if(!cutStart &amp;&amp; goingTo){
-            scr_unit_move_avoiding(walkSpeed,0,0);
+         if (instance_exists(target)&amp;&amp; target.x &gt; x &amp;&amp; !workStart &amp;&amp; goingTo){
+            scr_unit_move_avoiding(walkSpeed, 0, 1);
+         }else if(!workStart &amp;&amp; goingTo){
+            scr_unit_move_avoiding(walkSpeed, 0, 0);
          }
      }
     //starts the worker to woodcutting
-    if (cutStart){
+    if (workStart){
         image_speed = woodcuttingImageSpeed;
         if (!drawTool){
-            cuttingTimer ++;
+            workTimer ++;
             //set the sprite
             if (instance_exists(target)){
                 sprite_index = spriteWoodcutting;
                 if (x &gt; target.x){
-                    image_xscale = -1;
+                    scr_sprite_face_left();
                 }else{
-                    image_xscale = 1;
+                    scr_sprite_face_right();
                 }
             }
             //Triggers sound and particles
-            if (round(image_index) == 6 &amp;&amp; cutSound == 0){
+            if (round(image_index) == 6 &amp;&amp; workingSound == false){
                 if (instance_exists(target)){
                     dir = point_direction(x,y,target.x,target.y);
-                    part_particles_create(global.partMining,x+lengthdir_x(32,dir),y,global.partWoodChips,10);
+                    part_particles_create(global.partMining, x + lengthdir_x(32,dir), y, global.partWoodChips, 10);
                 }
-                workSound = audio_play_sound_at(woodcutSound[workRRPosition],x,y,0,1000,200,1,0,workRRPosition); 
-                randomize();
-                audio_sound_gain(workSound,global.sfxVol,0);
-                audio_sound_pitch(workSound,random_range(.95,1.2)); 
+                workSound = audio_play_sound_at(woodcutSound[workRRPosition], x, y, 0, 1000, 200, 1, 0, workRRPosition); 
+                audio_sound_gain(workSound, global.sfxVol, 0);
+                audio_sound_pitch(workSound, random_range(.95,1.2)); 
                 workRRPosition ++;
                 if (workRRPosition &gt; 3){
-                    randomize();
                     workRRPosition = irandom(2);
                 }
-                cutSound = 1; 
+                workingSound = 1; 
             } 
             if (round(image_index) != 6){
-                cutSound = 0;
+                workingSound = 0;
             }
             //adds the resouces the worker and decements wood from the tree
             if (instance_exists(target)){
-                if (cuttingTimer &gt;= cuttingTime &amp;&amp; !target.falling){
+                if (workTimer &gt;= workTime &amp;&amp; !target.falling){
                     image_speed = walkingImageSpeed;
-                    goingTo = 0;
-                    drawTool = 0;
-                    comingFrom = 1;
+                    goingTo = false;
+                    drawTool = false;
+                    comingFrom = true;
                     middleTimer = 0;
-                    cutStart = 0;
+                    workStart = false;
                     cuttingTimer = 0;
                     target.woodLeft -= 100;
                     target.fall -= 100;
                     //Randomizes the position of the cutting more when then the target tree has fallen
                     if (instance_exists(target)){
                         if (target.fell == 0){
-                            middleTimeWoodcutting =  (2 + irandom(target.midRandom));
+                            workMiddleTime =  (2 + irandom(target.midRandom));
                         }else{
-                            middleTimeWoodcutting =  (2 + irandom(target.midRandom) + irandom(40));    
+                            workMiddleTime =  (2 + irandom(target.midRandom) + irandom(40));    
                         }
                     }
                     moveToTime = 2 + irandom(20);
                     moveToTimer = 0;
                     //pops up xp gained
-                    with(instance_create(x,y,obj_workerDrawTimed)){
-                        amount = ("+"+string((other.target).xp)+"XP");
+                    with(instance_create(x, y, obj_workerDrawTimed)){
+                        amount = ("+" + string((other.target).xp) + "XP");
                         col = c_yellow;
                         myWorker = other.id;
                     }
                     //If the worker is already over the warehouse stop the middletimer 
-                    if (place_meeting(x,y,obj_warehouse)){
+                    if (place_meeting(x, y, obj_warehouse)){
                         middleTimer = middleTimeWoodcutting;
                     }
                     //pops up xp gained
                     xpWoodcutting += target.xp;
                     //Put the just mined resources into the inventory
-                    for (i = 3;i &lt;= 6; i++){
+                    for (i = 3; i &lt;= 6; i++){
                         if (is_real(inv[i,0]) &amp;&amp; inv[i,0] == -1){
                             inv[i,0] = target.resource;
                             inv[i,1] = 'resource';
@@ -1193,38 +1187,38 @@ if (state == STATES_WORKER.woodcutting){
                     }
                     //Levels the worker up if he has enough XP
                     if (xpWoodcutting &gt;= xpNeededWoodcutting){
-                        with(instance_create(x,y,obj_workerDrawTimed)){
+                        with(instance_create(x, y, obj_workerDrawTimed)){
                             myWorker = other.id;
                             amount = "Level Up!";
                             col = c_yellow;
                         }
                         woodcuttingLevel ++;
                         xpNeededWoodcutting += floor(woodcuttingLevel+300 * power(2,(woodcuttingLevel/7)));
-                        baseCuttingTime -= (10 + irandom(5));
+                        baseWorkTime -= (10 + irandom(5));
                     }
                     //if warehouse is not built, make idle
                     if (!instance_exists(dropOffTarget)){
-                        state = 'idle';
+                        state = STATES_WORKER.idle;
                     }
                     //check to see if the tree is over the warehouse
-                    if (point_distance(x,y,dropOffTarget.x,dropOffTarget.y) &lt; 10){
+                    if (point_distance(x, y, dropOffTarget.x, dropOffTarget.y) &lt; 10){
                         middleTimer = 50;
                     }
                 }
             //If the tree is destroyed before the cutting timer ends. (fail safe)
-            }else if (cuttingTimer &gt; cuttingTime){
-                cutStart = 0;
-                comingFrom = 1;
-                goingTo = 0;
+            }else if (workTimer &gt; workTime){
+                workStart = false;
+                comingFrom = true;
+                goingTo = false;
             }
         }else{
             //starts the pulling out tool animation
             if (instance_exists(target)){
                 sprite_index = spriteWoodcuttingDrawTool;
                 if (target.x &gt;= x){
-                    image_xscale = 1;
+                    scr_sprite_face_right();
                 }else{
-                    image_xscale = -1;   
+                    scr_sprite_face_left();  
                 }
             }
             drawToolTimer ++;
@@ -1232,7 +1226,7 @@ if (state == STATES_WORKER.woodcutting){
                 if (drawToolTimer &gt;= drawToolTimeFarming){
                     drawTool = 0;
                     drawToolTimer = 0;
-                    dir = point_direction(x,y,target.x,target.y);
+                    dir = point_direction(x, y, target.x, target.y);
                 }
             }
         }
@@ -1243,40 +1237,38 @@ if (state == STATES_WORKER.woodcutting){
         moveToTimer ++;
         if (moveToTimer &gt; moveToTime){
             sprite_index = spriteWalkingResources;
-            image_xscale = 1;
             scr_unit_move_avoiding(walkSpeed,0,1);    
         }
     }else if (comingFrom){
         moveToTimer ++;
         if (moveToTimer &gt; moveToTime){
             sprite_index = spriteWalkingResources;
-            image_xscale = -1;
             scr_unit_move_avoiding(walkSpeed,0,0);
         }
     }
   
     //If the target tree gets destroyed , set the state to idle
-    if ( (goingTo || (goingTo &amp;&amp; comingFrom == 0) ) &amp;&amp; !instance_exists(target) &amp;&amp; distance_to_object(instance_nearest(x,y,obj_treeParent)) &gt; 3000){
-        state = 'idle';
-        goingTo = 0;
-        comingFrom = 0;
+    if ((goingTo || (goingTo &amp;&amp; comingFrom == false)) &amp;&amp; !instance_exists(target) &amp;&amp; distance_to_object(instance_nearest(x, y, obj_treeParent)) &gt; 3000){
+        state = STATES_WORKER.idle;
+        goingTo = false;
+        comingFrom = false;
         middleTimer = 0;  
-        cutStart = 0;
-        cuttingTimer = 0;
+        workStart = false;
+        workTimer = 0;
         moveTimer = 0;
         moveToTimer = 0;  
         drawToolTimer = 0;
         sprite_index = spriteIdle;
-    }else if ( !comingFrom &amp;&amp; distance_to_object(instance_nearest(x,y,obj_treeParent)) &lt; 3000 &amp;&amp; !instance_exists(target)){
-        target = instance_nearest(x,y,obj_treeParent);
-        state = 'woodcutting';
-        comingFrom = 0;
-        cuttingTimer = 0;
+    }else if (!comingFrom &amp;&amp; distance_to_object(instance_nearest(x,y,obj_treeParent)) &lt; 3000 &amp;&amp; !instance_exists(target)){
+        target = instance_nearest(x, y, obj_treeParent);
+        state = STATES_WORKER.woodcutting;
+        comingFrom = false;
+        workTimer = 0;
         moveToTimer = 0;
-        cutStart = 0;
+        cutStart = false;
         middleTimer = 0;
         drawToolTimer = 0;
-        goingTo = 1;        
+        goingTo = true;        
     }
 }
 
@@ -1364,7 +1356,7 @@ if (resourcePosition == 1){
 // stop the movement
 if (positionTimer &gt;= positionTime &amp;&amp; (resourcePosition == 1 || resourcePosition == 2)){
     positionTimer = 0;
-    goingTo = 1;
+    goingTo = true;
     resourcePosition = 0;    
     middleTimer = 0;
     if (x &gt; target.x){
@@ -1374,8 +1366,8 @@ if (positionTimer &gt;= positionTime &amp;&amp; (resourcePosition == 1 || resour
 //Make the worker take their resources back to the warehouse before they begin working
 if (goingTo &amp;&amp; state != 'building'){
     if (is_real(inv[3,0]) &amp;&amp; inv[3,0] != -1){
-        goingTo = 0;
-        comingFrom = 1;
+        goingTo = false;
+        comingFrom = true;
     }    
 }
 
@@ -1843,7 +1835,7 @@ if (!falling &amp;&amp; place_meeting(x, y + 4, obj_tileSurfaceFlatParent) &amp;
             <kind>1</kind>
             <string>///Middle timer for all resources
 
-if (state == "mining" || state == "woodcutting" &amp;&amp; instance_exists(target)){ 
+if (state == STATES_WORKER.mining || state == STATES_WORKER.woodcutting &amp;&amp; instance_exists(target)){ 
     if (goingTo &amp;&amp; (scr_findXDiff(x, target.x) &lt; target.midDistance)){
         middleTimer ++;
     }
@@ -1851,31 +1843,31 @@ if (state == "mining" || state == "woodcutting" &amp;&amp; instance_exists(targe
 
 //Woodcutting specific 
 
-if (state == "woodcutting" &amp;&amp; instance_exists(target) &amp;&amp; (scr_findXDiff(x, target.x) &lt; target.midDistance)){
+if (state == STATES_WORKER.woodcutting &amp;&amp; instance_exists(target) &amp;&amp; (scr_findXDiff(x, target.x) &lt; target.midDistance)){
     if (goingTo &amp;&amp; (middleTimer &gt;= middleTime) &amp;&amp; woodcuttingLevel &gt;= target.levelReq){
-        drawTool = 1;
-        cutStart = 1;
-        cutTimeAdd = irandom(round(baseCuttingTime/3));
-        cuttingTime = (baseCuttingTime + cutTimeAdd);
+        drawTool = true;
+        workStart = true;
+        workTimeAdd = irandom(round(baseWorkTime / 3));
+        workTime = (baseWorkTime + workTimeAdd);
         moveToTimer = 0;
         image_index = 0; 
-        goingTo = 0;
-        comingFrom = 0; 
+        goingTo = false;
+        comingFrom = false; 
         middleTimer = 0;
-        workingLenDirX = lengthdir_x(20,point_direction(x,y,target.x,target.y));
-        workingLenDirY = lengthdir_y(13,point_direction(x,y,target.x,target.y));    
+        workingLenDirX = lengthdir_x(20,point_direction(x, y, target.x, target.y));
+        workingLenDirY = lengthdir_y(13,point_direction(x, y, target.x, target.y));    
     }else if (woodcuttingLevel &lt; target.levelReq){
-        goingTo = 0;
+        goingTo = false;
         middleTimer = 0;
-        state = 'idle';
-        var msg = instance_create(x,y,obj_workerDrawTimed);
+        state = STATES_WORKER.idle;
+        var msg = instance_create(x, y, obj_workerDrawTimed);
         msg.col = c_red;
         msg.amount = "Can't do that."
         image_speed = idleImageSpeed;
         sprite_index = spriteIdle;    
     }  
-    if (!drawTool &amp;&amp; cutSound){
-        other.animationTimer = 0;
+    if (!drawTool &amp;&amp; workingSound){
+        target.animationTimer = 0;
     }
 }
 

@@ -12,23 +12,20 @@ for(i = 0;i < 100;i++){
             targetType = argument1.object_index;
             state = argument0;
             if (state == STATES_WORKER.building || STATES_WORKER.upgrading){
-                gettingResources = 1;
-                goingTo = 0;
+                gettingResources = true;
+                goingTo = false;
             }else{
-                gettingResources = 0;
-                goingTo = 1;
+                gettingResources = false;
+                goingTo = true;
             }
-            comingFrom = 0;
-            mineStart = 0;
-            miningTimer = 0;
-            cutStart = 0;
-            cuttingTimer = 0;
-            selected = 0;
+            comingFrom = false;
+            workStart = false;
+            workTimer = 0;
+            selected = false;
             moveToTimer = 0;
-            workStart = 0;
             middleTimer = 0;
             middleTime = (target.midTime + irandom(target.midRandom));
-            if (point_distance(x,y,target.x,target.y) < target.posDistance){
+            if (point_distance(x, y, target.x, target.y) < target.posDistance){
                 if (x > target.x){
                     resourcePosition = 2;
                     positionTime = target.posTime;

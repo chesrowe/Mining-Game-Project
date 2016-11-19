@@ -177,9 +177,9 @@ if (falling){
 if (!fell){
     animationTimer ++;
     if (animationTimer &gt;= 30){
-        beingCut = 0;
+        beingCut = false;
     }else{
-        beingCut = 1;
+        beingCut = true;
     }
 }else{
     animationTimer = 31;
@@ -281,9 +281,9 @@ if (global.dev_mode &amp;&amp; !showDebug){
 //Makes the selected worker mine this resource
 
 //Set the selected workers to woodcutting
-if (!global.building &amp;&amp; !global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
+if (!global.building &amp;&amp; !global.workerBuild &amp;&amp; !position_meeting(mouse_x, mouse_y, obj_workerParent)){
     var tree = id;
-    scr_unit_array_set_resource_target(STATES_WORKER.woodcutting,tree);   
+    scr_unit_array_set_resource_target(STATES_WORKER.woodcutting, tree);   
     scr_unit_array_clear();
 }else{
     scr_unit_array_clear();
