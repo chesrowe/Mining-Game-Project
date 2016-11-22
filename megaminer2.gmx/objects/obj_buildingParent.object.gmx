@@ -26,6 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>///general variables
+levelReq = 1;
 spriteColor = c_white;
 directional = 0;
 autoBuild = 0;

@@ -29,6 +29,7 @@
 event_inherited();
 
 //general variabels
+levelReq = 1;
 surfaceOnly = 1;
 groundY = 695;
 originOffX = 0;

@@ -67,10 +67,8 @@ bottomX = -2;
 bottomY = 2;
 stumpX = x + bottomX;
 stumpY = y + bottomY;
-
-
-
-//bottom = instance_create(x+2,y+18,obj_treeBottom);
+workTimeBase = 300; 
+workTimeAdd = irandom(round(baseWorkTime / 3));
 
 //Sound
 soundPlayed = 0;

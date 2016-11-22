@@ -11,7 +11,7 @@ for(i = 0;i < 100;i++){
             target = argument1.id;
             targetType = argument1.object_index;
             state = argument0;
-            if (state == STATES_WORKER.building || STATES_WORKER.upgrading){
+            if (state == STATES_WORKER.building || state == STATES_WORKER.upgrading){
                 gettingResources = true;
                 goingTo = false;
             }else{
@@ -45,4 +45,5 @@ for(i = 0;i < 100;i++){
     }
                 
 }
+
             

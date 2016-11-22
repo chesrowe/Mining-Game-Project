@@ -42,7 +42,8 @@
             <string>///General
 layer = 'surface';
 dir = 0;
-state = 'idle';
+state = STATES_WORKER.idle;
+substate = SUBSTATES_WORKER.none;
 BloodColor = 'red';
 gold = 1;
 slot = 0;
@@ -60,7 +61,6 @@ number = 0;
 dying = 0;
 selecting = 0;
 selected = 0;
-randomize();
 moveToTime = 2 + irandom(15);
 moveToTimer = 0;
 target = -4;
@@ -457,37 +457,6 @@ inv[6,6] = -1;
             <string>///Debug stuff
 
 windowObject = obj_uiDebugWindowWorker;
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///States
-
-enum STATES_WORKER{
-    woodcutting,
-    mining, 
-    building,
-    farming, 
-    idle,
-    moveToTarget,
-    upgrading
-}
 </string>
           </argument>
         </arguments>
@@ -1172,7 +1141,7 @@ if (state == STATES_WORKER.woodcutting){
                     }
                     //If the worker is already over the warehouse stop the middletimer 
                     if (place_meeting(x, y, obj_warehouse)){
-                        middleTimer = middleTimeWoodcutting;
+                        middleTimer = workMiddleTime;
                     }
                     //pops up xp gained
                     xpWoodcutting += target.xp;
@@ -1841,22 +1810,48 @@ if (state == STATES_WORKER.mining || state == STATES_WORKER.woodcutting &amp;&am
     }
 }
 
-//Woodcutting specific 
+//Set the state specific 
+switch(state){
+    //Woodcutting
+    case STATES_WORKER.woodcutting:
+        var skillLevel = woodcuttingLevel;
+    break;
+    
+    //Mininig
+    case STATES_WORKER.mining:
+        var skillLevel = miningLevel;
+    break;
+    
+    //Farmining
+    case STATES_WORKER.farming:
+        var skillLevel = 1;
+    break;
+    
+    //Building
+    case STATES_WORKER.building:
+        var skillLevel = 1;
+    break;
+    
+    //Upgrading
+    case STATES_WORKER.upgrading:
+        var skillLevel = 1;
+    break;
+}
 
+
+
+//General middleTime stuff
 if (state == STATES_WORKER.woodcutting &amp;&amp; instance_exists(target) &amp;&amp; (scr_findXDiff(x, target.x) &lt; target.midDistance)){
-    if (goingTo &amp;&amp; (middleTimer &gt;= middleTime) &amp;&amp; woodcuttingLevel &gt;= target.levelReq){
-        drawTool = true;
+    if (goingTo &amp;&amp; (middleTimer &gt;= middleTime) &amp;&amp; skillLevel &gt;= target.levelReq){
+        substate = SUBSTATES_WORKER.toolPullout;
         workStart = true;
-        workTimeAdd = irandom(round(baseWorkTime / 3));
-        workTime = (baseWorkTime + workTimeAdd);
+        workTime = (target.WorkTimeBase + target.workTimeAdd);
         moveToTimer = 0;
         image_index = 0; 
-        goingTo = false;
-        comingFrom = false; 
         middleTimer = 0;
         workingLenDirX = lengthdir_x(20,point_direction(x, y, target.x, target.y));
         workingLenDirY = lengthdir_y(13,point_direction(x, y, target.x, target.y));    
-    }else if (woodcuttingLevel &lt; target.levelReq){
+    }else if (skillLevel &lt; target.levelReq){
         goingTo = false;
         middleTimer = 0;
         state = STATES_WORKER.idle;
@@ -1871,6 +1866,29 @@ if (state == STATES_WORKER.woodcutting &amp;&amp; instance_exists(target) &amp;&
     }
 }
 
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Substates 
 
 
 </string>
@@ -1901,7 +1919,7 @@ if (state == STATES_WORKER.woodcutting &amp;&amp; instance_exists(target) &amp;&
 if (comingFrom){
     middleTimer ++;
     if (middleTimer == 60){
-        supplyDropOff = 1;
+        supplyDropOff = true;
         dropX = x;
         dropY = y;
         image_index = 0;
@@ -1910,14 +1928,14 @@ if (comingFrom){
 
 // Adds the resources and sets the worker back to working
 if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60 &amp;&amp; !gettingResources){
-    if ((state == 'mining' || state == 'woodcutting' || state == 'farming') &amp;&amp; comingFrom){
+    if ((state == STATES_WORKER.mining || state == STATES_WORKER.woodcutting || state == STATES_WORKER.farming) &amp;&amp; comingFrom){
         
         if (!supplyDropOff){
             //loop through the inv slots and add any resources found to the warehouse
             for (i = 3; i&lt;=6; i++;){
                 if ( (is_real(inv[i,0]) &amp;&amp; inv[i,0] != -1) || (is_string(inv[i,1]) &amp;&amp; (inv[i,1] == 'resource' || inv[i,1] == 'gem')) ){
                     var yy = 0;
-                    (instance_create(x,y+yy,obj_workerDrawTimed)).amount = ("+" + string(inv[i,6]) + " " + string(inv[i,0])); 
+                    (instance_create(x,y + yy,obj_workerDrawTimed)).amount = ("+" + string(inv[i,6]) + " " + string(inv[i,0])); 
                     yy += 32;
                     switch(inv[i,0]){
                         case 'stone': 
@@ -1963,8 +1981,8 @@ if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60 &amp;&amp
                 }
             }
             //set the worker going back
-            comingFrom = 0;
-            goingTo = 1;
+            comingFrom = false;
+            goingTo = true;
             middleTimer = 0;
         }else{
             //Chnage to the proper sprite
@@ -1974,7 +1992,7 @@ if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60 &amp;&amp
             sprite_index = spriteDropResources;   
             
             if (image_index &gt;= 6){
-                supplyDropOff = 0;
+                supplyDropOff = false;
             }
             
         }
@@ -1983,14 +2001,14 @@ if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60 &amp;&amp
     }
 }
 //Get resources to bulid with
-if (gettingResources){
+if (gettingResources &amp;&amp; (state == STATES_WORKER.building || state == STATES_WORKER.upgrading) ){
     middleTimer ++;
     if (middleTimer &gt;= 55){
         if (scr_unit_find_inventory_slot() != 0){
             slot = scr_unit_find_inventory_slot();
         }
         //Give the worker the right resources
-        if (target.built != 1){
+        if (target.built != true){
             if (scr_building_find_resource_needed() != -4){
                 var resource = scr_building_find_resource_needed();
                 switch(target.cost[resource,0]){
@@ -2053,7 +2071,7 @@ if (gettingResources){
             <string>///Upgrading 
 
 //Get resources to bulid with
-if (gettingResources){
+if (gettingResources &amp;&amp; state == STATES_WORKER.upgrading){
     middleTimer ++;
     if (middleTimer &gt;= 55){
         slot = scr_unit_find_inventory_slot();
