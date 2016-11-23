@@ -8,6 +8,10 @@
 for(i = 0;i < 100;i++){
     if (instance_exists(global.unitSelected[i]) && global.unitSelected[i].object_index == obj_workerHumanP1){
         with (global.unitSelected[i]){
+            //Set the dropOffTarget for the worker
+            if (instance_exists(obj_warehouse)){
+                dropOffTarget = obj_warehouse;
+            }
             target = argument1.id;
             targetType = argument1.object_index;
             state = argument0;
@@ -18,7 +22,7 @@ for(i = 0;i < 100;i++){
                 gettingResources = false;
                 goingTo = true;
             }
-            comingFrom = false;
+            substate = SUBSTATES_WORKER.goingTo;
             workStart = false;
             workTimer = 0;
             selected = false;

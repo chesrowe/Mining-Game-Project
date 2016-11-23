@@ -246,7 +246,7 @@ global.building = 0;
 
 //Sound Variables
 global.currentSong = irandom(1);
-global.mute = 0;
+global.mute = 1;
 pickSoundTimer = 0;
 global.songPlaying[0] = 0;
 //audio_master_gain(0);
@@ -853,7 +853,8 @@ enum SUBSTATES_WORKER{
     none,
     resourceDropOff,
     goingTo,
-    toolPullout
+    toolPullout,
+    working
 }
 
 

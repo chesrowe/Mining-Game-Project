@@ -46,7 +46,7 @@ falling = 0;
 fallTimer = 80;
 fallDir = 'right';
 fell = 0;
-woodLeft = 500;
+resourceLeft = 500;
 fallSpeed = 0;
 fallIncrement = 0;
 fallXAdd = .3;
@@ -68,21 +68,55 @@ bottomY = 2;
 stumpX = x + bottomX;
 stumpY = y + bottomY;
 workTimeBase = 300; 
-workTimeAdd = irandom(round(baseWorkTime / 3));
+workTimeAdd = irandom(round(workTimeBase / 3));
 
-//Sound
-soundPlayed = 0;
 
-fallingSound[0] = sd_treeFalling1;
-fallingSound[1] = sd_treeFalling2;
-fallingSound[2] = sd_treeFalling3;
-fallingSound[3] = sd_treeFalling4;
 
 //checks to see if it spawned on the town center
 if (place_meeting(x,y,obj_townCenter)){
     instance_destroy();
 }
 
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Sound
+
+
+soundPlayed = 0;
+
+//The falling sounds the tree
+fallingSound[0] = sd_treeFalling1;
+fallingSound[1] = sd_treeFalling2;
+fallingSound[2] = sd_treeFalling3;
+fallingSound[3] = sd_treeFalling4;
+
+//Tool sounds (the sound the workers tool makes when hitting this resource)
+
+toolSound[0] = sd_woodcut1; 
+toolSound[1] = sd_woodcut2; 
+toolSound[2] = sd_woodcut3; 
+toolSound[3] = sd_woodcut4;
+
+hitFrame = 6;
 
 </string>
           </argument>
@@ -147,7 +181,7 @@ if (fall &lt;= 0) {
 //Makes the tree fall
 if (falling){
     if (!soundPlayed){
-        audio_play_sound_at(fallingSound[irandom(3)],x,y,0,1000,200,1,0,9999900);    
+        audio_play_sound_at(fallingSound[irandom(3)], x, y, 0, 1000, 200, 1, 0, 9999900);    
         soundPlayed = 1;
     }
     fallIncrement += .001;
@@ -194,7 +228,7 @@ if (beingCut){
 
 
 //Destroy the tree, if the wood is gone
-if (woodLeft &lt;= 0){
+if (resourceLeft &lt;= 0){
     instance_destroy();
 }
 </string>

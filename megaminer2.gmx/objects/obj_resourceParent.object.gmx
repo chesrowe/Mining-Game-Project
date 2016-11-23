@@ -44,7 +44,7 @@ exhausted = 0;
 exhaustTimer = 0;
 exhaustTime = 300;
 maxAmountLeft = 400;
-amountLeft = maxAmountLeft;
+resourceLeft = maxAmountLeft;
 levelReq = 1;
 exPopUp = 0;
 xp = 25;
@@ -90,7 +90,7 @@ if (exhausted){
     if (exhaustTimer &gt;= exhaustTime){
         exhausted = 0;
         exPopUp = 0;
-        amountLeft = maxAmountLeft;
+        resourceLeft = maxAmountLeft;
         exhaustTimer = 0;
     }
 }else{
