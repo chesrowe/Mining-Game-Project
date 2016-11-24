@@ -178,6 +178,35 @@ global.woodCommon = 100;
 global.woodOak = 0;
 global.woodBirch = 0;
 global.food = 200;
+
+//Set up constants for the resource ids
+enum RESOURCES{
+    oreGold,
+    stone,
+    oreCrystal,
+    oreBrimstone,
+    oreMushroom,
+    woodCommon,
+    woodOak,
+    woodBirch,
+    food,
+    nothing
+}
+
+//Map the reource IDs to their names
+global.resourceNameMap = ds_map_create();
+global.resourceNameMap[? RESOURCES.oreGold] = "gold ore";
+global.resourceNameMap[? RESOURCES.stone] = "stone";
+global.resourceNameMap[? RESOURCES.oreCrystal] = "crystal ore";
+global.resourceNameMap[? RESOURCES.oreBrimstone] = "brimstone";
+global.resourceNameMap[? RESOURCES.oreMushroom] = "petrified mushroom";
+global.resourceNameMap[? RESOURCES.woodCommon] = "commmon wood";
+global.resourceNameMap[? RESOURCES.woodOak] = "oak wood";
+global.resourceNameMap[? RESOURCES.woodBirch] = "birch wood";
+global.resourceNameMap[? RESOURCES.food] = "food";
+
+
+
 </string>
           </argument>
         </arguments>
@@ -1655,6 +1684,7 @@ font_delete(global.fontDmg);
 part_system_destroy(global.partMining);
 ds_grid_destroy(global.surfaceHeightGrid);
 ds_list_destroy(fpsAverageList);
+ds_map_destroy(global.resourceNameMap);
 
 </string>
           </argument>

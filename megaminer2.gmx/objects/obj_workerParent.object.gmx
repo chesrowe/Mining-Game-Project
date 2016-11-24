@@ -373,6 +373,7 @@ image_speed = idleImageSpeed;
             <kind>1</kind>
             <string>///Inventory Setup
 
+//Tool slots setup
 //inv[?,0] = name
 //inv[?,1] = type
 //inv[?,2] = gem socket
@@ -410,30 +411,12 @@ inv[3,3] = -1;
 inv[3,4] = -1;
 inv[3,5] = -1;
 inv[3,6] = -1;
-//slot 5
-inv[4,0] = -1;
-inv[4,1] = -1;
-inv[4,2] = -1;
-inv[4,3] = -1;
-inv[4,4] = -1;
-inv[4,5] = -1;
-inv[4,6] = -1;
-//slot 6
-inv[5,0] = -1;
-inv[5,1] = -1;
-inv[5,2] = -1;
-inv[5,3] = -1;
-inv[5,4] = -1;
-inv[5,5] = -1;
-inv[5,6] = -1;
-//slot 7
-inv[6,0] = -1;
-inv[6,1] = -1;
-inv[6,2] = -1;
-inv[6,3] = -1;
-inv[6,4] = -1;
-inv[6,5] = -1;
-inv[6,6] = -1;
+
+//Resource slot
+
+resourceSlot[0,0] = RESOURCES.nothing; //Resource ID
+resourceSlot[0,1] = 0; //Amount
+
 </string>
           </argument>
         </arguments>
@@ -1206,7 +1189,7 @@ if (state == STATES_WORKER.woodcutting){
         moveToTimer ++;
         if (moveToTimer &gt; moveToTime){
             sprite_index = spriteWalkingResources;
-            scr_unit_move_avoiding(walkSpeed,0,0);
+            scr_unit_move_avoiding(walkSpeed,0,-1);
         }
     }
   
@@ -1798,8 +1781,8 @@ if (!falling &amp;&amp; place_meeting(x, y + 4, obj_tileSurfaceFlatParent) &amp;
             <kind>1</kind>
             <string>///Middle timer for all resources
 
-if (state == STATES_WORKER.mining || state == STATES_WORKER.woodcutting &amp;&amp; instance_exists(target)){ 
-    if (goingTo &amp;&amp; (scr_findXDiff(x, target.x) &lt; target.midDistance)){
+if (scr_worker_is_working() &amp;&amp; instance_exists(target)){ 
+    if (substate == SUBSTATES_WORKER.goingTo &amp;&amp; (scr_findXDiff(x, target.x) &lt; target.midDistance)){
         middleTimer ++;
     }
 }
@@ -1879,20 +1862,20 @@ if (scr_worker_is_working() &amp;&amp; instance_exists(target) &amp;&amp; (scr_f
 
 if (substate != SUBSTATES_WORKER.none){
     switch(substate){
-        //goingTo (go to the target to begin working)
+        //goingTo (go to the target to begin working)\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.goingTo:
             image_speed = walkingImageSpeed;
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteWalking;
-                if (instance_exists(target)&amp;&amp; target.x &gt; x &amp;&amp; !workStart &amp;&amp; goingTo){
-                    scr_unit_move_avoiding(walkSpeed, 0, 1);
-                }else if(!workStart &amp;&amp; goingTo){
-                    scr_unit_move_avoiding(walkSpeed, 0, 0);
+                //Walk toward target
+                if (instance_exists(target)){
+                    scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dirX(target.x));
                 }
             }
         break;    
-        //toolPullOut
+        
+        //toolPullOut \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.toolPullout:
             var toolTime, workSprite;
             //Get the animation times and sprites for the state of the worker
@@ -1941,7 +1924,8 @@ if (substate != SUBSTATES_WORKER.none){
                 }
             }
         break;
-        //Working
+        
+        //Working \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.working:
             workTimer ++; 
             //Sounds
@@ -1983,14 +1967,8 @@ if (substate != SUBSTATES_WORKER.none){
                         middleTimer = workMiddleTime;
                     }
                     //Put the just worked resources into the inventory
-                    for (i = 3; i &lt;= 6; i++){
-                        if (is_real(inv[i,0]) &amp;&amp; inv[i,0] == -1){
-                            inv[i,0] = target.resource;
-                            inv[i,1] = 'resource';
-                            inv[i,6] = pickupLoad;
-                            break;
-                        }
-                    }
+                    resourceSlot[0,0] = target.resource
+                    resourceSlot[0,0] = 100;
                     //Levels the worker up if he has enough XP
                     /*if (xpWoodcutting &gt;= xpNeededWoodcutting){
                         with(instance_create(x, y, obj_workerDrawTimed)){
@@ -2012,9 +1990,46 @@ if (substate != SUBSTATES_WORKER.none){
                     } */
                 }
         break;
-        //resourceDropOff
+        
+        //resourceDropOff \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.resourceDropOff:
-            
+            //Make the worker walk toward the dropOffTarget
+            if (instance_exists(dropOffTarget)){
+                if (middleTimer &lt; 60){
+                    moveToTimer ++;
+                    scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dirX(dropOffTarget.x));
+                    sprite_index = spriteWalkingResources;   
+                }
+                //Collision with the warehouse
+                if (place_meeting(x, y, dropOffTarget)){
+                    //Start the middle timer
+                    middleTimer ++;
+                    if (middleTimer == 60){
+                        dropX = x;
+                        dropY = y;
+                        image_index = 0;
+                        sprite_index = spriteDropResources;
+                        image_speed = .10;
+                    }else if (middleTimer &gt; 60){
+                        if (image_index &gt;= 6){
+                            switch (other.resourceSlot[0,0]){
+                                case RESOURCES.woodCommon:
+                                    global.woodCommon += 100;
+                                    other.resourceSlot[0,0] = RESOURCES.nothing;
+                                    other.resourceSlot[0,1] = 0;
+                                break;
+                            }
+                            //Set the worker going back to the target if the worker is working
+                            if (scr_worker_is_working()){
+                                scr_unit_change_substate(SUBSTATES_WORKER.goingTo);
+                            }else{
+                                scr_unit_change_substate(SUBSTATES_WORKER.none);
+                                state = STATES_WORKER.idle;
+                            }
+                        }    
+                    }   
+                }
+            }
         break;
             
     }
@@ -2046,7 +2061,7 @@ if (substate != SUBSTATES_WORKER.none){
             <string>///Give resources/pick up resources
 
 //Starts middletimer/changes dropoff var
-if (comingFrom){
+/*if (substate == SUBSTATES_WORKER.resourceDropOff){
     middleTimer ++;
     if (middleTimer == 60){
         supplyDropOff = true;
@@ -2058,62 +2073,15 @@ if (comingFrom){
 
 // Adds the resources and sets the worker back to working
 if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60 &amp;&amp; !gettingResources){
-    if ((state == STATES_WORKER.mining || state == STATES_WORKER.woodcutting || state == STATES_WORKER.farming) &amp;&amp; comingFrom){
+    if (scr_worker_is_working &amp;&amp; SUBSTATES_WORKER.resourceDropOff){
         
         if (!supplyDropOff){
-            //loop through the inv slots and add any resources found to the warehouse
-            for (i = 3; i&lt;=6; i++;){
-                if ( (is_real(inv[i,0]) &amp;&amp; inv[i,0] != -1) || (is_string(inv[i,1]) &amp;&amp; (inv[i,1] == 'resource' || inv[i,1] == 'gem')) ){
-                    var yy = 0;
-                    (instance_create(x,y + yy,obj_workerDrawTimed)).amount = ("+" + string(inv[i,6]) + " " + string(inv[i,0])); 
-                    yy += 32;
-                    switch(inv[i,0]){
-                        case 'stone': 
-                            global.stone += inv[i,6]; 
-                            global.totalResourcesCollected += inv[i,6];  
-                        break;
-                        
-                        case 'woodCommon': 
-                            global.woodCommon += inv[i,6] 
-                            global.totalResourcesCollected += inv[i,6];
-                        break;
-                        
-                        case 'woodBirch': 
-                            global.woodBirch += inv[i,6] 
-                            global.totalResourcesCollected += inv[i,6];
-                        break;
-                        
-                        case 'woodOak': 
-                            global.woodOak += inv[i,6] 
-                            global.totalResourcesCollected += inv[i,6];
-                        break;
-                
-                        case 'food': 
-                            global.food += inv[i,6]; 
-                            global.totalResourcesCollected += inv[i,6];
-                        break;  
-                        
-                        case 'gold': 
-                            global.gold += inv[i,6]; 
-                            global.totalResourcesCollected += inv[i,6];
-                        break;
-                    }
-                    //clear the slot
-                    inv[i,0] = -1;
-                    inv[i,1] = -1;
-                    inv[i,2] = -1;
-                    inv[i,3] = -1;
-                    inv[i,4] = -1;
-                    inv[i,5] = -1;
-                    inv[i,6] = -1;
-                }else{
-                    break;
-                }
+            switch (other.resourceSlot[0,0]){
+                case RESOURCES.woodCommon:
+                    global.woodCommon += 100;
+                    other.resourceSlot[0,0] = RESOURCES.nothing;
+                    other.resourceSlot[0,1] = 0;
             }
-            //set the worker going back
-            comingFrom = false;
-            goingTo = true;
-            middleTimer = 0;
         }else{
             //Chnage to the proper sprite
             x = dropX;
@@ -2129,7 +2097,7 @@ if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60 &amp;&amp
         
         
     }
-}
+} */
 //Get resources to bulid with
 if (gettingResources &amp;&amp; (state == STATES_WORKER.building || state == STATES_WORKER.upgrading) ){
     middleTimer ++;

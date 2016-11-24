@@ -337,6 +337,8 @@
       <script>scripts\scr_unit_find_inventory_slot.gml</script>
       <script>scripts\scr_unit_move_avoiding.gml</script>
       <script>scripts\scr_unit_change_substate.gml</script>
+      <script>scripts\scr_unit_dirX.gml</script>
+      <script>scripts\scr_worker_is_working.gml</script>
     </scripts>
     <scripts name="Misc">
       <script>scripts\scr_effects_fade_in.gml</script>
@@ -362,7 +364,6 @@
     </scripts>
     <script>scripts\scr_check_for_clickable_instances_under_mouse.gml</script>
     <script>scripts\scr_instance_under_mouse.gml</script>
-    <script>scripts\scr_worker_is_working.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\ft_gameFont</font>

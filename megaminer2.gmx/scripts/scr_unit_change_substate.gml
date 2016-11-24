@@ -31,6 +31,11 @@ switch (substateArg){
     //goingTo
     case SUBSTATES_WORKER.goingTo:
         image_speed = walkingImageSpeed;    
+        if (state == STATES_WORKER.building || state = STATES_WORKER.upgrading){
+            sprite_index = spriteWalkingResources;
+        }else{
+            sprite_index = spriteWalking;
+        }
     break;
     //resourceDropOff
     case SUBSTATES_WORKER.resourceDropOff:
