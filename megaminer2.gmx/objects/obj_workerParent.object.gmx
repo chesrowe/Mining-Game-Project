@@ -61,7 +61,7 @@ number = 0;
 dying = 0;
 selecting = 0;
 selected = 0;
-moveToTime = 2 + irandom(15);
+moveToTime = 2 + irandom(6);
 moveToTimer = 0;
 target = -4;
 targetType = 0;
@@ -512,28 +512,6 @@ if (falling){
 if (state == STATES_WORKER.moveToTarget &amp;&amp; !global.workerBuild){
     moveToTimer ++;
     image_speed = walkingImageSpeed;
-}
-//move towards target 
-if (moveToTimer &gt; moveToTime){
-    if (run){
-            staminaTimer = 0;
-            sprite_index = spriteRunning; 
-            if (stamina &gt; 0){
-                stamina --;
-            }else{
-                run = 0;
-            }
-        }else{
-            sprite_index = spriteWalking;
-        }
-        
-    if ( (state == STATES_WORKER.moveToTarget &amp;&amp; moveTargetX &gt;= x) &amp;&amp; (moveToTimer &gt; moveToTime)){
-         scr_unit_move_avoiding(walkSpeed, run, 1);
-    }else if (state == STATES_WORKER.moveToTarget &amp;&amp; moveTargetX &lt;= x){
-        scr_unit_move_avoiding(walkSpeed,run,0); 
-    }
-}else if (state == STATES_WORKER.moveToTarget){
-    image_index = 0;
 }
 
 //Stop when the target is reached
@@ -1309,19 +1287,9 @@ if (positionTimer &gt;= positionTime &amp;&amp; (resourcePosition == 1 || resour
         
     }
 }
-//Make the worker take their resources back to the warehouse before they begin working
-if (goingTo &amp;&amp; state != 'building'){
-    if (is_real(inv[3,0]) &amp;&amp; inv[3,0] != -1){
-        goingTo = false;
-        comingFrom = true;
-    }    
-}
 
-///Make the worker face the target they are going to
 
-if ((goingTo || !comingFrom) &amp;&amp; instance_exists(target) &amp;&amp; !resourcePosition &amp;&amp; state != STATES_WORKER.moveToTarget &amp;&amp; state != STATES_WORKER.idle){
-    scr_sprite_face_xpoint(target.x);
-}
+
 
 </string>
           </argument>
@@ -1864,14 +1832,16 @@ if (substate != SUBSTATES_WORKER.none){
     switch(substate){
         //goingTo (go to the target to begin working)\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.goingTo:
-            image_speed = walkingImageSpeed;
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteWalking;
+                image_speed = walkingImageSpeed;
                 //Walk toward target
                 if (instance_exists(target)){
                     scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dirX(target.x));
                 }
+            }else{
+                image_speed = 0;
             }
         break;    
         
@@ -1995,7 +1965,7 @@ if (substate != SUBSTATES_WORKER.none){
         case SUBSTATES_WORKER.resourceDropOff:
             //Make the worker walk toward the dropOffTarget
             if (instance_exists(dropOffTarget)){
-                if (middleTimer &lt; 60){
+                if (middleTimer &lt; 80){
                     moveToTimer ++;
                     scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dirX(dropOffTarget.x));
                     sprite_index = spriteWalkingResources;   
@@ -2004,13 +1974,16 @@ if (substate != SUBSTATES_WORKER.none){
                 if (place_meeting(x, y, dropOffTarget)){
                     //Start the middle timer
                     middleTimer ++;
-                    if (middleTimer == 60){
+                    if (middleTimer == 80){
                         dropX = x;
                         dropY = y;
                         image_index = 0;
                         sprite_index = spriteDropResources;
+                        image_speed = 0;
+                    }else if (middleTimer &gt; 80){
                         image_speed = .10;
-                    }else if (middleTimer &gt; 60){
+                        sprite_index = spriteDropResources;
+                        scr_sprite_face_xpoint(dropOffTarget.x); 
                         if (image_index &gt;= 6){
                             switch (other.resourceSlot[0,0]){
                                 case RESOURCES.woodCommon:
