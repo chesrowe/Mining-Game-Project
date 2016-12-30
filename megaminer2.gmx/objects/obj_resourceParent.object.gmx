@@ -30,10 +30,10 @@ image_speed = 0;
 image_index = irandom(image_number);
 x += choose(1,2,4,6,10,12,-1,-2,-3,-4,-5,-10,-12);
 // if the tree is on a slope or not in the corrent place, delete it 
-if (place_meeting(x,y + 42,obj_tileSurfaceHillParent)){
+if (place_meeting(x, y + 22, obj_tileSurfaceHillParent)){
     instance_destroy();
 }
-if (!place_meeting(x,y + 42,obj_tileSurfaceParent)){
+if (!place_meeting(x, y + 22, obj_tileSurfaceParent)){
     instance_destroy();
 }
 
@@ -53,6 +53,7 @@ posDistance = 30;
 posTime = 30;
 midTime = 6;
 midRandom = 12;
+midDistance = 20;
 //Dev mode
 showDebug = 0;
 
@@ -124,7 +125,7 @@ if (exhausted){
 
 if (!global.building &amp;&amp; !global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent)){
     var rock = id;
-    scr_unit_array_set_resource_target('mining',rock);   
+    scr_unit_array_set_resource_target(STATES_WORKER.mining, rock);   
     scr_unit_array_clear();
 }else{
     scr_unit_array_clear();

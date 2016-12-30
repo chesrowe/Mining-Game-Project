@@ -880,10 +880,12 @@ enum STATES_WORKER{
 //Worker substates
 enum SUBSTATES_WORKER{
     none,
-    resourceDropOff,
-    goingTo,
-    toolPullout,
-    working
+    resourceDropOff, //working
+    goingTo, //working
+    toolPullout, //working
+    working, //working
+    resourcePosition, //working
+    sitting //idle
 }
 
 

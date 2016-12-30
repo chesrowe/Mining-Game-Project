@@ -70,7 +70,7 @@ moveTargetY = 0;
 moveXStart = 0;
 image_speed = 0;
 image_alpha = 1;
-resourcePosition = 0; //1 = move left , 2 = move right
+resourceDir = 0; //-1 = move left , 1 = move right
 positionTimer = 0;
 positionTime = 20;
 idleTimer = 0;
@@ -514,14 +514,25 @@ if (state == STATES_WORKER.moveToTarget &amp;&amp; !global.workerBuild){
     image_speed = walkingImageSpeed;
 }
 
+if (state == STATES_WORKER.moveToTarget &amp;&amp; !global.workerBuild &amp;&amp; moveToTimer &gt;= moveToTime){
+    scr_unit_move_avoiding(walkSpeed, run, scr_unit_dir_x(moveTargetX));
+    if (run){
+        sprite_index = spriteRunning;
+    }else{
+        sprite_index = spriteWalking;
+    }
+}
+
+
 //Stop when the target is reached
-if (state == STATES_WORKER.moveToTarget &amp;&amp; ceil(point_distance(x,y,moveTargetX,y)) &lt;= 1 &amp;&amp; moveToTimer &gt; moveToTime){
-    state = 'idle';
+if (state == STATES_WORKER.moveToTarget &amp;&amp; ceil(point_distance(x, y, moveTargetX, y)) &lt;= 1 &amp;&amp; moveToTimer &gt; moveToTime){
+    state = STATES_WORKER.idle;
     run = 0;
     moveToTimer = 0;
     image_speed = idleImageSpeed;
     sprite_index = spriteIdle;
-    
+    idleTimer = 0;
+    scr_unit_change_substate(SUBSTATES_WORKER.none);
     if (moveXStart == 'less'){
         scr_sprite_face_right();
     }else{
@@ -1262,55 +1273,6 @@ if (global.select &amp;&amp; selected == 1){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Working general
-
-if (comingFrom &amp;&amp; !instance_exists(dropOffTarget) &amp;&amp; state != STATES_WORKER.moveToTarget){
-    state = STATES_WORKER.idle;
-    sprite_index = spriteIdle;
-}
-//Moves the worker in position to work, if he is directly on top of the resource
-//1 = left, 2 = right
-if (resourcePosition == 1){
-    positionTimer ++;
-    scr_unit_move_avoiding(walkSpeed, 0, left);           
-}else if (resourcePosition == 2){
-    positionTimer ++;
-    scr_unit_move_avoiding(walkSpeed, 0, right);
-}
-// stop the movement
-if (positionTimer &gt;= positionTime &amp;&amp; (resourcePosition == 1 || resourcePosition == 2)){
-    positionTimer = 0;
-    goingTo = true;
-    resourcePosition = 0;    
-    middleTimer = 0;
-    if (x &gt; target.x){
-        
-    }
-}
-
-
-
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
             <string>///Multi-click select
 
 //State select
@@ -1349,30 +1311,16 @@ if (global.workerSelectAll &amp;&amp; distance_to_point((view_wview[0]/2),y) &lt
             <string>///Idle/Sitting
 
 //Make the worker sit down after they have stayed idle for while
-if (state == 'idle'){
+if (state == STATES_WORKER.idle &amp;&amp; substate != SUBSTATES_WORKER.sitting){
     sprite_index = spriteIdle;
     idleTimer ++;
     if (idleTimer &gt;= 600){
-        state = 'sitting';   
-        image_index = 0;
-        idleTimer = 0;     
+        scr_unit_change_substate(SUBSTATES_WORKER.sitting);      
     }   
 
 }
 
-//Sitting
 
-if (state == 'sitting'){
-    image_speed = .10
-    idleTimer = 0;
-    sprite_index = spriteSittingDown;
-    
-    //Make sure the animation stops on the sitting frame    
-    if (image_index &gt;= 5){
-        image_speed = 0;
-        image_index = 5;
-    }
-}
 
 
 
@@ -1747,105 +1695,88 @@ if (!falling &amp;&amp; place_meeting(x, y + 4, obj_tileSurfaceFlatParent) &amp;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Middle timer for all resources
-
-if (scr_worker_is_working() &amp;&amp; instance_exists(target)){ 
-    if (substate == SUBSTATES_WORKER.goingTo &amp;&amp; (scr_findXDiff(x, target.x) &lt; target.midDistance)){
-        middleTimer ++;
-    }
-}
-
-//Set the state specific 
-switch(state){
-    //Woodcutting
-    case STATES_WORKER.woodcutting:
-        var skillLevel = woodcuttingLevel;
-    break;
-    
-    //Mininig
-    case STATES_WORKER.mining:
-        var skillLevel = miningLevel;
-    break;
-    
-    //Farmining
-    case STATES_WORKER.farming:
-        var skillLevel = 1;
-    break;
-    
-    //Building
-    case STATES_WORKER.building:
-        var skillLevel = 1;
-    break;
-    
-    //Upgrading
-    case STATES_WORKER.upgrading:
-        var skillLevel = 1;
-    break;
-}
-
-
-
-//General middleTime stuff
-if (scr_worker_is_working() &amp;&amp; instance_exists(target) &amp;&amp; (scr_findXDiff(x, target.x) &lt; target.midDistance)){
-    if (substate == SUBSTATES_WORKER.goingTo &amp;&amp; (middleTimer &gt;= middleTime) &amp;&amp; skillLevel &gt;= target.levelReq){
-        scr_unit_change_substate(SUBSTATES_WORKER.toolPullout);   
-    }else if (skillLevel &lt; target.levelReq){
-        goingTo = false;
-        middleTimer = 0;
-        state = STATES_WORKER.idle;
-        var msg = instance_create(x, y, obj_workerDrawTimed);
-        msg.col = c_red;
-        msg.amount = "Can't do that."
-        image_speed = idleImageSpeed;
-        sprite_index = spriteIdle;    
-    }  
-    if (substate != SUBSTATES_WORKER.toolPullout &amp;&amp; workingSound){
-        target.animationTimer = 0;
-    }
-}
-
-
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
             <string>///Substates 
 
 if (substate != SUBSTATES_WORKER.none){
     switch(substate){
-        //goingTo (go to the target to begin working)\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        //goingTo (go to the target to begin working)\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.goingTo:
+             //If the target ceases to exist while the worker is going to, find the worker a new target.
+            if (!instance_exists(target)){
+                switch(state){
+                    case STATES_WORKER.woodcutting:
+                        target = instance_nearest(x, y, obj_treeParent);
+                        scr_unit_change_substate(SUBSTATES_WORKER.goingTo);    
+                    break;
+                }
+            
+            }
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
                 sprite_index = spriteWalking;
                 image_speed = walkingImageSpeed;
                 //Walk toward target
                 if (instance_exists(target)){
-                    scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dirX(target.x));
+                    scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dir_x(target.x));
                 }
             }else{
                 image_speed = 0;
             }
+            //Middle timer stuff
+            if (scr_worker_is_working() &amp;&amp; instance_exists(target)){ 
+                if (scr_find_x_diff(x, target.x) &lt; target.midDistance){
+                    middleTimer ++;
+                }
+            }
+            
+            //Set the state specific 
+            switch(state){
+                //Woodcutting
+                case STATES_WORKER.woodcutting:
+                    var skillLevel = woodcuttingLevel;
+                break;
+                
+                //Mininig
+                case STATES_WORKER.mining:
+                    var skillLevel = miningLevel;
+                break;
+                
+                //Farmining
+                case STATES_WORKER.farming:
+                    var skillLevel = 1;
+                break;
+                
+                //Building
+                case STATES_WORKER.building:
+                    var skillLevel = 1;
+                break;
+                
+                //Upgrading
+                case STATES_WORKER.upgrading:
+                    var skillLevel = 1;
+                break;
+            }
+            
+            //General middleTime stuff \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\s
+            if (scr_worker_is_working() &amp;&amp; instance_exists(target) &amp;&amp; (scr_find_x_diff(x, target.x) &lt; target.midDistance)){
+                if ((middleTimer &gt;= middleTime) &amp;&amp; skillLevel &gt;= target.levelReq){
+                    scr_unit_change_substate(SUBSTATES_WORKER.toolPullout);   
+                }else if (skillLevel &lt; target.levelReq){
+                    middleTimer = 0;
+                    state = STATES_WORKER.idle;
+                    var msg = instance_create(x, y, obj_workerDrawTimed);
+                    msg.col = c_red;
+                    msg.amount = "Can't do that."
+                    image_speed = idleImageSpeed;
+                    sprite_index = spriteIdle;    
+                }  
+                if (workingSound){
+                    target.animationTimer = 0;
+                }
+            }
         break;    
         
-        //toolPullOut \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        //toolPullOut \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.toolPullout:
             var toolTime, workSprite;
             //Get the animation times and sprites for the state of the worker
@@ -1885,7 +1816,6 @@ if (substate != SUBSTATES_WORKER.none){
             if (instance_exists(target)){
                 if (drawToolTimer &gt;= toolTime){
                     //play sound
-                    
                     drawTool = 0;
                     drawToolTimer = 0;
                     dir = point_direction(x, y, target.x, target.y);
@@ -1895,18 +1825,30 @@ if (substate != SUBSTATES_WORKER.none){
             }
         break;
         
-        //Working \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        //Working \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.working:
+            //If the target ceases to exist while the worker is working, find the worker a new target.
+            if (!instance_exists(target)){
+                
+                switch(state){
+                    case STATES_WORKER.woodcutting:
+                        target = instance_nearest(x, y, obj_treeParent);
+                        scr_unit_change_substate(SUBSTATES_WORKER.goingTo);    
+                    break;
+                }
+            
+            }
             workTimer ++; 
             //Sounds
-            if (round(image_index) == target.hitFrame &amp;&amp; workingSound == false) {
-                if (instance_exists(target)){
-                    dir = point_direction(x,y,target.x,target.y);
-                    part_particles_create(global.partMining, x + lengthdir_x(32,dir), y, global.partWoodChips, 10);
-                }
+            if (instance_exists(target) &amp;&amp; round(image_index) == target.hitFrame &amp;&amp; workingSound == false){
+                //Create particles for the tool hiting the resource
+                dir = point_direction(x, y, target.x, target.y);
+                part_particles_create(global.partMining, x + lengthdir_x(16, dir), y, global.partWoodChips, 10);
+                //Play the sound of the tool hiting the resource
                 workSound = audio_play_sound_at(target.toolSound[workRRPosition], x, y, 0, 1000, 200, 1, 0, workRRPosition); 
                 audio_sound_gain(workSound, global.sfxVol, 0);
                 audio_sound_pitch(workSound, random_range(.95,1.2)); 
+                //Increment the RR of the tool sounds
                 workRRPosition ++;
                 if (workRRPosition &gt; 3){
                     workRRPosition = irandom(2);
@@ -1914,11 +1856,11 @@ if (substate != SUBSTATES_WORKER.none){
                 workingSound = 1; 
             }   
             //Stop the sound from playing when it's not the hit frame of the sprite
-            if (round(image_index) != target.hitFrame){
+            if (instance_exists(target) &amp;&amp; round(image_index) != target.hitFrame){
                 workingSound = 0;
             }
             //Make the worker take the resources to the warehouse
-            if (workTimer &gt;= workTime){
+            if (workTimer &gt;= workTime &amp;&amp; instance_exists(target)){
                    scr_unit_change_substate(SUBSTATES_WORKER.resourceDropOff);
                     target.resourceLeft -= 100;
                     target.fall -= 100;
@@ -1961,17 +1903,20 @@ if (substate != SUBSTATES_WORKER.none){
                 }
         break;
         
-        //resourceDropOff \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        //resourceDropOff \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.resourceDropOff:
             //Make the worker walk toward the dropOffTarget
             if (instance_exists(dropOffTarget)){
                 if (middleTimer &lt; 80){
                     moveToTimer ++;
-                    scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dirX(dropOffTarget.x));
+                    scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dir_x(dropOffTarget.x));
                     sprite_index = spriteWalkingResources;   
                 }
                 //Collision with the warehouse
                 if (place_meeting(x, y, dropOffTarget)){
+                    if (x == target.x){
+                        middleTimer = 80;
+                    }
                     //Start the middle timer
                     middleTimer ++;
                     if (middleTimer == 80){
@@ -1994,7 +1939,13 @@ if (substate != SUBSTATES_WORKER.none){
                             }
                             //Set the worker going back to the target if the worker is working
                             if (scr_worker_is_working()){
-                                scr_unit_change_substate(SUBSTATES_WORKER.goingTo);
+                                if instance_exists(target){
+                                    scr_unit_change_substate(SUBSTATES_WORKER.goingTo);
+                                }else if (state == STATES_WORKER.woodcutting){
+                                    //If the tree has been cut down, find the worker a new tree
+                                    target = instance_nearest(x, y, obj_treeParent);
+                                    scr_unit_change_substate(SUBSTATES_WORKER.goingTo);
+                                }
                             }else{
                                 scr_unit_change_substate(SUBSTATES_WORKER.none);
                                 state = STATES_WORKER.idle;
@@ -2004,7 +1955,34 @@ if (substate != SUBSTATES_WORKER.none){
                 }
             }
         break;
-            
+        
+        //resourcePosition\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        case SUBSTATES_WORKER.resourcePosition:
+            //Start the movement
+            positionTimer ++;
+            scr_unit_move_avoiding(walkSpeed, 0, -(resourceDir)); 
+            sprite_index = spriteWalking;
+            // stop the movement
+            if (positionTimer &gt;= positionTime){
+                positionTimer = 0;  
+                //Make the worker go toward the target again or start working
+                if (scr_find_x_diff(x, target.x) &gt; target.midDistance){
+                    scr_unit_change_substate(SUBSTATES_WORKER.goingTo);
+                }else{
+                    scr_unit_change_substate(SUBSTATES_WORKER.toolPullout);
+                }
+            } 
+        break;
+        
+        //Sitting/////////////////////////////////////////////////////////////////////////////////////////////////////
+        case SUBSTATES_WORKER.sitting:
+            sprite_index = spriteSittingDown;
+            //Make sure the animation stops on the sitting frame    
+            if (image_index &gt;= 5){
+                image_speed = 0;
+                image_index = 5;
+            }    
+        break;      
     }
 }
 
@@ -2409,7 +2387,7 @@ if (state == 'upgrading' &amp;&amp; middleTimer &gt;= workMiddleTime &amp;&amp; 
             <string>///mine
 //Starts the worker mining
 
-if (other.id == target &amp;&amp; goingTo){
+/*if (other.id == target &amp;&amp; goingTo){
     middleTimer ++;
 }
 

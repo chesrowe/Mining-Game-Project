@@ -5,7 +5,7 @@
 //arugment 0 : what state to set the selected workers to
 //arugment 1 : What instance to set as the target
 
-for(i = 0;i < 100;i++){
+for(i = 0; i < 100; i++){
     if (instance_exists(global.unitSelected[i]) && global.unitSelected[i].object_index == obj_workerHumanP1){
         with (global.unitSelected[i]){
             //Set the dropOffTarget for the worker
@@ -19,28 +19,19 @@ for(i = 0;i < 100;i++){
                 gettingResources = true;
                 goingTo = false;
             }else{
-                gettingResources = false;
-                goingTo = true;
+                if (scr_find_x_diff(x, target.x) < target.posDistance){
+                    scr_unit_change_substate(SUBSTATES_WORKER.resourcePosition);
+                }else if (scr_find_x_diff(x, target.x) > target.posDistance && scr_find_x_diff(x, target.x) > target.midDistance){
+                    scr_unit_change_substate(SUBSTATES_WORKER.goingTo);    
+                }else{
+                    scr_unit_change_substate(SUBSTATES_WORKER.toolPullout);
+                }    
             }
-            substate = SUBSTATES_WORKER.goingTo;
-            workStart = false;
             workTimer = 0;
             selected = false;
             moveToTimer = 0;
             middleTimer = 0;
             middleTime = (target.midTime + irandom(target.midRandom));
-            if (point_distance(x, y, target.x, target.y) < target.posDistance){
-                if (x > target.x){
-                    resourcePosition = 2;
-                    positionTime = target.posTime;
-                    sprite_index = spriteWalking;
-                }else{
-                    resourcePosition = 1;
-                    positionTime = target.posTime;
-                    sprite_index = spriteWalking;
-                }
-                goingTo = 0;
-            }
         }
     }else if global.unitSelected[i] = noone{
             //clear unit array

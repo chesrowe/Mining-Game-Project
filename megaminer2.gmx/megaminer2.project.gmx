@@ -337,7 +337,7 @@
       <script>scripts\scr_unit_find_inventory_slot.gml</script>
       <script>scripts\scr_unit_move_avoiding.gml</script>
       <script>scripts\scr_unit_change_substate.gml</script>
-      <script>scripts\scr_unit_dirX.gml</script>
+      <script>scripts\scr_unit_dir_x.gml</script>
       <script>scripts\scr_worker_is_working.gml</script>
     </scripts>
     <scripts name="Misc">
@@ -347,7 +347,9 @@
       <script>scripts\scr_object_is_in_view.gml</script>
       <script>scripts\scr_create_floating_message.gml</script>
       <script>scripts\scr_mouse_over.gml</script>
-      <script>scripts\scr_findXDiff.gml</script>
+      <script>scripts\scr_find_x_diff.gml</script>
+      <script>scripts\scr_check_for_clickable_instances_under_mouse.gml</script>
+      <script>scripts\scr_instance_under_mouse.gml</script>
     </scripts>
     <scripts name="Dev Tools">
       <script>scripts\dev_tool_create_object.gml</script>
@@ -362,8 +364,6 @@
       <script>scripts\scr_sprite_face_right.gml</script>
       <script>scripts\scr_sprite_face_left.gml</script>
     </scripts>
-    <script>scripts\scr_check_for_clickable_instances_under_mouse.gml</script>
-    <script>scripts\scr_instance_under_mouse.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\ft_gameFont</font>
