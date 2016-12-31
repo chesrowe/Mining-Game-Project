@@ -26,9 +26,21 @@ switch (substateArg){
         workingLenDirY = lengthdir_y(13, point_direction(x, y, target.x, target.y));
         workTimer = 0;
         workTime = (target.workTimeBase + target.workTimeAdd);
-        sprite_index = spriteWoodcutting;
         image_index = 0; 
-        image_speed = woodcuttingImageSpeed;
+        //Set the sprite based on the target type
+        switch(target.object_index){
+            //woodcutting
+            case obj_treeParent:
+                sprite_index = spriteWoodcutting;
+                image_speed = woodcuttingImageSpeed;
+            break;
+            
+            //Mining
+            case obj_resourceParent:
+                sprite_index = spriteMining;
+                image_speed = woodcuttingImageSpeed; 
+            break;
+        }
     break;
     
     //goingTo

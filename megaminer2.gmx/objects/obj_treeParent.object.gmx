@@ -39,7 +39,7 @@ if (y &gt; instance_nearest(x,y,obj_tileSurfaceFlatParent)){
 //sets the sprites to use for the tree
 x += choose(irandom(16), - (irandom(16)));
 y -= choose(0,-1,-2);
-resource = 'wood';
+resource = RESOURCES.woodCommon;
 levelReq = 1;
 fall = 500; 
 falling = 0;

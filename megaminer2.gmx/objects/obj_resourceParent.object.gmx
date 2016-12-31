@@ -54,11 +54,47 @@ posTime = 30;
 midTime = 6;
 midRandom = 12;
 midDistance = 20;
+workTimeBase = 300; 
+workTimeAdd = irandom(round(workTimeBase / 3));
 //Dev mode
 showDebug = 0;
 
 
 
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Sound
+
+
+soundPlayed = 0;
+
+//Tool sounds (the sound the workers tool makes when hitting this resource)
+
+toolSound[0] = sd_pickaxe1; 
+toolSound[1] = sd_pickaxe2; 
+toolSound[2] = sd_pickaxe3; 
+toolSound[3] = sd_pickaxe4;
+
+hitFrame = 6;
 
 </string>
           </argument>

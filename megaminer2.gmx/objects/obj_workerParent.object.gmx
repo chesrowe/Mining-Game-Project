@@ -1863,7 +1863,10 @@ if (substate != SUBSTATES_WORKER.none){
             if (workTimer &gt;= workTime &amp;&amp; instance_exists(target)){
                    scr_unit_change_substate(SUBSTATES_WORKER.resourceDropOff);
                     target.resourceLeft -= 100;
-                    target.fall -= 100;
+                    //If the target is a tree decrement the fall variable in it
+                    if (object_is_ancestor(target, obj_treeParent)){
+                        target.fall -= 100;    
+                    }
                     //Randomizes the position of the cutting more when then the target tree has fallen
                     workMiddleTime =  (2 + irandom(target.midRandom));         
                     moveToTime = 2 + irandom(20);
