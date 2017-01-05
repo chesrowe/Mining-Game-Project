@@ -1917,7 +1917,7 @@ if (substate != SUBSTATES_WORKER.none){
                 }
                 //Collision with the warehouse
                 if (place_meeting(x, y, dropOffTarget)){
-                    if (x == target.x){
+                    if (instance_exists(target) &amp;&amp; x == target.x){
                         middleTimer = 80;
                     }
                     //Start the middle timer
@@ -1932,17 +1932,35 @@ if (substate != SUBSTATES_WORKER.none){
                         image_speed = .10;
                         sprite_index = spriteDropResources;
                         scr_sprite_face_xpoint(dropOffTarget.x); 
+                        //Add the resources to the dropoff target
                         if (image_index &gt;= 6){
-                            switch (other.resourceSlot[0,0]){
+                            other.resourceSlot[0,0] = RESOURCES.nothing;
+                            other.resourceSlot[0,1] = 0;
+                            switch (resourceSlot[0,0]){
+                                //Wood common
                                 case RESOURCES.woodCommon:
                                     global.woodCommon += 100;
-                                    other.resourceSlot[0,0] = RESOURCES.nothing;
-                                    other.resourceSlot[0,1] = 0;
+                                break;
+                                //Wood oak
+                                case RESOURCES.woodOak:
+                                    global.woodOak += 100;
+                                break;
+                                //Wood birch
+                                case RESOURCES.woodBirch:
+                                    global.woodBirch += 100;
+                                break;
+                                //Stone
+                                case RESOURCES.stone:
+                                    global.stone += 100;
+                                break;
+                                //Gold
+                                case RESOURCES.oreGold:
+                                    global.gold += 100;
                                 break;
                             }
                             //Set the worker going back to the target if the worker is working
                             if (scr_worker_is_working()){
-                                if instance_exists(target){
+                                if (instance_exists(target)){
                                     scr_unit_change_substate(SUBSTATES_WORKER.goingTo);
                                 }else if (state == STATES_WORKER.woodcutting){
                                     //If the tree has been cut down, find the worker a new tree
@@ -1985,432 +2003,24 @@ if (substate != SUBSTATES_WORKER.none){
                 image_speed = 0;
                 image_index = 5;
             }    
-        break;      
-    }
-}
-
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="4" ename="obj_warehouse">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Give resources/pick up resources
-
-//Starts middletimer/changes dropoff var
-/*if (substate == SUBSTATES_WORKER.resourceDropOff){
-    middleTimer ++;
-    if (middleTimer == 60){
-        supplyDropOff = true;
-        dropX = x;
-        dropY = y;
-        image_index = 0;
-    }
-}
-
-// Adds the resources and sets the worker back to working
-if (other.object_index = dropOffTarget &amp;&amp; middleTimer &gt;= 60 &amp;&amp; !gettingResources){
-    if (scr_worker_is_working &amp;&amp; SUBSTATES_WORKER.resourceDropOff){
+        break;  
         
-        if (!supplyDropOff){
-            switch (other.resourceSlot[0,0]){
-                case RESOURCES.woodCommon:
-                    global.woodCommon += 100;
-                    other.resourceSlot[0,0] = RESOURCES.nothing;
-                    other.resourceSlot[0,1] = 0;
-            }
-        }else{
-            //Chnage to the proper sprite
-            x = dropX;
-            y = dropY;
-            image_speed = .10;
-            sprite_index = spriteDropResources;   
-            
-            if (image_index &gt;= 6){
-                supplyDropOff = false;
-            }
-            
-        }
-        
-        
-    }
-} */
-//Get resources to bulid with
-if (gettingResources &amp;&amp; (state == STATES_WORKER.building || state == STATES_WORKER.upgrading) ){
-    middleTimer ++;
-    if (middleTimer &gt;= 55){
-        if (scr_unit_find_inventory_slot() != 0){
-            slot = scr_unit_find_inventory_slot();
-        }
-        //Give the worker the right resources
-        if (target.built != true){
-            if (scr_building_find_resource_needed() != -4){
-                var resource = scr_building_find_resource_needed();
-                switch(target.cost[resource,0]){
-                    case 'woodCommon':
-                        if (global.woodCommon &gt;= 40){
-                            global.woodCommon -= 40;
-                            gettingResources = 0;
-                            currentResource = 'woodCommon';
-                            goingTo = 1;
-                            middleTimer = 0;
-                            moveToTimer = 0;
-                            inv[slot,0] = 'woodCommon';
-                            inv[slot,1] = 'resource';
-                            inv[slot,2] = 40;
-                        }
-                    break;    
-                
-                }
-      
-            }else{
-                state = "idle";
-                goingTo = 0;
-                middleTimer = 0;
-                moveToTimer = 0;
-                gettingResources = 0;
-            }   
-        }
-    }
-    
-}
-
-
-
-
-
-
-
-
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Upgrading 
-
-//Get resources to bulid with
-if (gettingResources &amp;&amp; state == STATES_WORKER.upgrading){
-    middleTimer ++;
-    if (middleTimer &gt;= 55){
-        slot = scr_unit_find_inventory_slot();
-        //Give the worker the right resources
-        if (target.upgrade == 1){
-            if (scr_building_find_resource_needed_upgrade(target) != -4){
-                var resource = scr_building_find_resource_needed_upgrade(target);
-                //Put the proper resource into the worker's inventory
-                switch(target.upgradeCost[resource,0]){
-                    //Wood
-                    case 'woodCommon':
-                        if (global.woodCommon &gt;= 40){
-                            global.woodCommon -= 40;
-                            gettingResources = 0;
-                            currentResource = 'woodCommon';
-                            goingTo = 1;
-                            middleTimer = 0;
-                            moveToTimer = 0;
-                            inv[slot,0] = 'woodCommon';
-                            inv[slot,1] = 'resource';
-                            inv[slot,2] = 40;
-                        }
-                    break;   
-                    //food 
-                     case 'food':
-                        if (global.food &gt;= 40){
-                            global.food -= 40;
-                            gettingResources = 0;
-                            currentResource = 'food';
-                            goingTo = 1;
-                            middleTimer = 0;
-                            moveToTimer = 0;
-                            inv[slot,0] = 'food';
-                            inv[slot,1] = 'resource';
-                            inv[slot,2] = 40;
-                        }
-                    break;  
-                    //stone 
-                    case 'stone':
-                        if (global.stone &gt;= 40){
-                            global.stone -= 40;
-                            gettingResources = 0;
-                            currentResource = 'stone';
-                            goingTo = 1;
-                            middleTimer = 0;
-                            moveToTimer = 0;
-                            inv[slot,0] = 'stone';
-                            inv[slot,1] = 'resource';
-                            inv[slot,2] = 40;
-                        }
-                    break;  
-                    
-                
-                }
-      
-            }else{
-                state = "idle";
-                goingTo = 0;
-                middleTimer = 0;
-                moveToTimer = 0;
-                gettingResources = 0;
-            }   
-        }
-    }
-    
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="4" ename="obj_farmingPatch">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Start building 
-
-if (other.id == target &amp;&amp; goingTo){
-    if (middleTimer == 0){
-        workMiddleTime = (target.midTime + irandom(target.midRandom));
-    }
-    middleTimer ++;  
-     
-}
-
-if (state == 'building' &amp;&amp; middleTimer &gt;= workMiddleTime &amp;&amp; resourcePosition == 0 &amp;&amp; !gettingResources &amp;&amp; other.id == target){
-    workStart = 1;
-    drawTool = 1;
-    goingTo = 0;
-    image_index = 0;
-    moveToTimer = 0;
-    comingFrom = 0;
-    var workTimeAdd = irandom(round(baseBuildingTime/3)); 
-    workTime = (baseBuildingTime + workTimeAdd);
-    middleTimer = 0;
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///farming
-//Starts the worker farming
-
-if (other.id == target &amp;&amp; goingTo &amp;&amp; !global.workerBuild &amp;&amp; other.built){
-    middleTimer ++;
-    if (middleTimer == 1){
-        middleTime = (target.midTime + irandom(midRandom));
+        //ResourcePickup//////////////////////////////////////////////////////////////////////////////////////////gr///////////////////    
+        case SUBSTATES_WORKER.resourcePickup:
+            //Make the work get the resources need for building :)
+        break;
     }
 }
 
-if (state == 'farming' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; middleTimer &gt; middleTime){
-    drawTool = 1;
-    farmStart = 1; 
-    goingTo = 0;
-    comingFrom = 0; 
-    middleTimer = 0;
-    moveToTimer = 0;
-    randomize();
-    farmTimeAdd = irandom(round(baseFarmingTime/3));
-    farmingTime = (baseFarmingTime + cutTimeAdd);
-    workingLenDirX = lengthdir_x(40,point_direction(x,y,target.x,target.y));
-    workingLenDirY = lengthdir_y(26,point_direction(x,y,target.x,target.y));
-    image_index = 0;
-}else if (other.exhausted &amp;&amp; state == 'farming' &amp;&amp; !comingFrom){
-    waitingToFarm = 1;
-    goingTo = 0;
-    comingFrom = 0;    
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="4" ename="obj_buildingParent">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Start building 
 
-if (other.id == target &amp;&amp; goingTo &amp;&amp; state == 'building'){
-    if (middleTimer == 0){
-        workMiddleTime = (target.midTime + irandom(target.midRandom));
-    }
-    middleTimer ++;  
-     
-}
 
-if (state == 'building' &amp;&amp; middleTimer &gt;= workMiddleTime &amp;&amp; resourcePosition == 0 &amp;&amp; !gettingResources &amp;&amp; other.id == target){
-    workStart = 1;
-    drawTool = 1;
-    goingTo = 0;
-    image_index = 0;
-    moveToTimer = 0;
-    comingFrom = 0;
-    var workTimeAdd = irandom(round(baseBuildingTime/3)); 
-    workTime = (baseBuildingTime + workTimeAdd);
-    middleTimer = 0;
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Start upgrading
 
-if (other.id == target &amp;&amp; goingTo &amp;&amp; state == 'upgrading'){
-    if (middleTimer == 0){
-        workMiddleTime = (target.midTime + irandom(target.midRandom));
-    }
-    middleTimer ++;  
-     
-}
 
-if (state == 'upgrading' &amp;&amp; middleTimer &gt;= workMiddleTime &amp;&amp; resourcePosition == 0 &amp;&amp; !gettingResources &amp;&amp; other.id == target){
-    workStart = 1;
-    drawTool = 1;
-    goingTo = 0;
-    image_index = 0;
-    moveToTimer = 0;
-    comingFrom = 0;
-    var workTimeAdd = irandom(round(baseBuildingTime/3)); 
-    workTime = (baseBuildingTime + workTimeAdd);
-    middleTimer = 0;
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="4" ename="obj_resourceParent">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///mine
-//Starts the worker mining
 
-/*if (other.id == target &amp;&amp; goingTo){
-    middleTimer ++;
-}
 
-if (state == 'mining' &amp;&amp; other.id == target &amp;&amp; goingTo &amp;&amp; other.exhausted = 0 &amp;&amp; miningLevel &gt;= other.levelReq &amp;&amp; middleTimer &gt; middleTimeMining &amp;&amp; resourcePosition == 0){
-    randomize();
-    mineStart = 1;
-    drawTool = 1; 
-    goingTo = 0;
-    image_index = 0;
-    moveToTimer = 0;
-    comingFrom = 0;
-    mineTimeAdd = irandom(round(baseMiningTime/3));
-    miningTime = (baseMiningTime + mineTimeAdd);
-    middleTimer = 0;
-    comingFrom = 0; 
-}else if (other.exhausted &amp;&amp; state == 'mining'){
-    waitingToMine = 1;
-    goingTo = 0;
-    comingFrom = 0;    
-}
+
+
+
 </string>
           </argument>
         </arguments>

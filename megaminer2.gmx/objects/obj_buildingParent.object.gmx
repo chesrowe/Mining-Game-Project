@@ -46,6 +46,13 @@ totalResourcesNeeded = 0;
 amountBuilt = 0;
 devMode = 0;
 xp = 100; //xp a worker gets for building
+posDistance = 2;
+posTime = 30;
+midTime = 2;
+midRandom = 30;
+midDistance = sprite_width / 2;
+workTimeBase = 300; 
+workTimeAdd = irandom(round(workTimeBase / 3));
 ///Being built specific
 //Cost array table 
 //cost[0,0]
@@ -150,6 +157,16 @@ sound[1] = sd_windowPopUp2;
 sound[2] = sd_windowPopUp3;
 sound[3] = sd_windowPopUp4;
 soundRR = 0;
+
+//Tool sounds (the sound the workers tool makes when building/upgrading thid building)
+
+toolSound[0] = sd_pickaxe1; 
+toolSound[1] = sd_pickaxe2; 
+toolSound[2] = sd_pickaxe3; 
+toolSound[3] = sd_pickaxe4;
+
+hitFrame = 5;
+
 </string>
           </argument>
         </arguments>
@@ -176,18 +193,18 @@ upgrade = 0;
 amountUpgraded = 0;
 
 //wood - 200
-upgradeCost[0,0] = 'woodCommon'; //type
+upgradeCost[0,0] = RESOURCES.woodCommon; //type
 upgradeCost[0,1] = 200; //Amount needed
 upgradeCost[0,2] = 200; //Amount left
 //Stone - 200
-upgradeCost[1,0] = 'stone';
+upgradeCost[1,0] = RESOURCES.stone;
 upgradeCost[1,1] = 200;
 upgradeCost[1,2] = 200;
 //food - 200
-upgradeCost[2,0] = 'food';
+upgradeCost[2,0] = RESOURCES.food;
 upgradeCost[2,1] = 200;
 upgradeCost[2,2] = 200;
-//next (empty)
+//next (empty) //One empty slot has to be at the end!!
 upgradeCost[3,0] = -4;
 upgradeCost[3,1] = -4;
 upgradeCost[3,2] = -4;
@@ -612,7 +629,7 @@ if (global.selectedNumber &gt; 0 &amp;&amp; scr_unit_array_check_for_worker() &a
     (obj_globalCon.buildButton).visible = 0;
     global.workerBuildMenu = 0;
     var target = id;
-    scr_unit_array_set_resource_target('building',target);   
+    scr_unit_array_set_resource_target(STATES_WORKER.building, target);   
     scr_unit_array_clear();    
 }
 </string>
@@ -643,7 +660,7 @@ if (global.selectedNumber &gt; 0 &amp;&amp; scr_unit_array_check_for_worker() &a
     (obj_globalCon.buildButton).visible = 0;
     global.workerBuildMenu = 0;
     var target = id;
-    scr_unit_array_set_resource_target('upgrading',target);   
+    scr_unit_array_set_resource_target(STATES_WORKER.upgrading, target);   
     scr_unit_array_clear();    
 }
 </string>

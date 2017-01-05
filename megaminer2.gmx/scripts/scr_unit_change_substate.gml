@@ -28,18 +28,17 @@ switch (substateArg){
         workTime = (target.workTimeBase + target.workTimeAdd);
         image_index = 0; 
         //Set the sprite based on the target type
-        switch(target.object_index){
-            //woodcutting
-            case obj_treeParent:
-                sprite_index = spriteWoodcutting;
-                image_speed = woodcuttingImageSpeed;
-            break;
-            
-            //Mining
-            case obj_resourceParent:
-                sprite_index = spriteMining;
-                image_speed = woodcuttingImageSpeed; 
-            break;
+        if (object_is_ancestor(target.object_index, obj_treeParent)){
+            sprite_index = spriteWoodcutting;
+            image_speed = woodcuttingImageSpeed;
+        }
+        if (object_is_ancestor(target.object_index, obj_resourceParent)){
+            sprite_index = spriteMining;
+            image_speed = miningImageSpeed;
+        }
+        if (object_is_ancestor(target.object_index, obj_buildingParent)){
+            sprite_index = spriteBuilding;
+            image_speed = buildingImageSpeed;
         }
     break;
     

@@ -885,7 +885,8 @@ enum SUBSTATES_WORKER{
     toolPullout, //working
     working, //working
     resourcePosition, //working
-    sitting //idle
+    sitting, //idle
+    resourcePickup //Building/upgrading
 }
 
 

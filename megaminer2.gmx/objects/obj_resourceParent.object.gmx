@@ -49,11 +49,11 @@ levelReq = 1;
 exPopUp = 0;
 xp = 25;
 gemChance = 10;
-posDistance = 30;
+posDistance = 20;
 posTime = 30;
 midTime = 6;
-midRandom = 12;
-midDistance = 20;
+midRandom = 15;
+midDistance = 30;
 workTimeBase = 300; 
 workTimeAdd = irandom(round(workTimeBase / 3));
 //Dev mode
