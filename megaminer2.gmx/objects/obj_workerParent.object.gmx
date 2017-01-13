@@ -1704,6 +1704,7 @@ if (substate != SUBSTATES_WORKER.none){
              //If the target ceases to exist while the worker is going to, find the worker a new target.
             if (!instance_exists(target)){
                 switch(state){
+                    //woodcutting
                     case STATES_WORKER.woodcutting:
                         target = instance_nearest(x, y, obj_treeParent);
                         scr_unit_change_substate(SUBSTATES_WORKER.goingTo);    
@@ -1729,7 +1730,7 @@ if (substate != SUBSTATES_WORKER.none){
                 }
             }
             
-            //Set the state specific 
+            //Set the state specific level reqs
             switch(state){
                 //Woodcutting
                 case STATES_WORKER.woodcutting:
@@ -1829,8 +1830,8 @@ if (substate != SUBSTATES_WORKER.none){
         case SUBSTATES_WORKER.working:
             //If the target ceases to exist while the worker is working, find the worker a new target.
             if (!instance_exists(target)){
-                
                 switch(state){
+                    //woodcutting
                     case STATES_WORKER.woodcutting:
                         target = instance_nearest(x, y, obj_treeParent);
                         scr_unit_change_substate(SUBSTATES_WORKER.goingTo);    
@@ -1934,8 +1935,8 @@ if (substate != SUBSTATES_WORKER.none){
                         scr_sprite_face_xpoint(dropOffTarget.x); 
                         //Add the resources to the dropoff target
                         if (image_index &gt;= 6){
-                            other.resourceSlot[0,0] = RESOURCES.nothing;
-                            other.resourceSlot[0,1] = 0;
+                            resourceSlot[0,0] = RESOURCES.nothing;
+                            resourceSlot[0,1] = 0;
                             switch (resourceSlot[0,0]){
                                 //Wood common
                                 case RESOURCES.woodCommon:
@@ -2007,7 +2008,83 @@ if (substate != SUBSTATES_WORKER.none){
         
         //ResourcePickup//////////////////////////////////////////////////////////////////////////////////////////gr///////////////////    
         case SUBSTATES_WORKER.resourcePickup:
-            //Make the work get the resources need for building :)
+            //Make the worker walk toward the dropOffTarget
+            if (instance_exists(dropOffTarget)){
+                if (middleTimer &lt; 80){
+                    moveToTimer ++;
+                    scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dir_x(dropOffTarget.x));
+                    sprite_index = spriteWalkingResources;   
+                }
+                //Collision with the warehouse
+                if (place_meeting(x, y, dropOffTarget)){
+                    if (instance_exists(target) &amp;&amp; x == target.x){
+                        middleTimer = 80;
+                    }
+                    //Start the middle timer
+                    middleTimer ++;
+                    if (middleTimer == 80){
+                        dropX = x;
+                        dropY = y;
+                        image_index = 0;
+                        sprite_index = spriteDropResources;
+                        image_speed = 0;
+                    }else if (middleTimer &gt; 80){
+                        image_speed = .10;
+                        sprite_index = spriteDropResources;
+                        scr_sprite_face_xpoint(dropOffTarget.x); 
+                        //Add the resources needed to the worker
+                        if (image_index &gt;= 6){
+                            var resourceNeeded = scr_building_find_resource_needed();
+                            switch (target.cost[resourceNeeded,0]){
+                                //Wood common
+                                case RESOURCES.woodCommon:
+                                    //If the warehouse has less than 100 of the resource but more than 0
+                                    if (scr_building_check_amount_resources_needed() &gt; global.woodCommon){ 
+                                        resourceSlot[0,0] = RESOURCES.woodCommon;
+                                        resourceSlot[0,1] = global.woodCommon;
+                                        global.woodCommon = 0;
+                                    }
+                                    //if the warehouse has more than 100 of the resource
+                                    if (scr_building_check_amount_resources_needed() &gt; 100){
+                                        resourceSlot[0,0] = RESOURCES.woodCommon;
+                                        resourceSlot[0,1] = 100;
+                                        global.woodCommon -= 100;
+                                    }
+                                break;
+                                //Wood oak
+                                case RESOURCES.woodOak:
+                                    global.woodOak -= 100;
+                                break;
+                                //Wood birch
+                                case RESOURCES.woodBirch:
+                                    global.woodBirch -= 100;
+                                break;
+                                //Stone
+                                case RESOURCES.stone:
+                                    global.stone -= 100;
+                                break;
+                                //Gold
+                                case RESOURCES.oreGold:
+                                    global.gold -= 100;
+                                break;
+                            }
+                            //Set the worker going back to the target if the worker is working
+                            if (scr_worker_is_working()){
+                                if (instance_exists(target)){
+                                    scr_unit_change_substate(SUBSTATES_WORKER.goingTo);
+                                }else if (state == STATES_WORKER.woodcutting){
+                                    //If the tree has been cut down, find the worker a new tree
+                                    target = instance_nearest(x, y, obj_treeParent);
+                                    scr_unit_change_substate(SUBSTATES_WORKER.goingTo);
+                                }
+                            }else if (state != STATES_WORKER.building || state != STATES_WORKER.upgrading){
+                                scr_unit_change_substate(SUBSTATES_WORKER.none);
+                                state = STATES_WORKER.idle;
+                            }
+                        }    
+                    }   
+                }
+            }
         break;
     }
 }

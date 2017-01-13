@@ -56,12 +56,14 @@ workTimeAdd = irandom(round(workTimeBase / 3));
 ///Being built specific
 //Cost array table 
 //cost[0,0]
-cost[0,0] = 'woodCommon'; //Type
+cost[0,0] = RESOURCES.woodCommon; //Type
 cost[0,1] = 400; //Total amount needed
 cost[0,2] = 400; //Amount left
+
 cost[1,0] = -1; 
 cost[1,1] = -1; 
 cost[1,2] = -1; 
+
 cost[2,0] = -1; 
 cost[2,1] = -1; 
 cost[2,2] = -1; 

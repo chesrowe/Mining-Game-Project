@@ -16,8 +16,8 @@ for(i = 0; i < 100; i++){
             targetType = argument1.object_index;
             state = argument0;
             if (state == STATES_WORKER.building || state == STATES_WORKER.upgrading){
-                gettingResources = true;
-                goingTo = false;
+                scr_unit_change_substate(SUBSTATES_WORKER.resourcePickup);
+                
             }else{
                 if (scr_find_x_diff(x, target.x) < target.posDistance){
                     scr_unit_change_substate(SUBSTATES_WORKER.resourcePosition);

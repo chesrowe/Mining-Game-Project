@@ -364,6 +364,7 @@
       <script>scripts\scr_sprite_face_right.gml</script>
       <script>scripts\scr_sprite_face_left.gml</script>
     </scripts>
+    <script>scripts\scr_building_check_amount_resources_needed.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\ft_gameFont</font>
