@@ -157,12 +157,15 @@ workTimeAdd = irandom(round(baseWorkTime / 3));
 workTime = (baseWorkTime + workTimeAdd);
 workingSound = false;
 waitingToWork = 0;
+toolTime = 0;
+
 
 //Building
 buildingImageSpeed = .11;
 baseBuildingTime = 200;
 gettingResources = 0;
 currentResource = -1;
+drawToolTimeBuilding = 42;
 
 //mining
 baseMiningTime = 400;
@@ -414,6 +417,7 @@ inv[3,6] = -1;
 
 //Resource slot
 
+resourceSlotMax = 100; //the maximum amount the slot can hold
 resourceSlot[0,0] = RESOURCES.nothing; //Resource ID
 resourceSlot[0,1] = 0; //Amount
 
@@ -516,10 +520,14 @@ if (state == STATES_WORKER.moveToTarget &amp;&amp; !global.workerBuild){
 
 if (state == STATES_WORKER.moveToTarget &amp;&amp; !global.workerBuild &amp;&amp; moveToTimer &gt;= moveToTime){
     scr_unit_move_avoiding(walkSpeed, run, scr_unit_dir_x(moveTargetX));
-    if (run){
+    if (run &amp;&amp; scr_worker_resource_slot_is_empty()){
         sprite_index = spriteRunning;
     }else{
-        sprite_index = spriteWalking;
+        if (scr_worker_resource_slot_is_empty()){
+            sprite_index = spriteWalking;
+        }else{
+            sprite_index = spriteWalkingResources;
+        }
     }
 }
 
@@ -563,7 +571,7 @@ if (state == STATES_WORKER.moveToTarget &amp;&amp; ceil(point_distance(x, y, mov
 
 //footsteps
 if (state != "idle"){
-    if (gettingResources || goingTo || comingFrom || state == 'moveToTarget'){
+    if (substate == SUBSTATES_WORKER.resourcePickup || substate == SUBSTATES_WORKER.goingTo || substate == SUBSTATES_WORKER.resourceDropOff || state == STATES_WORKER.moveToTarget){
         if (round(image_index) == 1 &amp;&amp; stepSound == 0 || round(image_index) == 5 &amp;&amp; stepSound == 0){
             randomize();
             if (!audio_is_playing(footstepGrassSound[footstepRRPosition])){
@@ -1352,142 +1360,9 @@ if (state == STATES_WORKER.idle &amp;&amp; substate != SUBSTATES_WORKER.sitting)
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Building 
-
-if (!dying){
-    
-    if (state == STATES_WORKER.building){
-        if (!gettingResources){
-            moveToTimer ++;
-            image_speed = walkingImageSpeed;
-            //Workers walks to the building to bulid it
-            if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalkingResources;
-                if (target.x &gt; x &amp;&amp; !workStart &amp;&amp; goingTo){
-                    image_xscale = 1;    
-                    scr_unit_move_avoiding(walkSpeed,0,right);  
-                }else if(!workStart &amp;&amp; goingTo){
-                    image_xscale = -1;
-                    scr_unit_move_avoiding(walkSpeed,0,left); 
-                }
-            }
-        }else{
-            moveToTimer ++;
-            image_speed = walkingImageSpeed;
-            //Worker goes to get resources from the stockpile to build the building with
-            if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalking;
-                if (obj_warehouse.x &gt; x &amp;&amp; !workStart &amp;&amp; gettingResources){
-                    image_xscale = 1;
-                    scr_unit_move_avoiding(walkSpeed,0,right);  
-                }else if(!workStart &amp;&amp; gettingResources){
-                    image_xscale = -1;
-                    scr_unit_move_avoiding(walkSpeed,0,left);  
-                }
-            }
-        }
-        //Starts the worker to building
-        if (workStart){
-            image_speed = miningImageSpeed;
-            if (!drawTool){
-                workTimer ++;
-                //set the sprite
-                sprite_index = spriteBuilding;
-                //Triggers sound and particles
-                if (round(image_index) == 5 &amp;&amp; cutSound == 0){
-                    var sound = audio_play_sound_at(pickSound[workRRPosition],x,y,0,1000,200,1,0,999999);  
-                    audio_sound_gain(sound,global.sfxVol,0);
-                    workRRPosition ++;
-                    if (workRRPosition &gt; 3){
-                        randomize();
-                        workRRPosition = irandom(2);
-                    }
-                    cutSound = 1; 
-                } 
-                if (round(image_index) != 5){
-                    cutSound = 0;
-                }
-                //Makes miner take the resources to the stockpile
-                if (workTimer &gt;= workTime){
-                    goingTo = 0;
-                    gettingResources = 1;
-                    workStart = 0;
-                    workTimer = 0;
-                    moveToTime = 2 + irandom(20);
-                    moveToTimer = 0;
-                    middleTimer = 0;
-                    workTime = (baseWorkTime + workTimeAdd);
-                    //pops up xp gained
-                    var targetXp = string(target.xp);
-                    with(instance_create(x,y,obj_workerDrawTimed)){
-                        amount = ("+" + targetXp + "XP");
-                        col = c_yellow;
-                        myWorker = other.id;
-                    }
-                    //Take away the resources the worker was building with
-                    for (i = 0; i &lt; 3; i++){
-                        if (target.cost[i,0] == currentResource){
-                            target.cost[i,2] -= 40;
-                            target.amountBuilt += 40;
-                            for (a = 0; a &lt;= 10; a++;){
-                                if (inv[a,0] == currentResource){
-                                    inv[a,0] = -1;
-                                    inv[a,1] = -1;
-                                    inv[a,2] = -1;
-                                    break;
-                                }
-                            }
-                            currentResource = -1;
-                            break;
-                        }   
-                    }
-                    
-                }
-            }else{
-            //starts the pulling out tool animation
-                    sprite_index = spriteBuildingDrawTool;
-                    drawToolTimer ++;
-                if (drawToolTimer &gt;= drawToolTimeWoodcutting){
-                    drawTool = 0;
-                    drawToolTimer = 0;
-                    dir = point_direction(x,y,target.x,target.y);
-                }
-            }
-        }
-        if (target.built){
-            if (target.object_index = obj_lift){
-                (target.myElevator).y = target.y + 10;
-            }
-            middleTimer = 0;
-            goingTo = 0;
-            gettingResources = 0;
-            state = STATES_WORKER.idle;
-        }            
-    }
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
             <string>///Upgrading
 
-if (!dying){
+/*if (!dying){
     
     if (state == 'upgrading'){
         if (!gettingResources){
@@ -1699,7 +1574,7 @@ if (!falling &amp;&amp; place_meeting(x, y + 4, obj_tileSurfaceFlatParent) &amp;
 
 if (substate != SUBSTATES_WORKER.none){
     switch(substate){
-        //goingTo (go to the target to begin working)\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        //goingTo \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.goingTo:
              //If the target ceases to exist while the worker is going to, find the worker a new target.
             if (!instance_exists(target)){
@@ -1714,10 +1589,9 @@ if (substate != SUBSTATES_WORKER.none){
             }
             moveToTimer ++;
             if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalking;
-                image_speed = walkingImageSpeed;
                 //Walk toward target
                 if (instance_exists(target)){
+                    image_speed = walkingImageSpeed;
                     scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dir_x(target.x));
                 }
             }else{
@@ -1742,7 +1616,7 @@ if (substate != SUBSTATES_WORKER.none){
                     var skillLevel = miningLevel;
                 break;
                 
-                //Farmining
+                //Farming
                 case STATES_WORKER.farming:
                     var skillLevel = 1;
                 break;
@@ -1758,7 +1632,7 @@ if (substate != SUBSTATES_WORKER.none){
                 break;
             }
             
-            //General middleTime stuff \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\s
+            //General middleTime stuff \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             if (scr_worker_is_working() &amp;&amp; instance_exists(target) &amp;&amp; (scr_find_x_diff(x, target.x) &lt; target.midDistance)){
                 if ((middleTimer &gt;= middleTime) &amp;&amp; skillLevel &gt;= target.levelReq){
                     scr_unit_change_substate(SUBSTATES_WORKER.toolPullout);   
@@ -1777,7 +1651,7 @@ if (substate != SUBSTATES_WORKER.none){
             }
         break;    
         
-        //toolPullOut \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        //toolPullOut \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.toolPullout:
             var toolTime, workSprite;
             //Get the animation times and sprites for the state of the worker
@@ -1826,7 +1700,7 @@ if (substate != SUBSTATES_WORKER.none){
             }
         break;
         
-        //Working \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        //Working \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.working:
             //If the target ceases to exist while the worker is working, find the worker a new target.
             if (!instance_exists(target)){
@@ -1848,7 +1722,7 @@ if (substate != SUBSTATES_WORKER.none){
                 //Play the sound of the tool hiting the resource
                 workSound = audio_play_sound_at(target.toolSound[workRRPosition], x, y, 0, 1000, 200, 1, 0, workRRPosition); 
                 audio_sound_gain(workSound, global.sfxVol, 0);
-                audio_sound_pitch(workSound, random_range(.95,1.2)); 
+                audio_sound_pitch(workSound, random_range(.95, 1.2)); 
                 //Increment the RR of the tool sounds
                 workRRPosition ++;
                 if (workRRPosition &gt; 3){
@@ -1862,8 +1736,45 @@ if (substate != SUBSTATES_WORKER.none){
             }
             //Make the worker take the resources to the warehouse
             if (workTimer &gt;= workTime &amp;&amp; instance_exists(target)){
-                   scr_unit_change_substate(SUBSTATES_WORKER.resourceDropOff);
-                    target.resourceLeft -= 100;
+                   if (state != STATES_WORKER.building &amp;&amp; state != STATES_WORKER.upgrading){
+                        scr_unit_change_substate(SUBSTATES_WORKER.resourceDropOff);
+                        target.resourceLeft -= resourceSlotMax;
+                    }else{
+                        //Take the resources the worker was building/upgrading with away
+                        if (state == STATES_WORKER.upgrading){
+                            for (i = 0; i &lt; 3; i++){
+                                if (target.upgradeCost[i,0] == currentResource){
+                                    target.upgradeCost[i,2] -= resourceSlot[0,1];
+                                    target.amountUpgraded += resourceSlot[0,1];
+                                    resourceSlot[0,0] = RESOURCES.nothing;
+                                    resourceSlot[0,1] = 0;
+                                    currentResource = -1;
+                                    break;
+                                 
+                                } 
+                            }
+                        }
+                        //Building
+                        if (state == STATES_WORKER.building){
+                            for (i = 0; i &lt; 3; i++){
+                                if (target.cost[i,0] == currentResource){
+                                    target.cost[i,2] -= resourceSlot[0,1];
+                                    target.amountBuilt += resourceSlot[0,1];
+                                    resourceSlot[0,0] = RESOURCES.nothing;
+                                    resourceSlot[0,1] = 0;
+                                    currentResource = -1;
+                                    break;
+                                }   
+                            }
+                        }
+                    
+                        
+                        
+                        //Make the worker go pick up more resources to build with
+                        scr_unit_change_substate(SUBSTATES_WORKER.resourcePickup);
+                        resourceSlot[0,0] = RESOURCES.nothing;
+                        resourceSlot[0,1] = 0;
+                    }
                     //If the target is a tree decrement the fall variable in it
                     if (object_is_ancestor(target, obj_treeParent)){
                         target.fall -= 100;    
@@ -1883,8 +1794,10 @@ if (substate != SUBSTATES_WORKER.none){
                         middleTimer = workMiddleTime;
                     }
                     //Put the just worked resources into the inventory
-                    resourceSlot[0,0] = target.resource
-                    resourceSlot[0,0] = 100;
+                    if (state != STATES_WORKER.building &amp;&amp; state != STATES_WORKER.upgrading){
+                        resourceSlot[0,0] = target.resource
+                        resourceSlot[0,1] = resourceSlotMax;
+                    }
                     //Levels the worker up if he has enough XP
                     /*if (xpWoodcutting &gt;= xpNeededWoodcutting){
                         with(instance_create(x, y, obj_workerDrawTimed)){
@@ -1905,9 +1818,18 @@ if (substate != SUBSTATES_WORKER.none){
                         middleTimer = 50;
                     } */
                 }
+                //If the worker is building or upgrading a sturcture and the structure is built make the worker go idle
+                if (state == STATES_WORKER.building &amp;&amp; target.built){
+                    state = STATES_WORKER.idle;
+                    scr_unit_change_substate(SUBSTATES_WORKER.none);
+                }
+                if (state == STATES_WORKER.upgrading &amp;&amp; !target.upgrade){
+                    state = STATES_WORKER.idle;
+                    scr_unit_change_substate(SUBSTATES_WORKER.none);
+                }
         break;
         
-        //resourceDropOff \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        //resourceDropOff \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.resourceDropOff:
             //Make the worker walk toward the dropOffTarget
             if (instance_exists(dropOffTarget)){
@@ -1935,30 +1857,30 @@ if (substate != SUBSTATES_WORKER.none){
                         scr_sprite_face_xpoint(dropOffTarget.x); 
                         //Add the resources to the dropoff target
                         if (image_index &gt;= 6){
-                            resourceSlot[0,0] = RESOURCES.nothing;
-                            resourceSlot[0,1] = 0;
                             switch (resourceSlot[0,0]){
                                 //Wood common
                                 case RESOURCES.woodCommon:
-                                    global.woodCommon += 100;
+                                    global.woodCommon += resourceSlotMax;
                                 break;
                                 //Wood oak
                                 case RESOURCES.woodOak:
-                                    global.woodOak += 100;
+                                    global.woodOak += resourceSlotMax;
                                 break;
                                 //Wood birch
                                 case RESOURCES.woodBirch:
-                                    global.woodBirch += 100;
+                                    global.woodBirch += resourceSlotMax;
                                 break;
                                 //Stone
                                 case RESOURCES.stone:
-                                    global.stone += 100;
+                                    global.stone += resourceSlotMax;
                                 break;
                                 //Gold
                                 case RESOURCES.oreGold:
-                                    global.gold += 100;
+                                    global.gold += resourceSlotMax;
                                 break;
                             }
+                            resourceSlot[0,0] = RESOURCES.nothing;
+                            resourceSlot[0,1] = 0;
                             //Set the worker going back to the target if the worker is working
                             if (scr_worker_is_working()){
                                 if (instance_exists(target)){
@@ -1978,7 +1900,7 @@ if (substate != SUBSTATES_WORKER.none){
             }
         break;
         
-        //resourcePosition\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        //resourcePosition\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.resourcePosition:
             //Start the movement
             positionTimer ++;
@@ -1996,7 +1918,7 @@ if (substate != SUBSTATES_WORKER.none){
             } 
         break;
         
-        //Sitting/////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Sitting/////////////////////////////////////////////////////////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.sitting:
             sprite_index = spriteSittingDown;
             //Make sure the animation stops on the sitting frame    
@@ -2006,78 +1928,293 @@ if (substate != SUBSTATES_WORKER.none){
             }    
         break;  
         
-        //ResourcePickup//////////////////////////////////////////////////////////////////////////////////////////gr///////////////////    
+        //ResourcePickup/////////////////////////////////////////////////////////////////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\  
         case SUBSTATES_WORKER.resourcePickup:
             //Make the worker walk toward the dropOffTarget
             if (instance_exists(dropOffTarget)){
+                //Check to make sure the building still needs to be built/upgraded
+                if (state == STATES_WORKER.building){
+                    if (target.built){
+                        scr_unit_change_substate(SUBSTATES_WORKER.none);
+                        state = STATES_WORKER.idle;   
+                    }
+                }
+                if (state == STATES_WORKER.upgrading){
+                    if (!target.upgrade){
+                        scr_unit_change_substate(SUBSTATES_WORKER.none);
+                        state = STATES_WORKER.idle;       
+                    }
+                }
+                //Worker walk to dropOffTarget
                 if (middleTimer &lt; 80){
                     moveToTimer ++;
+                    if (instance_exists(target) &amp;&amp; (x == dropOffTarget.x)){
+                        middleTimer = 80;
+                    }
                     scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dir_x(dropOffTarget.x));
-                    sprite_index = spriteWalkingResources;   
+                    //sprite_index = spriteWalking;   
                 }
                 //Collision with the warehouse
                 if (place_meeting(x, y, dropOffTarget)){
-                    if (instance_exists(target) &amp;&amp; x == target.x){
-                        middleTimer = 80;
-                    }
-                    //Start the middle timer
-                    middleTimer ++;
+                    //Check the middle timer
                     if (middleTimer == 80){
+                        middleTimer ++;
                         dropX = x;
                         dropY = y;
                         image_index = 0;
-                        sprite_index = spriteDropResources;
                         image_speed = 0;
                     }else if (middleTimer &gt; 80){
+                        //Check the resourceSlot for resources and deposit them if there are any
+                        if (resourceSlot[0,0] != RESOURCES.nothing){
+                            scr_worker_resource_slot_deposit(resourceSlotMax);
+                        }
                         image_speed = .10;
-                        sprite_index = spriteDropResources;
+                        //sprite_index = spriteDropResources;
                         scr_sprite_face_xpoint(dropOffTarget.x); 
                         //Add the resources needed to the worker
-                        if (image_index &gt;= 6){
-                            var resourceNeeded = scr_building_find_resource_needed();
-                            switch (target.cost[resourceNeeded,0]){
-                                //Wood common
-                                case RESOURCES.woodCommon:
-                                    //If the warehouse has less than 100 of the resource but more than 0
-                                    if (scr_building_check_amount_resources_needed() &gt; global.woodCommon){ 
-                                        resourceSlot[0,0] = RESOURCES.woodCommon;
-                                        resourceSlot[0,1] = global.woodCommon;
-                                        global.woodCommon = 0;
-                                    }
-                                    //if the warehouse has more than 100 of the resource
-                                    if (scr_building_check_amount_resources_needed() &gt; 100){
-                                        resourceSlot[0,0] = RESOURCES.woodCommon;
-                                        resourceSlot[0,1] = 100;
-                                        global.woodCommon -= 100;
-                                    }
-                                break;
-                                //Wood oak
-                                case RESOURCES.woodOak:
-                                    global.woodOak -= 100;
-                                break;
-                                //Wood birch
-                                case RESOURCES.woodBirch:
-                                    global.woodBirch -= 100;
-                                break;
-                                //Stone
-                                case RESOURCES.stone:
-                                    global.stone -= 100;
-                                break;
-                                //Gold
-                                case RESOURCES.oreGold:
-                                    global.gold -= 100;
-                                break;
+                        if (image_index &gt;= 2){
+                            //Get the resources for building(if the state is building)
+                            if (state == STATES_WORKER.building){
+                                var resourceNeeded = scr_building_find_resource_needed();
+                                if (resourceNeeded != noone){
+                                    switch (target.cost[resourceNeeded,0]){
+                                        //Wood common /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        case RESOURCES.woodCommon:
+                                            //If the warehouse has less than 100 of the resource but more than 0
+                                            if ((scr_building_check_amount_resources_needed() &gt; global.woodCommon) &amp;&amp; (global.woodCommon &lt; resourceSlotMax)){ 
+                                                resourceSlot[0,0] = RESOURCES.woodCommon;
+                                                resourceSlot[0,1] = global.woodCommon;
+                                                global.woodCommon = 0;
+                                                currentResource = RESOURCES.woodCommon;
+                                            }
+                                            //if the warehouse has more than 100 of the resource
+                                            if (scr_building_check_amount_resources_needed() &gt;= resourceSlotMax){
+                                                resourceSlot[0,0] = RESOURCES.woodCommon;
+                                                resourceSlot[0,1] = resourceSlotMax;
+                                                global.woodCommon -= resourceSlotMax;
+                                                currentResource = RESOURCES.woodCommon;
+                                            }
+                                        break;
+                                        
+                                        //Wood oak /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        case RESOURCES.woodOak:
+                                            //If the warehouse has less than 100 of the resource but more than 0
+                                            if ((scr_building_check_amount_resources_needed() &gt; global.woodOak) &amp;&amp; (global.woodOak &lt; resourceSlotMax)){ 
+                                                resourceSlot[0,0] = RESOURCES.woodOak;
+                                                resourceSlot[0,1] = global.woodOak;
+                                                global.woodOak = 0;
+                                                currentResource = RESOURCES.woodOak;
+                                            }
+                                            //if the warehouse has more than 100 of the resource
+                                            if (scr_building_check_amount_resources_needed() &gt;= resourceSlotMax){
+                                                resourceSlot[0,0] = RESOURCES.woodOak;
+                                                resourceSlot[0,1] = resourceSlotMax;
+                                                global.woodOak -= resourceSlotMax;
+                                                currentResource = RESOURCES.woodOak;
+                                            }
+                                        break;
+                                        
+                                        //Wood birch ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        case RESOURCES.woodBirch:
+                                            //If the warehouse has less than 100 of the resource but more than 0
+                                            if ((scr_building_check_amount_resources_needed() &gt; global.woodBirch) &amp;&amp; (global.woodBirch &lt; resourceSlotMax)){ 
+                                                resourceSlot[0,0] = RESOURCES.woodBirch;
+                                                resourceSlot[0,1] = global.woodBirch;
+                                                global.woodBirch = 0;
+                                                currentResource = RESOURCES.woodBirch;
+                                            }
+                                            //if the warehouse has more than 100 of the resource
+                                            if (scr_building_check_amount_resources_needed() &gt;= resourceSlotMax){
+                                                resourceSlot[0,0] = RESOURCES.woodBirch;
+                                                resourceSlot[0,1] = resourceSlotMax;
+                                                global.woodBirch -= resourceSlotMax;
+                                                currentResource = RESOURCES.woodBirch;
+                                            }
+                                        break;
+                                        
+                                        //Stone ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        case RESOURCES.stone:
+                                            //If the warehouse has less than 100 of the resource but more than 0
+                                            if ((scr_building_check_amount_resources_needed() &gt; global.stone) &amp;&amp; (global.stone &lt; resourceSlotMax)){ 
+                                                resourceSlot[0,0] = RESOURCES.stone;
+                                                resourceSlot[0,1] = global.stone;
+                                                global.woodStone = 0;
+                                                currentResource = RESOURCES.stone;
+                                            }
+                                            //if the warehouse has more than 100 of the resource
+                                            if (scr_building_check_amount_resources_needed() &gt;= resourceSlotMax){
+                                                resourceSlot[0,0] = RESOURCES.stone;
+                                                resourceSlot[0,1] = resourceSlotMax;
+                                                global.stone -= resourceSlotMax;
+                                                currentResource = RESOURCES.stone;
+                                            }
+                                        break;
+                                        
+                                        //Food ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        case RESOURCES.food:
+                                            //If the warehouse has less than 100 of the resource but more than 0
+                                            if ((scr_building_check_amount_resources_needed() &gt; global.food) &amp;&amp; (global.food &lt; resourceSlotMax)){ 
+                                                resourceSlot[0,0] = RESOURCES.food;
+                                                resourceSlot[0,1] = global.food;
+                                                global.food = 0;
+                                                currentResource = RESOURCES.food;
+                                            }
+                                            //if the warehouse has more than 100 of the resource
+                                            if (scr_building_check_amount_resources_needed() &gt;= resourceSlotMax){
+                                                resourceSlot[0,0] = RESOURCES.food;
+                                                resourceSlot[0,1] = resourceSlotMax;
+                                                global.food -= resourceSlotMax;
+                                                currentResource = RESOURCES.food;
+                                            }
+                                        break;
+                                        
+                                        //Gold ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        case RESOURCES.oreGold:
+                                            //If the warehouse has less than 100 of the resource but more than 0
+                                            if ((scr_building_check_amount_resources_needed() &gt; global.oreGold) &amp;&amp; (global.oreGold &lt; resourceSlotMax)){ 
+                                                resourceSlot[0,0] = RESOURCES.oreGold;
+                                                resourceSlot[0,1] = global.oreGold;
+                                                global.oreGold = 0;
+                                                currentResource = RESOURCES.oreGold;
+                                            }
+                                            //if the warehouse has more than 100 of the resource
+                                            if (scr_building_check_amount_resources_needed() &gt;= resourceSlotMax){
+                                                resourceSlot[0,0] = RESOURCES.oreGold;
+                                                resourceSlot[0,1] = resourceSlotMax;
+                                                global.woodCommon -= resourceSlotMax;
+                                                currentResource = RESOURCES.oreGold;
+                                            }
+                                        break;
+                                    } //If the building still needs to be built but the resource is not available make the worker wait
+                                }else if (!target.built){ 
+                                    scr_unit_change_substate(SUBSTATES_WORKER.waitingToBuild);
+                                }
                             }
+                            
+                            //Get the resources for upgrading
+                            if (state = STATES_WORKER.upgrading){
+                                var resourceNeeded = scr_building_find_resource_needed_upgrade(target);
+                                if (resourceNeeded != noone){
+                                    switch (target.upgradeCost[resourceNeeded,0]){
+                                        //Wood common ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        case RESOURCES.woodCommon:
+                                            //If the warehouse has less than 100 of the resource but more than 0
+                                            if ((scr_building_check_amount_resources_needed() &gt; global.woodCommon) &amp;&amp; (global.woodCommon &lt; resourceSlotMax)){ 
+                                                resourceSlot[0,0] = RESOURCES.woodCommon;
+                                                resourceSlot[0,1] = global.woodCommon;
+                                                global.woodCommon = 0;
+                                                currentResource = RESOURCES.woodCommon;
+                                            }
+                                            //if the warehouse has more than 100 of the resource
+                                            if (scr_building_check_amount_resources_needed_upgrade() &gt;= resourceSlotMax){
+                                                resourceSlot[0,0] = RESOURCES.woodCommon;
+                                                resourceSlot[0,1] = resourceSlotMax;
+                                                global.woodCommon -= resourceSlotMax;
+                                                currentResource = RESOURCES.woodCommon;
+                                            }
+                                        break;
+                                        
+                                        //Wood oak //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        case RESOURCES.woodOak:
+                                            //If the warehouse has less than 100 of the resource but more than 0
+                                            if ((scr_building_check_amount_resources_needed() &gt; global.woodCommon) &amp;&amp; (global.woodOak &lt; resourceSlotMax)){ 
+                                                resourceSlot[0,0] = RESOURCES.woodOak;
+                                                resourceSlot[0,1] = global.woodOak;
+                                                global.woodOak = 0;
+                                                currentResource = RESOURCES.woodOak;
+                                            }
+                                            //if the warehouse has more than 100 of the resource
+                                            if (scr_building_check_amount_resources_needed_upgrade() &gt;= resourceSlotMax){
+                                                resourceSlot[0,0] = RESOURCES.woodOak;
+                                                resourceSlot[0,1] = resourceSlotMax;
+                                                global.woodOak -= resourceSlotMax;
+                                                currentResource = RESOURCES.woodOak;
+                                            }
+                                        break;
+                                        
+                                        //Wood birch /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        case RESOURCES.woodBirch:
+                                            //If the warehouse has less than 100 of the resource but more than 0
+                                            if ((scr_building_check_amount_resources_needed() &gt; global.woodBirch) &amp;&amp; (global.woodBirch &lt; resourceSlotMax)){ 
+                                                resourceSlot[0,0] = RESOURCES.woodBirch;
+                                                resourceSlot[0,1] = global.woodBirch;
+                                                global.woodBirch = 0;
+                                                currentResource = RESOURCES.woodBirch;
+                                            }
+                                            //if the warehouse has more than 100 of the resource
+                                            if (scr_building_check_amount_resources_needed_upgrade() &gt;= resourceSlotMax){
+                                                resourceSlot[0,0] = RESOURCES.woodBirch;
+                                                resourceSlot[0,1] = resourceSlotMax;
+                                                global.woodCommon -= resourceSlotMax;
+                                                currentResource = RESOURCES.woodBirch;
+                                            }
+                                        break;
+                                        
+                                        //Stone ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        case RESOURCES.stone:
+                                            //If the warehouse has less than 100 of the resource but more than 0
+                                            if ((scr_building_check_amount_resources_needed() &gt; global.stone) &amp;&amp; (global.stone &lt; resourceSlotMax)){ 
+                                                resourceSlot[0,0] = RESOURCES.stone;
+                                                resourceSlot[0,1] = global.stone;
+                                                global.stone = 0;
+                                                currentResource = RESOURCES.stone;
+                                            }
+                                            //if the warehouse has more than 100 of the resource
+                                            if (scr_building_check_amount_resources_needed_upgrade() &gt;= resourceSlotMax){
+                                                resourceSlot[0,0] = RESOURCES.stone;
+                                                resourceSlot[0,1] = resourceSlotMax;
+                                                global.stone -= resourceSlotMax;
+                                                currentResource = RESOURCES.stone;
+                                            }
+                                        break;
+                                        
+                                        //Food ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        case RESOURCES.food:
+                                            //If the warehouse has less than 100 of the resource but more than 0
+                                            if ((scr_building_check_amount_resources_needed() &gt; global.food) &amp;&amp; (global.food &lt; resourceSlotMax)){ 
+                                                resourceSlot[0,0] = RESOURCES.food;
+                                                resourceSlot[0,1] = global.food;
+                                                global.food = 0;
+                                                currentResource = RESOURCES.food;
+                                            }
+                                            //if the warehouse has more than 100 of the resource
+                                            if (scr_building_check_amount_resources_needed_upgrade() &gt;= resourceSlotMax){
+                                                resourceSlot[0,0] = RESOURCES.food;
+                                                resourceSlot[0,1] = resourceSlotMax;
+                                                global.food -= resourceSlotMax;
+                                                currentResource = RESOURCES.food;
+                                            }
+                                        break;
+                                        
+                                        //Gold ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        case RESOURCES.oreGold:
+                                            //If the warehouse has less than 100 of the resource but more than 0
+                                            if ((scr_building_check_amount_resources_needed() &gt; global.oreGold) &amp;&amp; (global.oreGold &lt; resourceSlotMax)){ 
+                                                resourceSlot[0,0] = RESOURCES.oreGold;
+                                                resourceSlot[0,1] = global.oreGold;
+                                                global.oreGold = 0;
+                                                currentResource = RESOURCES.oreGold;
+                                            }
+                                            //if the warehouse has more than 100 of the resource
+                                            if (scr_building_check_amount_resources_needed_upgrade() &gt;= resourceSlotMax){
+                                                resourceSlot[0,0] = RESOURCES.oreGold;
+                                                resourceSlot[0,1] = resourceSlotMax;
+                                                global.oreGold -= resourceSlotMax;
+                                                currentResource = RESOURCES.oreGold;
+                                            }
+                                        break;
+                                    }
+                                }else if (target.upgrade){ 
+                                    scr_unit_change_substate(SUBSTATES_WORKER.waitingToBuild);
+                                }
+                            }
+                            
                             //Set the worker going back to the target if the worker is working
-                            if (scr_worker_is_working()){
+                            if (scr_worker_is_working() &amp;&amp; resourceNeeded != noone){
                                 if (instance_exists(target)){
                                     scr_unit_change_substate(SUBSTATES_WORKER.goingTo);
-                                }else if (state == STATES_WORKER.woodcutting){
-                                    //If the tree has been cut down, find the worker a new tree
-                                    target = instance_nearest(x, y, obj_treeParent);
-                                    scr_unit_change_substate(SUBSTATES_WORKER.goingTo);
                                 }
-                            }else if (state != STATES_WORKER.building || state != STATES_WORKER.upgrading){
+                            }else if (state != STATES_WORKER.building &amp;&amp; state != STATES_WORKER.upgrading){
                                 scr_unit_change_substate(SUBSTATES_WORKER.none);
                                 state = STATES_WORKER.idle;
                             }
@@ -2085,6 +2222,28 @@ if (substate != SUBSTATES_WORKER.none){
                     }   
                 }
             }
+        break;
+        
+        //waitingToBuild /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        case SUBSTATES_WORKER.waitingToBuild:
+            //Building state
+            if (state == STATES_WORKER.building &amp;&amp; !target.built){
+                if (scr_building_find_resource_needed() != -4){
+                    scr_unit_change_substate(SUBSTATES_WORKER.resourcePickup);
+                }       
+            }else if (state == STATES_WORKER.building &amp;&amp; target.built){
+                state = STATES_WORKER.idle;
+                scr_unit_change_substate(SUBSTATES_WORKER.none);
+            } 
+            //Upgrading state
+            if (state == STATES_WORKER.upgrading &amp;&amp; target.upgrade){
+                if (scr_building_find_resource_needed_upgrade(target) != -4){
+                    scr_unit_change_substate(SUBSTATES_WORKER.resourcePickup);
+                }       
+            }else if (state == STATES_WORKER.upgrading &amp;&amp; !target.upgrade){
+                state = STATES_WORKER.idle;
+                scr_unit_change_substate(SUBSTATES_WORKER.none);
+            }       
         break;
     }
 }

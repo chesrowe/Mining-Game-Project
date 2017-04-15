@@ -1,14 +1,17 @@
-///scr_building_find_resource_needed()
+///scr_building_find_resource_needed_upgrade(struc)
 
-var target = argument[0] ;
-for (i = 0; i <= 3; i++;){
-    if (target.upgradeCost[i,2] != -4){
-        if (target.upgradeCost[i,2] > 0){
-            return i;
-            break;   
-        }
-    }else if (target.upgradeCost[i,0] == -4){
+var struc = argument[0];
+
+for (i = 0; i <= 5; i++;){
+    if (struc.upgradeCost[i,2] != -1){
+        if (struc.upgradeCost[i,2] > 0){
+            if (scr_building_resource_needed_available_upgrade(i, struc)){ 
+                return i;
+                break;   
+            }
+        }          
+    }else if (struc.upgradeCost[i,0] == -1){
         return -4;
         break;    
-    }
+    }      
 }

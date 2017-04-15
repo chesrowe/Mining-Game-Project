@@ -5,6 +5,10 @@
 //arugment 0 : what state to set the selected workers to
 //arugment 1 : What instance to set as the target
 
+var setState = argument[0];
+var targetInstance = argument[1];
+ 
+
 for(i = 0; i < 100; i++){
     if (instance_exists(global.unitSelected[i]) && global.unitSelected[i].object_index == obj_workerHumanP1){
         with (global.unitSelected[i]){
@@ -12,12 +16,12 @@ for(i = 0; i < 100; i++){
             if (instance_exists(obj_warehouse)){
                 dropOffTarget = obj_warehouse;
             }
-            target = argument1.id;
-            targetType = argument1.object_index;
-            state = argument0;
+            target = targetInstance.id;
+            targetType = targetInstance.object_index;
+            state = setState;
+            //If the target is a building make the worker go pick up resources
             if (state == STATES_WORKER.building || state == STATES_WORKER.upgrading){
                 scr_unit_change_substate(SUBSTATES_WORKER.resourcePickup);
-                
             }else{
                 if (scr_find_x_diff(x, target.x) < target.posDistance){
                     scr_unit_change_substate(SUBSTATES_WORKER.resourcePosition);

@@ -4,24 +4,8 @@
 
 var resource = scr_building_find_resource_needed();
 
-switch(cost[resource,0]){
-    //woodCommon
-    case RESOURCES.woodCommon:
-        return global.woodCommon;
-    break;
-    
-    //woodOak
-    case RESOURCES.woodOak:
-        return global.woodOak;
-    break;
-    
-    //woodBirch
-    case RESOURCES.woodBirch:
-        return global.woodBirch;
-    break;
-    
-    //
-    
+if (resource != -4){
+    return target.cost[resource,2];
 }
 
 

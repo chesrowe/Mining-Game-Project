@@ -339,6 +339,8 @@
       <script>scripts\scr_unit_change_substate.gml</script>
       <script>scripts\scr_unit_dir_x.gml</script>
       <script>scripts\scr_worker_is_working.gml</script>
+      <script>scripts\scr_worker_resource_slot_deposit.gml</script>
+      <script>scripts\scr_worker_resource_slot_is_empty.gml</script>
     </scripts>
     <scripts name="Misc">
       <script>scripts\scr_effects_fade_in.gml</script>
@@ -358,13 +360,16 @@
       <script>scripts\scr_building_can_be_placed.gml</script>
       <script>scripts\scr_building_find_resource_needed.gml</script>
       <script>scripts\scr_building_find_resource_needed_upgrade.gml</script>
+      <script>scripts\scr_building_check_amount_resources_needed.gml</script>
+      <script>scripts\scr_building_check_amount_resources_needed_upgrade.gml</script>
+      <script>scripts\scr_building_resource_needed_available.gml</script>
+      <script>scripts\scr_building_resource_needed_available_upgrade.gml</script>
     </scripts>
     <scripts name="Sprites">
       <script>scripts\scr_sprite_face_xpoint.gml</script>
       <script>scripts\scr_sprite_face_right.gml</script>
       <script>scripts\scr_sprite_face_left.gml</script>
     </scripts>
-    <script>scripts\scr_building_check_amount_resources_needed.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\ft_gameFont</font>

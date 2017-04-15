@@ -60,7 +60,7 @@ infoBoxWidth = 2;
             <string>///Sync resource amount
 event_inherited();
 
-resourceAmount = global.woodOak;
+resourceAmount = global.food;
 </string>
           </argument>
         </arguments>

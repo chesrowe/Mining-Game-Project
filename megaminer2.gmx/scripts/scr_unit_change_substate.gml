@@ -16,7 +16,6 @@ switch (substateArg){
     //Tool
     case SUBSTATES_WORKER.toolPullout:
         image_index = 0; 
-        workStart = true;
         drawToolTimer = 0;
     break;
     
@@ -46,10 +45,18 @@ switch (substateArg){
     case SUBSTATES_WORKER.goingTo:
         idleTimer = 0;
         image_speed = walkingImageSpeed;    
-        if (state == STATES_WORKER.building || state = STATES_WORKER.upgrading){
+        if (state == STATES_WORKER.building || state == STATES_WORKER.upgrading){
             sprite_index = spriteWalkingResources;
         }else{
-            sprite_index = spriteWalking;
+            if (!scr_worker_resource_slot_is_empty()){
+                sprite_index = spriteWalkingResources;
+            }else{
+                sprite_index = spriteWalking;
+            }
+            //If the worker is holding resources, make him take those to the warehouse first
+            if (resourceSlot[0,0] != RESOURCES.nothing){
+                scr_unit_change_substate(SUBSTATES_WORKER.resourceDropOff);
+            }
         }
     break;
     
@@ -58,6 +65,19 @@ switch (substateArg){
         sprite_index = spriteWalkingResources;
         image_speed = walkingImageSpeed; 
         scr_sprite_face_xpoint(dropOffTarget.x);   
+    break;
+    
+    //resourcePickUp
+    case SUBSTATES_WORKER.resourcePickup:
+        //If the worker already has the type of resource needed in his resourceSlot then start him towards the structure
+        var resourceNeeded = scr_building_find_resource_needed();
+        if (resourceNeeded != noone && target.cost[resourceNeeded,0] == resourceSlot[0,0]){
+            scr_unit_change_substate(SUBSTATES_WORKER.goingTo);
+        }else{
+            sprite_index = spriteWalking;
+            image_speed = walkingImageSpeed; 
+            scr_sprite_face_xpoint(dropOffTarget.x);   
+        }
     break;
     
     //resourcePosition
@@ -74,6 +94,12 @@ switch (substateArg){
         image_index = 0;
         idleTimer = 0;   
         image_speed = .10; 
+    break;
+    
+    //waitingToBuild
+    case SUBSTATES_WORKER.waitingToBuild:
+        sprite_index = spriteIdle;
+        image_speed = idleImageSpeed;
     break;
 }
 

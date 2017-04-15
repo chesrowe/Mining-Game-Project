@@ -28,7 +28,8 @@
             <string>/// Get event from parent 
 event_inherited();
 
-resource = 'gold';
+resource = RESOURCES.oreGold;
+xp = 50;
 </string>
           </argument>
         </arguments>

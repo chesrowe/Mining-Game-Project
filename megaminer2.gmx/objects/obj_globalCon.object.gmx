@@ -169,15 +169,15 @@ draw_set_font(global.fontDmg);
             <kind>1</kind>
             <string>///Resources
 global.totalResourcesCollected = 0;
-global.gold = 200;
+global.gold = 2000;
 global.stone = 200;
 global.crystal = 0;
 global.brimstone = 0;
 global.mushroom = 0;
-global.woodCommon = 100;
+global.woodCommon = 9900;
 global.woodOak = 0;
 global.woodBirch = 0;
-global.food = 200;
+global.food = 2000;
 
 //Set up constants for the resource ids
 enum RESOURCES{
@@ -192,7 +192,6 @@ enum RESOURCES{
     food,
     nothing
 }
-
 //Map the reource IDs to their names
 global.resourceNameMap = ds_map_create();
 global.resourceNameMap[? RESOURCES.oreGold] = "gold ore";
@@ -829,7 +828,7 @@ hungerLevel = 0;
             <string>///Debug stuff
 
 global.autoBuild = 0;
-global.debugNoTrees = 0;
+global.debugNoTrees = 1;
 global.debugClickDeleteTrees = 1;
 global.debugSkipIntro = 1;
 
@@ -886,7 +885,8 @@ enum SUBSTATES_WORKER{
     working, //working
     resourcePosition, //working
     sitting, //idle
-    resourcePickup //Building/upgrading
+    resourcePickup, //Building/upgrading
+    waitingToBuild //Building/upgrading
 }
 
 
@@ -1451,11 +1451,11 @@ global.selected = noone;
 if (global.workerBuild &amp;&amp; global.selected != noone &amp;&amp; !global.dev_mode_dupe){
     if ((global.selected).y == ((global.selected).groundY - (global.selected).originOffY)){
         with(global.selected){
-            if (!place_meeting(x,y,obj_buildingParent) &amp;&amp; scr_building_can_be_placed() &amp;&amp; !place_meeting(x, y, obj_farmingPatch) &amp;&amp; !place_meeting(x, y, obj_treeParent) &amp;&amp; !place_meeting(x, y, obj_resourceParent)){
+            if (!place_meeting(x, y, obj_buildingParent) &amp;&amp; scr_building_can_be_placed() &amp;&amp; !place_meeting(x, y, obj_farmingPatch) &amp;&amp; !place_meeting(x, y, obj_treeParent) &amp;&amp; !place_meeting(x, y, obj_resourceParent)){
                 placed = 1;
                 //Set the selected units to building the structure
                 with (obj_workerParent){
-                    scr_unit_array_set_resource_target('building',global.selected);
+                    scr_unit_array_set_resource_target(STATES_WORKER.building, global.selected);
                 }
                 ///DEBUG: Auto Build
                 if (global.autoBuild){
@@ -1487,7 +1487,7 @@ if (global.workerBuild &amp;&amp; global.selected != noone &amp;&amp; !global.de
                     }
               
             }else{
-                scr_create_floating_message(mouse_x,mouse_y,.1,2,30,"Can't build that there.");
+                scr_create_floating_message(mouse_x, mouse_y, .1, 2, 30, "Can't build that there.");
             }
         }
     }   
@@ -1495,7 +1495,7 @@ if (global.workerBuild &amp;&amp; global.selected != noone &amp;&amp; !global.de
 
 //deselects the selected object if you click in an empty area
 if (!global.workerBuild &amp;&amp; global.selected != noone){
-    if (!instance_position(mouse_x,mouse_y,obj_workerParent) &amp;&amp; !instance_position(mouse_x,mouse_y,obj_buildingParent) &amp;&amp; !mouseOverPopUpMenu){
+    if (!instance_position(mouse_x, mouse_y, obj_workerParent) &amp;&amp; !instance_position(mouse_x, mouse_y, obj_buildingParent) &amp;&amp; !mouseOverPopUpMenu){
         global.selected = noone;
     }
 }
