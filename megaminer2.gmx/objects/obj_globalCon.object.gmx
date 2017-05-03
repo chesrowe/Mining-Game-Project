@@ -34,6 +34,10 @@ view_hview[0] = 360;
 view_wport[0] = 640;
 view_hport[0] = 360;
 view_visible[0] = true;
+
+window_set_fullscreen(true);  
+
+
 </string>
           </argument>
         </arguments>
@@ -169,15 +173,15 @@ draw_set_font(global.fontDmg);
             <kind>1</kind>
             <string>///Resources
 global.totalResourcesCollected = 0;
-global.gold = 2000;
-global.stone = 200;
+global.gold = 0;
+global.stone = 0;
 global.crystal = 0;
 global.brimstone = 0;
 global.mushroom = 0;
-global.woodCommon = 9900;
+global.woodCommon = 100;
 global.woodOak = 0;
 global.woodBirch = 0;
-global.food = 2000;
+global.food = 1500;
 
 //Set up constants for the resource ids
 enum RESOURCES{
@@ -274,7 +278,7 @@ global.building = 0;
 
 //Sound Variables
 global.currentSong = irandom(1);
-global.mute = 1;
+global.mute = 0;
 pickSoundTimer = 0;
 global.songPlaying[0] = 0;
 //audio_master_gain(0);
@@ -803,46 +807,8 @@ instance_create(0,0,obj_conOpeningScene);
 
 hungerTimer = 0;
 eatTime = irandom_range(800, 1100);
-eatAmount = irandom_range(5, 15);
+eatAmount = irandom_range(5, 10);
 hungerLevel = 0;
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Debug stuff
-
-global.autoBuild = 0;
-global.debugNoTrees = 1;
-global.debugClickDeleteTrees = 1;
-global.debugSkipIntro = 1;
-
-if (global.debugNoTrees){
-    with(obj_treeParent){
-        instance_destroy();
-    }
-}
-
-//list to hold frame rates
-
-fpsAverageList = ds_list_create();
-fpsAverage = 0;
-
 </string>
           </argument>
         </arguments>
@@ -886,11 +852,56 @@ enum SUBSTATES_WORKER{
     resourcePosition, //working
     sitting, //idle
     resourcePickup, //Building/upgrading
-    waitingToBuild //Building/upgrading
+    waitingToWork //Building/upgrading/mining/farming/woodcutting
+}
+
+//Lift states
+enum STATES_LIFT{
+    idle,
+    movingUp,
+    movingDown
 }
 
 
 
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Debug stuff
+
+global.autoBuild = 1;
+global.debugNoTrees = 1;
+global.debugClickDeleteTrees = 1;
+global.debugSkipIntro = 0;
+
+if (global.debugNoTrees){
+    with(obj_treeParent){
+        instance_destroy();
+    }
+}
+
+//list to hold frame rates
+
+fpsAverageList = ds_list_create();
+fpsAverage = 0;
 
 </string>
           </argument>
@@ -1004,23 +1015,23 @@ if (keyboard_check_released(vk_space)){
 } 
 
 //Camera movement with mouse
-if (mouse_x &lt; view_xview[0] + 40 &amp;&amp; !global.consoleOn){
+if (mouse_x &lt; view_xview[0] + 20 &amp;&amp; !global.consoleOn){
     if (window_get_fullscreen()){
         scrolling = 1;
         scrollIncrements = -.5;
-        maxScroll = -10;
+        maxScroll = -7;
     }
 }
 
-if (mouse_x &gt; view_xview[0] + 1200){
+if (mouse_x &gt; view_xview[0] + 600){
     if (window_get_fullscreen()){
         scrolling = 1;
         scrollIncrements = .5;
-        maxScroll = 10;
+        maxScroll = 7;
     }
 }
 //stops scrolling when no scroll action is beining performed
-if (mouse_x &lt; view_xview[0] + 1200 &amp;&amp; mouse_x &gt; view_xview[0] + 40 &amp;&amp; !keyboard_check(ord('A')) &amp;&amp; !keyboard_check(ord('D'))){
+if (mouse_x &lt; view_xview[0] + 600 &amp;&amp; mouse_x &gt; view_xview[0] + 20 &amp;&amp; !keyboard_check(ord('A')) &amp;&amp; !keyboard_check(ord('D'))){
     scrolling = 0;
 }
 
@@ -1029,12 +1040,12 @@ if (!global.consoleOn){
     if (keyboard_check(ord('A'))){
         scrolling = 1;
         scrollIncrements = -.5;
-        maxScroll = -10;
+        maxScroll = -7;
     }
     if (keyboard_check(ord('D'))){
         scrolling = 1;
         scrollIncrements = .5;
-        maxScroll = 10;
+        maxScroll = 7;
     }
     
     if (keyboard_check(ord('W'))){
@@ -1048,7 +1059,7 @@ if (!global.consoleOn){
     //Starts and stops the scrolling
     if (scrolling){
         with(obj_tileSurfaceFlatParent){
-            if (x &gt;= (view_xview[0]-(96+(flatNumber*32))) &amp;&amp; x &lt;= (view_xview[0]+1302)){
+            if (x &gt;= (view_xview[0] - (96 + (flatNumber * 16))) &amp;&amp; x &lt;= (view_xview[0] + 800)){
                     canDraw = 1;
                     visible = 1;
                     if (!instance_exists(drawObj)){
@@ -1076,7 +1087,7 @@ if (!global.consoleOn){
         if (scrollSpeed != maxScroll &amp;&amp; scrollSpeed &lt; 11){
             scrollSpeed += scrollIncrements;
         }
-        if (view_xview[0] &gt; 0 || view_xview[0] &lt; 1280){ 
+        if (view_xview[0] &gt; 0 || view_xview[0] &lt; 640){ 
             view_xview[0] += scrollSpeed;
             view_xview[0] = round(view_xview[0]);
         }
@@ -1898,7 +1909,7 @@ if (global.food &gt;= -1 &amp;&amp; instance_exists(obj_townCenter)){
             <kind>1</kind>
             <string>//Snap camera to nearest IDLE worker
 
-if (instance_exists(obj_workerParent)){
+if (instance_exists(obj_workerParent) &amp;&amp; !global.consoleOn){
     var viewMiddle = (view_wview[0] / 2);
     view_xview[0] = instance_nearest(view_xview[0] + viewMiddle, 720, obj_workerParent).x - viewMiddle;
     //If part of the view goes too far left. fix it 

@@ -34,18 +34,20 @@ bottomX = 0;
 bottomY = 7;
 stumpX = x + bottomX;
 stumpY = y + bottomY;
-fallYAdd = .12;
-fallXAdd = .03;
+fallYAdd = .08;
+fallXAdd = .02;
 
 xp = 30;
-resource = 'woodBirch';
+resource = RESOURCES.woodBirch;
 levelReq = 5;
-woodLeft = 1000;
 midDistance = 16;
 midTime = 0;
 midRandom = 1;
 posDistance = 16;
 posTime = 20;
+workTimeBase = 350;
+resourceLeft = 400;
+fall = resourceLeft / 2; 
 </string>
           </argument>
         </arguments>

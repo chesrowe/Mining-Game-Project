@@ -53,7 +53,7 @@ myLift = noone;
             <string>///X position
 
 
-x = myLift.x - 92;
+x = myLift.x - 46;
 </string>
           </argument>
         </arguments>

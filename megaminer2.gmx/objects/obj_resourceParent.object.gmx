@@ -29,11 +29,12 @@
 image_speed = 0; 
 image_index = irandom(image_number);
 x += choose(1,2,4,6,10,12,-1,-2,-3,-4,-5,-10,-12);
-// if the tree is on a slope or not in the corrent place, delete it 
-if (place_meeting(x, y + 22, obj_tileSurfaceHillParent)){
+// if the tree is on a slope or not in the corrent place, delete it(makes sure the obj is not a farm) 
+if (place_meeting(x, y + 22, obj_tileSurfaceHillParent) &amp;&amp; object_index != obj_farmingPatch){
     instance_destroy();
 }
-if (!place_meeting(x, y + 22, obj_tileSurfaceParent)){
+//Second part is because this is a parent obj for farming patches too
+if (!place_meeting(x, y + 22, obj_tileSurfaceParent) &amp;&amp; object_index != obj_farmingPatch){
     instance_destroy();
 }
 
@@ -54,8 +55,9 @@ posTime = 30;
 midTime = 6;
 midRandom = 15;
 midDistance = 30;
-workTimeBase = 300; 
+workTimeBase = 400; 
 workTimeAdd = irandom(round(workTimeBase / 3));
+orgXAdd = 0;
 //Dev mode
 showDebug = 0;
 
@@ -120,12 +122,29 @@ hitFrame = 6;
             <kind>1</kind>
             <string>///Exhausted
 
+
+//Make the resource exhaust if the resources in it reach 0
+if (resourceLeft &lt;= 0){
+    exhausted = true;
+    //Create exclamation popup 
+    if (!exPopUp){
+        exPopUp = 1;
+        with(instance_create(x,y,obj_workerDrawTimed)){
+            col = c_red;
+            amount = "!";
+            xScale = 2;
+            yScale = 2;
+        }
+    }
+}
+
+
 //starts the exhaust timer
 if (exhausted){
     exhaustTimer ++;
     image_alpha = .6;    
     if (exhaustTimer &gt;= exhaustTime){
-        exhausted = 0;
+        exhausted = false;
         exPopUp = 0;
         resourceLeft = maxAmountLeft;
         exhaustTimer = 0;

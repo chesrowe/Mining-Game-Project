@@ -305,10 +305,20 @@ if (commandGot){
             //find the object from the third arg
             createObj = asset_get_index(arg3);
             //Create the instance
-            arg1 = real(arg1);
-            arg2 = real(arg2);
+            if (arg1 != "mouse_x"){
+                arg1 = real(arg1);
+            }else{
+                arg1 = mouse_x;
+            }
+            if (arg2 != "mouse_y"){
+                arg2 = real(arg2);
+            }else{
+                arg2 = mouse_y;
+            }
             arg3 = createObj;
-            instance_create(arg1,arg2,arg3);
+            if (object_exists(arg3)){
+                instance_create(arg1,arg2,arg3);
+            }
             //global.consoleOn = 0;
             commandGot = 0;
             ds_list_add(cmdList,command);
@@ -344,7 +354,7 @@ commandGot = 0;
             <string>///Draw the console
 if (global.consoleOn &amp;&amp; global.dev_mode){
     draw_set_colour(c_black);
-    draw_rectangle(view_xview[0],view_yview[0] + 20,view_xview[0] + 450, view_yview[0] + 40,0);
+    draw_rectangle(view_xview[0],view_yview[0] + 20,view_xview[0] + 450, view_yview[0] + 30,0);
     
     draw_set_color(c_white);
     draw_text(view_xview[0] + 2, view_yview[0] + 20 ,text);

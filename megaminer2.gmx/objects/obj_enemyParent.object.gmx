@@ -59,8 +59,8 @@ contactTarget = 0; // if the enemy has made contact with the target, it's id is 
 attack = 0; // NOT USED
 attackTimer = 0; // A tiemr that counts up between each attack(basicly used to set the attack speed)
 hillStart = 0;
-spriteAttackingRight = spr_wolfAttackingRight; // sets the sprite for when the enemy is attacking to the right
-spriteAttackingLeft = spr_wolfAttackingRight; // sets the sprite for when the enemy is attacking to the right
+spriteAttacking = spr_wolfAttacking; // sets the sprite for when the enemy is attacking 
+
 
 </string>
           </argument>
@@ -91,7 +91,7 @@ spriteAttackingLeft = spr_wolfAttackingRight; // sets the sprite for when the en
 if (place_meeting(x,y+3,obj_groundParent)){
     falling = 0;
     if (place_meeting(x,y+3,obj_tileSurfaceFlatParent) &amp;&amp; !place_meeting(x,y,obj_tileSurfaceHillParent)){
-        y = (instance_place(x,y+3,obj_tileSurfaceFlatParent).y) - 24;
+        y = (instance_place(x,y+3,obj_tileSurfaceFlatParent).y) - 12;
     }
 }else if (!hillStart){
     falling = 1;
@@ -138,7 +138,7 @@ if (!dying){
         nearestTarget = -1;
     }  
     //Sets the state to attack if a target is in range 
-    if (minerDist &lt; 150 &amp;&amp; nearestTarget != -1){
+    if (minerDist &lt; 600 &amp;&amp; nearestTarget != -1){
             state = 'attacking';
     }else{
             state = 'walking';
@@ -166,7 +166,7 @@ if (!dying){
     }
     //Checks to see if the enemy is not being knocked back and if the state is walking(if so the walk forward)
     if (!knockBackRight &amp;&amp; !knockBackLeft &amp;&amp; state == 'walking'){
-        x += walkSpeed;
+        //x += walkSpeed;
     } 
     // Checks to see if the enemy is not being knocked back, if so then start attacking
     if (!knockBackRight &amp;&amp; !knockBackLeft &amp;&amp; state == 'attacking'){
@@ -196,11 +196,7 @@ if (!dying){
             } 
         }else{
             // Sets the enemy's sprite facing the right way
-            if (contactTarget.x &gt; x){
-                sprite_index = spriteAttackingRight;
-            }else{
-                sprite_index = spriteAttackingLeft;
-            }
+            scr_sprite_face_xpoint(contactTarget.x);
             attackTimer ++;
             if (attackTimer &gt;= 20){
                 image_speed = .08;

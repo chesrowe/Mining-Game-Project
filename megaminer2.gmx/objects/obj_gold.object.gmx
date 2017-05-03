@@ -29,7 +29,9 @@
 event_inherited();
 
 resource = RESOURCES.oreGold;
-xp = 50;
+xp = 200;
+workTimeBase = 600 
+workTimeAdd = irandom(round(workTimeBase / 3));
 </string>
           </argument>
         </arguments>

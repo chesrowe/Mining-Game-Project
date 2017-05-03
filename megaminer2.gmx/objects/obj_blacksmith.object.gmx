@@ -62,8 +62,8 @@ spriteLevel[4] = spr_blacksmith1;
 //Cost array table 
 //cost[0,0]
 cost[0,0] = RESOURCES.woodCommon; //Type
-cost[0,1] = 500; //Total amount needed
-cost[0,2] = 500; //Amount left
+cost[0,1] = 400; //Total amount needed
+cost[0,2] = 400; //Amount left
 cost[1,0] = RESOURCES.stone; 
 cost[1,1] = 200; 
 cost[1,2] = 200; 

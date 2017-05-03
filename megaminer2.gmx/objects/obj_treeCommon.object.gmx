@@ -34,8 +34,8 @@ bottomX = 2;
 bottomY = 4;
 stumpX = x + bottomX;
 stumpY = y + bottomY;
-fallYAdd = .15;
-fallXAdd = .18;
+fallYAdd = .1;
+fallXAdd = .12;
 
 
 
@@ -44,7 +44,7 @@ midDistance = 20;
 posTime = 30;
 midTime = 0;
 midRandom = 4;
-resource = 'woodCommon';
+resource = RESOURCES.woodCommon;
 xp = 25;
 
 

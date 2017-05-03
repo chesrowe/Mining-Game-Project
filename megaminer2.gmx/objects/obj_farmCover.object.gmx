@@ -3,7 +3,7 @@
   <spriteName>spr_farmCover</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-2</depth>
+  <depth>-1</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -57,8 +57,8 @@ image_speed = 0;
 
 if (instance_exists(myFarm)){
     if (myFarm.placed != 1){
-        x = (myFarm.x - 192);
-        y = (myFarm.y - 90);
+        x = (myFarm.x - 97);
+        y = (myFarm.y - 44);
     }
 }else{
     instance_destroy();

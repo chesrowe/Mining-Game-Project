@@ -51,8 +51,8 @@ posTime = 30;
 midTime = 2;
 midRandom = 30;
 midDistance = sprite_width / 2;
-workTimeBase = 300; 
-workTimeAdd = irandom(round(workTimeBase / 3));
+workTimeBase = 400; 
+orgXAdd = 0;
 ///Being built specific
 //Cost array table 
 //cost[0,0]
@@ -203,12 +203,12 @@ totalResourcesNeededUpgrade = 0;
 
 //wood - 200
 upgradeCost[0,0] = RESOURCES.woodCommon; //type
-upgradeCost[0,1] = 200; //Amount needed
-upgradeCost[0,2] = 200; //Amount left
+upgradeCost[0,1] = 400; //Amount needed
+upgradeCost[0,2] = 400; //Amount left
 //Stone - 200
 upgradeCost[1,0] = RESOURCES.stone;
-upgradeCost[1,1] = 500;
-upgradeCost[1,2] = 500;
+upgradeCost[1,1] = 200;
+upgradeCost[1,2] = 200;
 //food - 200
 upgradeCost[2,0] = -1;
 upgradeCost[2,1] = -1;
@@ -325,7 +325,7 @@ if (!placed){
         placeSoundPlayed = 1;
         // Add 10 to max population if the building was a house
         if (object_index == obj_house){
-            global.maxPop += 10;
+            global.maxPop += 5;
         }
     }else if (autoBuild){
         placeSoundPlayed = 1;
@@ -412,7 +412,7 @@ if (showButtons){
           <argument>
             <kind>1</kind>
             <string>///Building text popup
-if (instance_position(mouse_x,mouse_y,object_index) &amp;&amp; !instance_position(mouse_x, mouse_y, obj_workerParent)){
+if (instance_position(mouse_x,mouse_y,id) &amp;&amp; !instance_position(mouse_x, mouse_y, obj_workerParent)){
     if (!showButtons &amp;&amp; built){
         textPopUp = 1;
     }
@@ -589,6 +589,10 @@ if (!instance_position(mouse_x,mouse_y,obj_workerParent) &amp;&amp; built &amp;&
         showButtons = 1;
         textPopUp = 0;
     }
+}
+
+if (!position_meeting(mouse_x, mouse_y, obj_workerParent) &amp;&amp; placed &amp;&amp; built &amp;&amp; !global.selectBoxStart){
+    scr_unit_array_clear();
 }
 </string>
           </argument>

@@ -59,7 +59,7 @@ infoBoxText = "Birch  Wood";
             <string>///Sync resource amount
 event_inherited();
 
-resourceAmount = global.woodOak;
+resourceAmount = global.woodBirch;
 </string>
           </argument>
         </arguments>

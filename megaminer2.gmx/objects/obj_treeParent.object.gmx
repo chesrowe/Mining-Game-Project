@@ -41,16 +41,16 @@ x += choose(irandom(16), - (irandom(16)));
 y -= choose(0,-1,-2);
 resource = RESOURCES.woodCommon;
 levelReq = 1;
-fall = 500; 
 falling = 0;
 fallTimer = 80;
 fallDir = 'right';
 fell = 0;
 resourceLeft = 500;
+fall = resourceLeft / 2; 
 fallSpeed = 0;
 fallIncrement = 0;
-fallXAdd = .3;
-fallYAdd =.2;
+fallXAdd = .15;
+fallYAdd =.05;
 image_speed = 0;
 beingCut = 0;
 animationTimer = 0;
@@ -67,8 +67,8 @@ bottomX = -2;
 bottomY = 2;
 stumpX = x + bottomX;
 stumpY = y + bottomY;
-workTimeBase = 300; 
-workTimeAdd = irandom(round(workTimeBase / 3));
+workTimeBase = 300;
+orgXAdd = 0;
 
 
 
@@ -192,9 +192,8 @@ if (falling){
     if (collision_line(x, y, x + lengthdir_x(220, image_angle + 90), y + lengthdir_y(220,image_angle + 90),obj_tileSurfaceParent,1,0)){
         falling = 0;
         fell = 1;
-        instance_destroy();
-        midRandom += 10;
-        midTime += 30;
+        midRandom *= 2;
+        orgXAdd += round(sprite_height / 3);
     }
     if (fallDir = 'right'){
         image_angle -= fallSpeed;  
@@ -373,12 +372,12 @@ if (global.debugClickDeleteTrees &amp;&amp; global.dev_mode){
             <string>///Draw self and bottom
 
 draw_self();
-draw_sprite(spriteBottom,0,stumpX,stumpY);
+draw_sprite(spriteBottom, 0, stumpX, stumpY);
 
 //draw_line for collision checking
 if (global.dev_mode){
     draw_set_colour(c_white);
-    draw_line_width(x,y,x + lengthdir_x(100, image_angle + 90), y + lengthdir_y(100,image_angle + 90),10);
+    draw_line_width(x, y, x + lengthdir_x(100, image_angle + 90), y + lengthdir_y(100, image_angle + 90), 10);
     draw_set_colour(c_black);
 }
 </string>

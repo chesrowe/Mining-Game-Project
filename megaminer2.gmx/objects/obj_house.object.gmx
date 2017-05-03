@@ -47,7 +47,7 @@ global.selected = id;
 groundY = 615;
 surfaceOnly = 1;
 originOffX = 0;
-originOffY = -8;
+originOffY = 0;
 menuY = y + 150;
 costWoodCommon = 500;
 costStone = 0;
@@ -58,6 +58,17 @@ spriteLevel[1] = spr_house1;
 spriteLevel[2] = spr_house1;
 spriteLevel[3] = spr_house1;
 spriteLevel[4] = spr_house1;
+
+///Being built specific
+//Cost array table 
+//cost[0,0]
+cost[0,0] = RESOURCES.woodCommon; //Type
+cost[0,1] = 200; //Total amount needed
+cost[0,2] = 200; //Amount left
+
+cost[1,0] = -1; 
+cost[1,1] = -1; 
+cost[1,2] = -1; 
 
 </string>
           </argument>
@@ -156,14 +167,14 @@ upgrade = 0;
 amountUpgraded = 0;
 
 //wood - 200
-upgradeCost[0,0] = 'woodCommon'; //type
-upgradeCost[0,1] = 100; //Amount needed
-upgradeCost[0,2] = 100; //Amount left
-//Stone - 200
-//upgradeCost[1,0] = 'stone';
-//upgradeCost[1,1] = 200;
-//upgradeCost[1,2] = 200;
-//food - 200
+upgradeCost[0,0] = RESOURCES.woodCommon; //type
+upgradeCost[0,1] = 200; //Amount needed
+upgradeCost[0,2] = 200; //Amount left
+//none
+upgradeCost[1,0] = -1;
+upgradeCost[1,1] = -1;
+upgradeCost[1,2] = -1;
+//none
 //upgradeCost[2,0] = 'food';
 //upgradeCost[2,1] = 200;
 //upgradeCost[2,2] = 200;

@@ -30,22 +30,23 @@ event_inherited();
 
 spriteTop = spr_treeEvergreen;
 spriteBottom = spr_treeEvergreenStump;
-bottomX = 1;
-bottomY = 5;
+bottomX = 0;
+bottomY = 7;
 stumpX = x + bottomX;
 stumpY = y + bottomY;
-fallYAdd = .2;
-fallXAdd = -.02;
+fallYAdd = .01;
+fallXAdd = 0.002;
 
 xp = 30;
-resource = 'woodCommon';
+resource = RESOURCES.woodCommon;
 levelReq = 5;
-woodLeft = 1000;
 midTime = 2;
 midRandom = 3;
 midDistance = 18;
 posDistance = 16;
 posTime = 30;
+
+y -= 5;
 </string>
           </argument>
         </arguments>

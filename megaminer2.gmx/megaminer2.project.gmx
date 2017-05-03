@@ -313,6 +313,8 @@
         <sprite>sprites\spr_surfaceHillUpUnder</sprite>
         <sprite>sprites\spr_surfaceHillDown</sprite>
         <sprite>sprites\spr_surfaceHillUp</sprite>
+        <sprite>sprites\spr_hillUpMask</sprite>
+        <sprite>sprites\spr_hillDownMask</sprite>
       </sprites>
       <sprite>sprites\spr_tileBlack</sprite>
     </sprites>
@@ -320,6 +322,7 @@
   <backgrounds name="background">
     <background>background\bg_sky</background>
     <background>background\bg_mountains</background>
+    <background>background\background4</background>
     <background>background\bg_farMountains</background>
     <background>background\bg_bushClose</background>
   </backgrounds>
@@ -341,6 +344,9 @@
       <script>scripts\scr_worker_is_working.gml</script>
       <script>scripts\scr_worker_resource_slot_deposit.gml</script>
       <script>scripts\scr_worker_resource_slot_is_empty.gml</script>
+      <script>scripts\scr_worker_randomize_move_to_time.gml</script>
+      <script>scripts\scr_worker_randomize_mid_time.gml</script>
+      <script>scripts\scr_worker_randomize_work_time.gml</script>
     </scripts>
     <scripts name="Misc">
       <script>scripts\scr_effects_fade_in.gml</script>

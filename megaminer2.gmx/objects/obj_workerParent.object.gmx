@@ -45,11 +45,7 @@ dir = 0;
 state = STATES_WORKER.idle;
 substate = SUBSTATES_WORKER.none;
 BloodColor = 'red';
-gold = 1;
 slot = 0;
-stone = 0;
-goingTo = 0;
-comingFrom = 0;
 beingAttacked = 0;
 animationSpeed = .3;
 beingAttacked = 0;
@@ -63,7 +59,7 @@ selecting = 0;
 selected = 0;
 moveToTime = 2 + irandom(6);
 moveToTimer = 0;
-target = -4;
+target = noone;
 targetType = 0;
 moveTargetX = 0;
 moveTargetY = 0;
@@ -79,6 +75,8 @@ insideSelectBoxAlt = 0;
 middleTime = 0;
 run = 0;
 hillStart = 0;
+waitingToWorkTimer = 0;
+waitingToWorkTime = irandom(10);
 
 
 
@@ -114,28 +112,6 @@ leveled = 0;
 //Dev mode
 showDebug = 0; 
 
-//Resources
-goldHeld = 0;
-maxGold = 40;
-
-stoneHeld = 0;
-maxStone = 40;
-
-brimstoneHeld = 0;
-maxBrimstone = 20;
-
-crystalHeld = 0;
-maxCrystal = 20;
-
-mushroomHeld = 0;
-maxMushroom = 20;
-
-woodHeld = 0;
-maxWood = 40;
-
-foodHeld = 0;
-maxFood = 50;
-
 //Working general
 workingLenDirX = lengthdir_x(40 ,point_direction(x,y,x,y));
 workingLenDirY = lengthdir_y(26 ,point_direction(x,y,x,y));
@@ -152,9 +128,7 @@ dropY = 0;
 workStart = false;
 workTimer = 0;
 workMiddleTime = 0;
-baseWorkTime = 300;
-workTimeAdd = irandom(round(baseWorkTime / 3));
-workTime = (baseWorkTime + workTimeAdd);
+workTime = 0;
 workingSound = false;
 waitingToWork = 0;
 toolTime = 0;
@@ -442,7 +416,7 @@ resourceSlot[0,1] = 0; //Amount
           <argument>
             <kind>1</kind>
             <string>///Debug stuff
-
+windowOpen = 0;
 windowObject = obj_uiDebugWindowWorker;
 </string>
           </argument>
@@ -476,7 +450,7 @@ if (falling){
         if (place_meeting(x, y + 3, obj_tileSurfaceFlatParent) &amp;&amp; !place_meeting(x, y, obj_tileSurfaceHillParent)){
             y = (instance_place(x, y + 3, obj_tileSurfaceFlatParent).y) - 12;
         }
-    }else if (!hillStart){
+    }else if (!hillStart &amp;&amp; !place_meeting(x, y, obj_tileSurfaceHillParent)){
         falling = 1;
     }
 }else if (!place_meeting(x, y + 3, obj_groundParent) &amp;&amp; !hillStart){
@@ -494,8 +468,6 @@ if (falling){
           </argument>
         </arguments>
       </action>
-    </event>
-    <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -551,6 +523,8 @@ if (state == STATES_WORKER.moveToTarget &amp;&amp; ceil(point_distance(x, y, mov
           </argument>
         </arguments>
       </action>
+    </event>
+    <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -616,375 +590,6 @@ if (state != "idle"){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Farming
-/*
-if (!dying){
-    
-    if (state == STATES_WORKER.farming){
-        moveToTimer ++;
-        image_speed = walkingImageSpeed;
-        //Workers walks to the resource to farm it
-        if (moveToTimer &gt; moveToTime){
-            sprite_index = spriteWalking;
-            if (target.x &gt; x &amp;&amp; !farmStart &amp;&amp; goingTo){
-                scr_unit_move_avoiding(walkSpeed,0,1);
-            }else if(!farmStart &amp;&amp; goingTo){
-                scr_unit_move_avoiding(walkSpeed,0,0);
-            }
-        }
-        //Starts the worker to mining
-        if (farmStart){
-            image_speed = farmingImageSpeed;
-            if (!drawTool){
-                farmingTimer ++;
-                //set the sprite
-                sprite_index = spriteFarming;
-                if (x &gt; target.x){
-                    image_xscale = -1;
-                }else{
-                    image_xscale = 1;
-                } 
-                //Triggers sound and particles
-                if (round(image_index) == 5 &amp;&amp; cutSound == 0){
-                    var sound = audio_play_sound_at(farmingSound[workRRPosition],x,y,0,1000,200,1,0,999999);  
-                    audio_sound_gain(sound,global.sfxVol,0);
-                    part_particles_create(global.partMining,x+workingLenDirX,y+workingLenDirY,global.partWoodChips,10);
-                    workRRPosition ++;
-                    if (workRRPosition &gt; 3){
-                        randomize();
-                        workRRPosition = irandom(2);
-                    }
-                    cutSound = 1; 
-                } 
-                if (round(image_index) != 5){
-                    cutSound = 0;
-                }
-                //Makes miner take the resousces to the stockpile
-                if (farmingTimer &gt;= farmingTime){
-                    randomize();
-                    goingTo = 0;
-                    comingFrom = 1;
-                    farmStart = 0;
-                    farmingTimer = 0;
-                    moveToTime = 2 + irandom(20);
-                    moveToTimer = 0;
-                    middleTimer = 0;
-                    target.amountLeft -= 40;
-                    //pops up xp gained
-                    with(instance_create(x,y,obj_workerDrawTimed)){
-                        amount = ("+"+string((other.target).xp)+"XP");
-                        col = c_yellow;
-                        myWorker = other.id;
-                    }
-                    xpFarming += target.xp;
-                    //Put the just mined resources into the inventory
-                    for (i = 3;i &lt;= 6; i++){
-                        if (is_real(inv[i,0]) &amp;&amp; inv[i,0] == -1){
-                            inv[i,0] = target.resource;
-                            inv[i,1] = 'resource';
-                            inv[i,6] = pickupLoad;
-                            break;
-                        }
-                    }
-                    //levels up if there is enough xp
-                    if (xpFarming &gt;= xpNeededFarming){
-                        farmingLevel ++;
-                        xpNeededFarming += floor(farmingLevel+300 * power(2,(farmingLevel/7)));
-                        baseFarmingTime -= (10 + irandom(5));
-                    }
-                    
-                }
-            }else{
-            //starts the pulling out tool animation
-                sprite_index = spriteFarmingDrawTool;
-                if (target.x &gt; x){
-                    image_xscale = 1;
-                }else{
-                    image_xscale = -1;  
-                }
-                    drawToolTimer ++;
-                if (drawToolTimer &gt;= drawToolTimeWoodcutting){
-                    drawTool = 0;
-                    drawToolTimer = 0;
-                    dir = point_direction(x,y,target.x,target.y);
-                }
-            }
-        }
-        //Wait for resource to not be exhausted
-        with(target){
-            if (amountLeft &lt;= 0){
-                if (!exPopUp){
-                    moveToTimer = 0;
-                    exPopUp = 1;
-                    with(instance_create(x,y,obj_workerDrawTimed)){
-                        col = c_red;
-                        amount = "!";
-                        xScale = 2;
-                        yScale = 2;
-                    }
-                }
-                amountLeft = 0;
-                exhausted = 1;
-                other.farmStart = 0;
-                other.farmingTimer = 0;
-                other.pickSoundTimer = 0;
-            }
-        }
-        //Starts the worker back to farming
-        if (waitingToFarm &amp;&amp; target.exhausted == 0){
-            moveToTimer ++;
-            if (moveToTimer &gt; moveToTime){
-                farmStart = 1;
-                farmingTimer = 0;
-                pickSoundTimer = 0;
-                comingFrom = 0;
-                drawTool = 0;
-                gointTo = 1;
-                waitingToFarm = 0;
-                
-                sprite_index = spriteFarming;
-                if (target.x &gt; x){
-                    image_xscale = 1;
-                }else{
-                    image_xscale = -1;
-                }
-            }
-        //set idle animation
-        }else if (waitingToFarm){
-            sprite_index = spriteIdle;
-            image_speed = idleImageSpeed;
-            if (target.x &gt; x){
-                image_xscale = 1;
-            }else{
-                image_xscale = -1;
-            }   
-        }
-        //Sets the miner going towards the stockpile
-        if (comingFrom &amp;&amp; x &lt; dropOffTarget.x){
-            moveToTimer ++;
-            if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalkingResources;
-                image_xscale = 1;
-                scr_unit_move_avoiding(walkSpeed,0,1);   
-            }
-        }else if (comingFrom){
-            moveToTimer ++;
-            if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalkingResources;
-                image_xscale = -1;
-                scr_unit_move_avoiding(walkSpeed,0,0);
-            }
-        }
-    
-    }    
-
-}
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Mining
-/*
-if (!dying){
-    
-    if (state == STATES_WORKER.mining){
-        moveToTimer ++;
-        image_speed = walkingImageSpeed;
-        //Workers walks to the resource to mine it
-        if (moveToTimer &gt; moveToTime){
-            sprite_index = spriteWalking;
-            if (target.x &gt; x &amp;&amp; !mineStart &amp;&amp; goingTo){
-                image_xscale = 1;
-                scr_unit_move_avoiding(walkSpeed,0,1); 
-            }else if(!mineStart &amp;&amp; goingTo){
-                image_xscale = -1;
-                scr_unit_move_avoiding(walkSpeed,0,0);  
-            }
-        }
-        //Starts the worker to mining
-        if (mineStart){
-            image_speed = miningImageSpeed;
-            if (!drawTool){
-                miningTimer ++;
-                //set the sprite
-                sprite_index = spriteMining;
-                if (x &gt; target.x){
-                    image_xscale = -1;
-                }else{
-                    image_xscale = 1;
-                } 
-                //Triggers sound and particles
-                if (round(image_index) == 5 &amp;&amp; cutSound == 0){
-                    var dir = point_direction(x,y,target.x,target.y);
-                    var sound = audio_play_sound_at(pickSound[workRRPosition],x,y,0,1000,200,1,0,999999);  
-                    audio_sound_gain(sound,global.sfxVol,0);
-                    part_particles_create(global.partMining,x+lengthdir_x(6,dir),y+lengthdir_y(6,dir),global.partStoneChips,10);
-                    workRRPosition ++;
-                    if (workRRPosition &gt; 3){
-        
-                        workRRPosition = irandom(2);
-                    }
-                    cutSound = 1; 
-                } 
-                if (round(image_index) != 5){
-                    cutSound = 0;
-                }
-                //Makes miner take the resources to the stockpile
-                if (miningTimer &gt;= miningTime){
-                    goingTo = 0;
-                    comingFrom = 1;
-                    mineStart = 0;
-                    miningTimer = 0;
-                    moveToTime = 2 + irandom(20);
-                    moveToTimer = 0;
-                    middleTimer = 0;
-                    target.amountLeft -= 40;
-                    //pops up xp gained
-                    with(instance_create(x,y,obj_workerDrawTimed)){
-                        amount = ("+"+string((other.target).xp)+"XP");
-                        col = c_yellow;
-                        myWorker = other.id;
-                    }
-                    xpMining += target.xp;
-                    //Put the just mined resources into the inventory
-                    for (i = 3;i &lt;= 6; i++){
-                        if (is_real(inv[i,0]) &amp;&amp; inv[i,0] == -1){
-                            inv[i,0] = target.resource;
-                            inv[i,1] = 'resource';
-                            inv[i,6] = pickupLoad;
-                            break;
-                        }
-                    }
-    
-                    if (xpMining &gt;= xpNeededMining){
-                        miningLevel ++;
-                        xpNeededMining += floor(miningLevel+300 * power(2,(miningLevel/7)));
-                        baseMiningTime -= (10 + irandom(5));
-                    }
-                    
-                }
-            }else{
-            //starts the pulling out tool animation
-                sprite_index = spriteMiningDrawTool;
-                if (target.x &gt; x){
-                    image_xscale = 1;
-                }else{
-                    image_xscale = -1; 
-                }
-                    drawToolTimer ++;
-                if (drawToolTimer &gt;= drawToolTimeWoodcutting){
-                    drawTool = 0;
-                    drawToolTimer = 0;
-                    dir = point_direction(x,y,target.x,target.y);
-                }
-            }
-        }
-        //Wait for resource to not be exhausted
-        with(target){
-            if (amountLeft &lt;= 0){
-                if (!exPopUp){
-                    moveToTimer = 0;
-                    moveToTime = 2 + irandom(20);
-                    exPopUp = 1;
-                    with(instance_create(x,y,obj_workerDrawTimed)){
-                        col = c_red;
-                        amount = "!";
-                        xScale = 2;
-                        yScale = 2;
-                    }
-                }
-                amountLeft = 0;
-                exhausted = 1;
-                other.mineStart = 0;
-                other.miningTimer = 0;
-                other.pickSoundTimer = 0;
-            }
-        }
-        //Starts the worker back to mining
-        if (waitingToMine &amp;&amp; target.exhausted == 0){
-            moveToTimer ++;
-            if (moveToTimer &gt; moveToTime){
-                mineStart = 1;
-                miningTimer = 0;
-                goingTo = 1;
-                pickSoundTimer = 0;
-                comingFrom = 0;
-                goingTo = 0;
-                waitingToMine = 0;
-                drawTool = 1;
-                sprite_index = spriteMining;
-                if (target.x &gt; x){
-                    image_xscale = 1;
-                }else{
-                    image_xscale = -1;
-                }
-            }
-        //set idle animation
-        }else if (waitingToMine){
-                sprite_index = spriteIdle;
-                image_speed = idleImageSpeed;
-            if (target.x &gt; x){
-                image_xscale = 1;
-            }else{
-                image_xscale = -1;
-            }   
-        }
-        //Sets the miner going towards the stockpile
-        if (comingFrom &amp;&amp; x &lt; dropOffTarget.x){
-            moveToTimer ++;
-            if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalkingResources;
-                image_xscale = 1;
-                scr_unit_move_avoiding(walkSpeed,0,1);     
-        }
-        }else if (comingFrom){
-            moveToTimer ++;
-            if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalkingResources;
-                image_xscale = -1;
-                scr_unit_move_avoiding(walkSpeed,0,0);  
-            }
-        }
-    }  
-}
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
             <string>///Fighting
 
 if (!dying){
@@ -1028,198 +633,6 @@ if (!dying){
         instance_destroy();
     }
 }
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Woodcutting
-/*
-if (state == STATES_WORKER.woodcutting){
-    image_speed = walkingImageSpeed;
-    moveToTimer ++;
-     //makes the worker walk to the tree
-     if (moveToTimer &gt; moveToTime){
-         sprite_index = spriteWalking;
-         if (instance_exists(target)&amp;&amp; target.x &gt; x &amp;&amp; !workStart &amp;&amp; goingTo){
-            scr_unit_move_avoiding(walkSpeed, 0, 1);
-         }else if(!workStart &amp;&amp; goingTo){
-            scr_unit_move_avoiding(walkSpeed, 0, 0);
-         }
-     }
-    //starts the worker to woodcutting
-    if (workStart){
-        image_speed = woodcuttingImageSpeed;
-        if (!drawTool){
-            workTimer ++;
-            //Triggers sound and particles
-            if (round(image_index) == target.hitFrame &amp;&amp; workingSound == false) {
-                if (instance_exists(target)){
-                    dir = point_direction(x, y, target.x, target.y);
-                    part_particles_create(global.partMining, x + lengthdir_x(32,dir), y, global.partWoodChips, 10);
-                }
-                workSound = audio_play_sound_at(target.woodcutSound[workRRPosition], x, y, 0, 1000, 200, 1, 0, workRRPosition); 
-                audio_sound_gain(workSound, global.sfxVol, 0);
-                audio_sound_pitch(workSound, random_range(.95, 1.2)); 
-                workRRPosition ++;
-                if (workRRPosition &gt; 3){
-                    workRRPosition = irandom(2);
-                }
-                workingSound = 1; 
-            } 
-            if (round(image_index) != target.hitFrame){
-                workingSound = 0;
-            }
-            //adds the resouces the worker and decements wood from the tree
-            if (instance_exists(target)){
-                if (workTimer &gt;= workTime &amp;&amp; !target.falling){
-                    image_speed = walkingImageSpeed;
-                    goingTo = false;
-                    drawTool = false;
-                    comingFrom = true;
-                    middleTimer = 0;
-                    workStart = false;
-                    cuttingTimer = 0;
-                    target.woodLeft -= 100;
-                    target.fall -= 100;
-                    //Randomizes the position of the cutting more when then the target tree has fallen
-                    if (instance_exists(target)){
-                        if (target.fell == 0){
-                            workMiddleTime =  (2 + irandom(target.midRandom));
-                        }else{
-                            workMiddleTime =  (2 + irandom(target.midRandom) + irandom(40));    
-                        }
-                    }
-                    moveToTime = 2 + irandom(20);
-                    moveToTimer = 0;
-                    //pops up xp gained
-                    with(instance_create(x, y, obj_workerDrawTimed)){
-                        amount = ("+" + string((other.target).xp) + "XP");
-                        col = c_yellow;
-                        myWorker = other.id;
-                    }
-                    //If the worker is already over the warehouse stop the middletimer 
-                    if (place_meeting(x, y, obj_warehouse)){
-                        middleTimer = workMiddleTime;
-                    }
-                    //pops up xp gained
-                    xpWoodcutting += target.xp;
-                    //Put the just mined resources into the inventory
-                    for (i = 3; i &lt;= 6; i++){
-                        if (is_real(inv[i,0]) &amp;&amp; inv[i,0] == -1){
-                            inv[i,0] = target.resource;
-                            inv[i,1] = 'resource';
-                            inv[i,6] = pickupLoad;
-                            break;
-                        }
-                    }
-                    //Levels the worker up if he has enough XP
-                    if (xpWoodcutting &gt;= xpNeededWoodcutting){
-                        with(instance_create(x, y, obj_workerDrawTimed)){
-                            myWorker = other.id;
-                            amount = "Level Up!";
-                            col = c_yellow;
-                        }
-                        woodcuttingLevel ++;
-                        xpNeededWoodcutting += floor(woodcuttingLevel+300 * power(2,(woodcuttingLevel/7)));
-                        baseWorkTime -= (10 + irandom(5));
-                    }
-                    //if warehouse is not built, make idle
-                    if (!instance_exists(dropOffTarget)){
-                        state = STATES_WORKER.idle;
-                    }
-                    //check to see if the tree is over the warehouse
-                    if (point_distance(x, y, dropOffTarget.x, dropOffTarget.y) &lt; 10){
-                        middleTimer = 50;
-                    }
-                }
-            //If the tree is destroyed before the cutting timer ends. (fail safe)
-            }else if (workTimer &gt; workTime){
-                workStart = false;
-                comingFrom = true;
-                goingTo = false;
-            }
-        }else{
-            //starts the pulling out tool animation
-            if (instance_exists(target)){
-                sprite_index = spriteWoodcuttingDrawTool;
-                if (target.x &gt;= x){
-                    scr_sprite_face_right();
-                }else{
-                    scr_sprite_face_left();  
-                }
-            }
-            drawToolTimer ++;
-            if (instance_exists(target)){
-                if (drawToolTimer &gt;= drawToolTimeFarming){
-                    drawTool = 0;
-                    drawToolTimer = 0;
-                    dir = point_direction(x, y, target.x, target.y);
-                }
-            }
-        }
-    }
-    //Makes the worker take the reources to the stockpile
-    
-    if (comingFrom &amp;&amp; x &lt; dropOffTarget.x &amp;&amp; instance_exists(dropOffTarget)){
-        moveToTimer ++;
-        if (moveToTimer &gt; moveToTime){
-            sprite_index = spriteWalkingResources;
-            scr_unit_move_avoiding(walkSpeed,0,1);    
-        }
-    }else if (comingFrom){
-        moveToTimer ++;
-        if (moveToTimer &gt; moveToTime){
-            sprite_index = spriteWalkingResources;
-            scr_unit_move_avoiding(walkSpeed,0,-1);
-        }
-    }
-  
-    //If the target tree gets destroyed , set the state to idle
-    if ((goingTo || (goingTo &amp;&amp; comingFrom == false)) &amp;&amp; !instance_exists(target) &amp;&amp; distance_to_object(instance_nearest(x, y, obj_treeParent)) &gt; 3000){
-        state = STATES_WORKER.idle;
-        goingTo = false;
-        comingFrom = false;
-        middleTimer = 0;  
-        workStart = false;
-        workTimer = 0;
-        moveTimer = 0;
-        moveToTimer = 0;  
-        drawToolTimer = 0;
-        sprite_index = spriteIdle;
-    }else if (!comingFrom &amp;&amp; distance_to_object(instance_nearest(x,y,obj_treeParent)) &lt; 3000 &amp;&amp; !instance_exists(target)){
-        target = instance_nearest(x, y, obj_treeParent);
-        state = STATES_WORKER.woodcutting;
-        comingFrom = false;
-        workTimer = 0;
-        moveToTimer = 0;
-        cutStart = false;
-        middleTimer = 0;
-        drawToolTimer = 0;
-        goingTo = true;        
-    }
-}
-
-
-
-
-
-
 </string>
           </argument>
         </arguments>
@@ -1360,155 +773,6 @@ if (state == STATES_WORKER.idle &amp;&amp; substate != SUBSTATES_WORKER.sitting)
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Upgrading
-
-/*if (!dying){
-    
-    if (state == 'upgrading'){
-        if (!gettingResources){
-            moveToTimer ++;
-            image_speed = walkingImageSpeed;
-            //Workers walks to the building to bulid it
-            if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalkingResources;
-                if (target.x &gt; x &amp;&amp; !workStart &amp;&amp; goingTo){
-                    image_xscale = 1;
-                    scr_unit_move_avoiding(walkSpeed,0,1);  
-                }else if(!workStart &amp;&amp; goingTo){
-                    image_xscale = -1;
-                    scr_unit_move_avoiding(walkSpeed,0,0); 
-                }
-            }
-        }else{
-            //Worker Getting Resources
-            moveToTimer ++;
-            image_speed = walkingImageSpeed;
-            //Worker goes to get resources from the stockpile to build the building with
-            if (moveToTimer &gt; moveToTime){
-                sprite_index = spriteWalking;
-                if (obj_warehouse.x &gt; x &amp;&amp; !workStart &amp;&amp; gettingResources){
-                    image_xscale = 1;
-                    scr_unit_move_avoiding(walkSpeed,0,1);  
-                }else if(!workStart &amp;&amp; gettingResources){
-                    image_xscale = -1;
-                    scr_unit_move_avoiding(walkSpeed,0,0);  
-                }
-            }
-        }
-        //Starts the worker to building
-        if (workStart){
-            image_speed = miningImageSpeed;
-            if (!drawTool){
-                workTimer ++;
-                //set the sprite
-                sprite_index = spriteBuilding;
-                if (x &gt; target.x){
-                    image_xscale = -1;
-                }else{                    
-                    image_xscale = 1;
-                } 
-                //Triggers sound and particles
-                if (round(image_index) == 5 &amp;&amp; cutSound == 0){
-                    var sound = audio_play_sound_at(pickSound[workRRPosition],x,y,0,1000,200,1,0,999999);  
-                    audio_sound_gain(sound,global.sfxVol,0);
-                    workRRPosition ++;
-                    if (workRRPosition &gt; 3){
-                        randomize();
-                        workRRPosition = irandom(2);
-                    }
-                    cutSound = 1; 
-                } 
-                if (round(image_index) != 5){
-                    cutSound = 0;
-                }
-                //Makes worker take the resources to the stockpile
-                if (workTimer &gt;= workTime){
-                    randomize();
-                    goingTo = 0;
-                    gettingResources = 1;
-                    workStart = 0;
-                    workTimer = 0;
-                    moveToTime = 2 + irandom(20);
-                    moveToTimer = 0;
-                    middleTimer = 0;
-                    workTime = (baseWorkTime + workTimeAdd);
-                    //pops up xp gained
-                    var targetXp = string(target.xp);
-                    with(instance_create(x,y,obj_workerDrawTimed)){
-                        amount = ("+" + targetXp + "XP");
-                        col = c_yellow;
-                        myWorker = other.id;
-                    }
-                    //Take away the resources the worker was building with
-                    for (i = 0; i &lt; 3; i++){
-                        if (target.upgradeCost[i,0] == currentResource){
-                            target.upgradeCost[i,2] -= 40;
-                            target.amountUpgraded += 40;
-                            for (a = 0; a &lt;= 10; a++;){
-                                if (inv[a,0] == currentResource){
-                                    inv[a,0] = -1;
-                                    inv[a,1] = -1;
-                                    inv[a,2] = -1;
-                                    break;
-                                }
-                            }
-                            currentResource = -1;
-                            break;
-                        }   
-                    }
-                    
-                }
-            }else{
-            //starts the pulling out tool animation
-                sprite_index = spriteBuildingDrawTool;
-                if (target.x &gt; x){
-                    image_xscale = 1;    
-                }else{
-                    image_xscale = -1;    
-                }
-                    drawToolTimer ++;
-                if (drawToolTimer &gt;= drawToolTimeWoodcutting){
-                    drawTool = 0;
-                    drawToolTimer = 0;
-                    dir = point_direction(x,y,target.x,target.y);
-                }
-            }
-        } 
-        //Set the worker to idle when the structure is upgraded
-        if (target.upgrade == 0){
-            middleTimer = 0;
-            goingTo = 0;
-            gettingResources = 0;
-            state = 'idle';
-            sprite_index = spriteIdle;
-            if (x &gt; target.x){
-                image_xscale = -1;
-            }else{
-                image_xscale = 1;    
-            }
-        }         
-    }  
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
             <string>///Stamina regen
 
 if (!run &amp;&amp; stamina &lt; maxStamina){
@@ -1592,14 +856,14 @@ if (substate != SUBSTATES_WORKER.none){
                 //Walk toward target
                 if (instance_exists(target)){
                     image_speed = walkingImageSpeed;
-                    scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dir_x(target.x));
+                    scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dir_x((target.x + target.orgXAdd)));
                 }
             }else{
                 image_speed = 0;
             }
             //Middle timer stuff
             if (scr_worker_is_working() &amp;&amp; instance_exists(target)){ 
-                if (scr_find_x_diff(x, target.x) &lt; target.midDistance){
+                if (scr_find_x_diff(x, (target.x + target.orgXAdd)) &lt; target.midDistance){
                     middleTimer ++;
                 }
             }
@@ -1633,9 +897,22 @@ if (substate != SUBSTATES_WORKER.none){
             }
             
             //General middleTime stuff \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-            if (scr_worker_is_working() &amp;&amp; instance_exists(target) &amp;&amp; (scr_find_x_diff(x, target.x) &lt; target.midDistance)){
+            if (scr_worker_is_working() &amp;&amp; instance_exists(target) &amp;&amp; (scr_find_x_diff(x, (target.x + target.orgXAdd)) &lt; target.midDistance)){
                 if ((middleTimer &gt;= middleTime) &amp;&amp; skillLevel &gt;= target.levelReq){
-                    scr_unit_change_substate(SUBSTATES_WORKER.toolPullout);   
+                    //If the worker state is mining or farming, make sure the resource isn't exhausted
+                    if ((state == STATES_WORKER.mining || state == STATES_WORKER.farming) &amp;&amp; !target.exhausted){ 
+                        scr_unit_change_substate(SUBSTATES_WORKER.toolPullout); 
+                    }else if (state == STATES_WORKER.mining || state == STATES_WORKER.farming){
+                        scr_unit_change_substate(SUBSTATES_WORKER.waitingToWork);
+                    }  
+                    //If the worker state is building/upgrading
+                    if (state == STATES_WORKER.building || state == STATES_WORKER.upgrading){
+                        scr_unit_change_substate(SUBSTATES_WORKER.toolPullout);    
+                    }
+                    //Woodcutting
+                    if (state == STATES_WORKER.woodcutting){
+                        scr_unit_change_substate(SUBSTATES_WORKER.toolPullout);     
+                    }
                 }else if (skillLevel &lt; target.levelReq){
                     middleTimer = 0;
                     state = STATES_WORKER.idle;
@@ -1668,7 +945,7 @@ if (substate != SUBSTATES_WORKER.none){
                 
                 case STATES_WORKER.farming:
                     toolTime = drawToolTimeFarming;
-                    sprite_index = spriteFarminigDrawTool;
+                    sprite_index = spriteFarmingDrawTool;
                 break;
                 
                 case STATES_WORKER.building:
@@ -1681,7 +958,9 @@ if (substate != SUBSTATES_WORKER.none){
                     sprite_index = spriteBuildingDrawTool;
                 break;
             }
-            scr_sprite_face_xpoint(target.x);
+            if (instance_exists(target)){
+                scr_sprite_face_xpoint(target.x);
+            }
             //Make the worker pull out its tool
             //Play the sound
             if (image_index == 3){
@@ -1698,10 +977,23 @@ if (substate != SUBSTATES_WORKER.none){
                     scr_unit_change_substate(SUBSTATES_WORKER.working);
                 }
             }
+            //If the target ceases to exist while the worker is going to, find the worker a new target.
+            if (!instance_exists(target)){
+                switch(state){
+                    //woodcutting
+                    case STATES_WORKER.woodcutting:
+                        target = instance_nearest(x, y, obj_treeParent);
+                        scr_unit_change_substate(SUBSTATES_WORKER.goingTo);    
+                    break;
+                }
+            
+            }
         break;
         
         //Working \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         case SUBSTATES_WORKER.working:
+            workTimer ++; 
+            
             //If the target ceases to exist while the worker is working, find the worker a new target.
             if (!instance_exists(target)){
                 switch(state){
@@ -1713,7 +1005,13 @@ if (substate != SUBSTATES_WORKER.none){
                 }
             
             }
-            workTimer ++; 
+            if (state == STATES_WORKER.woodcutting &amp;&amp; target.falling){
+                waitingToWorkTimer ++;
+                if (waitingToWorkTimer &gt;= waitingToWorkTime){
+                    scr_unit_change_substate(SUBSTATES_WORKER.waitingToWork);    
+                }
+            }
+            
             //Sounds
             if (instance_exists(target) &amp;&amp; round(image_index) == target.hitFrame &amp;&amp; workingSound == false){
                 //Create particles for the tool hiting the resource
@@ -1728,12 +1026,24 @@ if (substate != SUBSTATES_WORKER.none){
                 if (workRRPosition &gt; 3){
                     workRRPosition = irandom(2);
                 }
-                workingSound = 1; 
+                workingSound = true; 
+                if (state == STATES_WORKER.woodcutting){
+                    target.beingCut = true;
+                    target.animationTimer = 0;
+                }
             }   
+            
             //Stop the sound from playing when it's not the hit frame of the sprite
             if (instance_exists(target) &amp;&amp; round(image_index) != target.hitFrame){
                 workingSound = 0;
             }
+            if ((state == STATES_WORKER.mining || state == STATES_WORKER.farming) &amp;&amp; target.exhausted){
+                waitingToWorkTimer ++;
+                if (waitingToWorkTimer &gt;= waitingToWorkTime){
+                    scr_unit_change_substate(SUBSTATES_WORKER.waitingToWork);
+                }
+            }
+            
             //Make the worker take the resources to the warehouse
             if (workTimer &gt;= workTime &amp;&amp; instance_exists(target)){
                    if (state != STATES_WORKER.building &amp;&amp; state != STATES_WORKER.upgrading){
@@ -1776,12 +1086,9 @@ if (substate != SUBSTATES_WORKER.none){
                         resourceSlot[0,1] = 0;
                     }
                     //If the target is a tree decrement the fall variable in it
-                    if (object_is_ancestor(target, obj_treeParent)){
+                    if (object_is_ancestor((target).object_index, obj_treeParent)){
                         target.fall -= 100;    
-                    }
-                    //Randomizes the position of the cutting more when then the target tree has fallen
-                    workMiddleTime =  (2 + irandom(target.midRandom));         
-                    moveToTime = 2 + irandom(20);
+                    }      
                     moveToTimer = 0;
                     //pops up xp gained
                     with(instance_create(x, y, obj_workerDrawTimed)){
@@ -1791,7 +1098,7 @@ if (substate != SUBSTATES_WORKER.none){
                     }
                     //If the worker is already over the warehouse stop the middletimer 
                     if (place_meeting(x, y, obj_warehouse)){
-                        middleTimer = workMiddleTime;
+                        middleTimer = middleTime;
                     }
                     //Put the just worked resources into the inventory
                     if (state != STATES_WORKER.building &amp;&amp; state != STATES_WORKER.upgrading){
@@ -1833,7 +1140,7 @@ if (substate != SUBSTATES_WORKER.none){
         case SUBSTATES_WORKER.resourceDropOff:
             //Make the worker walk toward the dropOffTarget
             if (instance_exists(dropOffTarget)){
-                if (middleTimer &lt; 80){
+                if (middleTimer &lt; middleTime){
                     moveToTimer ++;
                     scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dir_x(dropOffTarget.x));
                     sprite_index = spriteWalkingResources;   
@@ -1841,17 +1148,17 @@ if (substate != SUBSTATES_WORKER.none){
                 //Collision with the warehouse
                 if (place_meeting(x, y, dropOffTarget)){
                     if (instance_exists(target) &amp;&amp; x == target.x){
-                        middleTimer = 80;
+                        middleTimer = middleTime;
                     }
                     //Start the middle timer
                     middleTimer ++;
-                    if (middleTimer == 80){
+                    if (middleTimer == (middleTime - 1)){
                         dropX = x;
                         dropY = y;
                         image_index = 0;
                         sprite_index = spriteDropResources;
                         image_speed = 0;
-                    }else if (middleTimer &gt; 80){
+                    }else if (middleTimer &gt; middleTime){
                         image_speed = .10;
                         sprite_index = spriteDropResources;
                         scr_sprite_face_xpoint(dropOffTarget.x); 
@@ -1877,6 +1184,10 @@ if (substate != SUBSTATES_WORKER.none){
                                 //Gold
                                 case RESOURCES.oreGold:
                                     global.gold += resourceSlotMax;
+                                break;
+                                //Food
+                                case RESOURCES.food:
+                                    global.food += resourceSlotMax;
                                 break;
                             }
                             resourceSlot[0,0] = RESOURCES.nothing;
@@ -1910,7 +1221,7 @@ if (substate != SUBSTATES_WORKER.none){
             if (positionTimer &gt;= positionTime){
                 positionTimer = 0;  
                 //Make the worker go toward the target again or start working
-                if (scr_find_x_diff(x, target.x) &gt; target.midDistance){
+                if (scr_find_x_diff(x, target.x + target.orgXAdd) &gt; target.midDistance){
                     scr_unit_change_substate(SUBSTATES_WORKER.goingTo);
                 }else{
                     scr_unit_change_substate(SUBSTATES_WORKER.toolPullout);
@@ -1946,10 +1257,10 @@ if (substate != SUBSTATES_WORKER.none){
                     }
                 }
                 //Worker walk to dropOffTarget
-                if (middleTimer &lt; 80){
+                if (middleTimer &lt; middleTime){
                     moveToTimer ++;
                     if (instance_exists(target) &amp;&amp; (x == dropOffTarget.x)){
-                        middleTimer = 80;
+                        middleTimer = middleTime;
                     }
                     scr_unit_move_avoiding(walkSpeed, 0, scr_unit_dir_x(dropOffTarget.x));
                     //sprite_index = spriteWalking;   
@@ -1957,13 +1268,13 @@ if (substate != SUBSTATES_WORKER.none){
                 //Collision with the warehouse
                 if (place_meeting(x, y, dropOffTarget)){
                     //Check the middle timer
-                    if (middleTimer == 80){
+                    if (middleTimer == middleTime){
                         middleTimer ++;
                         dropX = x;
                         dropY = y;
                         image_index = 0;
                         image_speed = 0;
-                    }else if (middleTimer &gt; 80){
+                    }else if (middleTimer &gt; middleTime){
                         //Check the resourceSlot for resources and deposit them if there are any
                         if (resourceSlot[0,0] != RESOURCES.nothing){
                             scr_worker_resource_slot_deposit(resourceSlotMax);
@@ -2087,7 +1398,7 @@ if (substate != SUBSTATES_WORKER.none){
                                         break;
                                     } //If the building still needs to be built but the resource is not available make the worker wait
                                 }else if (!target.built){ 
-                                    scr_unit_change_substate(SUBSTATES_WORKER.waitingToBuild);
+                                    scr_unit_change_substate(SUBSTATES_WORKER.waitingToWork);
                                 }
                             }
                             
@@ -2205,7 +1516,7 @@ if (substate != SUBSTATES_WORKER.none){
                                         break;
                                     }
                                 }else if (target.upgrade){ 
-                                    scr_unit_change_substate(SUBSTATES_WORKER.waitingToBuild);
+                                    scr_unit_change_substate(SUBSTATES_WORKER.waitingToWork);
                                 }
                             }
                             
@@ -2225,10 +1536,10 @@ if (substate != SUBSTATES_WORKER.none){
         break;
         
         //waitingToBuild /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        case SUBSTATES_WORKER.waitingToBuild:
+        case SUBSTATES_WORKER.waitingToWork:
             //Building state
             if (state == STATES_WORKER.building &amp;&amp; !target.built){
-                if (scr_building_find_resource_needed() != -4){
+                if (scr_building_find_resource_needed() != -4){     
                     scr_unit_change_substate(SUBSTATES_WORKER.resourcePickup);
                 }       
             }else if (state == STATES_WORKER.building &amp;&amp; target.built){
@@ -2238,12 +1549,26 @@ if (substate != SUBSTATES_WORKER.none){
             //Upgrading state
             if (state == STATES_WORKER.upgrading &amp;&amp; target.upgrade){
                 if (scr_building_find_resource_needed_upgrade(target) != -4){
-                    scr_unit_change_substate(SUBSTATES_WORKER.resourcePickup);
+                        scr_unit_change_substate(SUBSTATES_WORKER.resourcePickup);
                 }       
             }else if (state == STATES_WORKER.upgrading &amp;&amp; !target.upgrade){
                 state = STATES_WORKER.idle;
                 scr_unit_change_substate(SUBSTATES_WORKER.none);
-            }       
+            } 
+            //Mining/Farming state 
+            if ((state == STATES_WORKER.mining || state = STATES_WORKER.farming) &amp;&amp; !target.exhausted){
+                waitingToWorkTimer ++;
+                if (waitingToWorkTimer &gt;= waitingToWorkTime){
+                    scr_unit_change_substate(SUBSTATES_WORKER.toolPullout);
+                }
+            }    
+            //Woodcutting
+            if (state == STATES_WORKER.woodcutting &amp;&amp; instance_exists(target) &amp;&amp; target.fell){
+                waitingToWorkTimer ++;
+                if (waitingToWorkTimer &gt;= waitingToWorkTime){
+                    scr_unit_change_substate(SUBSTATES_WORKER.toolPullout);
+                }
+            }   
         break;
     }
 }
@@ -2384,6 +1709,7 @@ if (!global.workerBuild &amp;&amp; !global.dev_mode_dupe &amp;&amp; !global.shif
     (obj_globalCon.buildButton).visible = 1;
     (obj_globalCon.workerInventoryButton).visible = 1;
     (obj_globalCon.workerSkillsButton).visible = 1;
+    global.workerBuildMenu = 0;
 }
 if (global.shiftSelect){
     scr_unit_array_add(id);

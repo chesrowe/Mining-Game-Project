@@ -93,7 +93,7 @@ hasWindow = 0;
 
 if (global.woodCommon &gt;= 200){
     global.woodCommon -= 200;
-    global.selected = instance_create(mouse_x,mouse_y,obj_farmingPatch);
+    global.selected = instance_create(mouse_x, mouse_y, obj_farmingPatch);
     global.workerBuild = 1;
 }
 </string>

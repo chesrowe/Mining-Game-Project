@@ -31,20 +31,20 @@ moveSpeed = 3;
 speedIncrement = 0;
 
 //wagon draw positions
-wX = -10;
-wY = 700;
-wSpeed = 2;
+wX = -5;
+wY = 698;
+wSpeed = 1;
 
 //Worker 1 draw positions
 workerImageSpeed = .12;
-w1X = -40;
-w1Y = 672;
+w1X = -20;
+w1Y = 684;
 w1ImageIndex = 0;
 w1Draw = 1;
 
 //Worker 2
-w2X = 20;
-w2Y = 672;
+w2X = 10;
+w2Y = 684;
 w2ImageIndex = 6; 
 w2Draw = 1;
 
@@ -104,7 +104,7 @@ if (global.debugSkipIntro){
 
 //Timer for the object
 timer ++;
-if (timer &gt;= 470){
+if (timer &gt;= 600){
     //Replace the dummy warehouse and workers with real ones
     instance_create(wX,wY,obj_warehouse);
     instance_destroy();
@@ -112,15 +112,15 @@ if (timer &gt;= 470){
 
 //Control camera moving down
 view_yview[0] += moveSpeed;
-speedIncrement += .000023
+speedIncrement += .0000125
 moveSpeed -= speedIncrement;
 
 //Control the wagon moving
-wX += .4;
+wX += .3;
 
 //Control the workers moving
-w1X += 1;
-w2X += 1;
+w1X += .5;
+w2X += .5;
 w1ImageIndex += workerImageSpeed;
 w2ImageIndex += workerImageSpeed;
 
@@ -133,13 +133,13 @@ if (w1ImageIndex &gt;= 7){
 }
 
 //Make them stop
-if (timer == 450){
+if (timer == 590){
     var w1 = instance_create(w1X, w1Y, obj_workerHumanP1);
     w1.sprite_index = spr_workerIdle;
     w1Draw = 0; 
 } 
 
-if (timer == 460){
+if (timer == 570){
     var w2 = instance_create(w2X, w2Y, obj_workerHumanP1);
     w2.sprite_index = spr_workerIdle;   
     w2Draw = 0; 

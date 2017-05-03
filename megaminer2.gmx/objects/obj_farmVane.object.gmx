@@ -59,8 +59,8 @@ image_speed = 0;
 
 if (instance_exists(myFarm)){
     if (myFarm.placed != 1){
-        x = (myFarm.x - 116);
-        y = (myFarm.y - 204);
+        x = (myFarm.x - 58);
+        y = (myFarm.y - 103);
     }
 }else{
     instance_destroy();

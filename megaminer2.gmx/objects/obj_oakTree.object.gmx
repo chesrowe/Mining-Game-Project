@@ -34,11 +34,11 @@ bottomX = 0;
 bottomY = -3;
 stumpX = x + bottomX;
 stumpY = y + bottomY;
-fallYAdd = .2;
-fallXAdd = .2;
+fallYAdd = .1;
+fallXAdd = .1;
 
 xp = 100;
-resource = 'woodOak';
+resource = RESOURCES.woodOak;
 levelReq = 10;
 woodLeft = 2400;
 posDistance = 20;
@@ -46,6 +46,9 @@ posTime = 25;
 midTime = 0;
 midRandom = 5;
 midDistance = 20;
+workTimeBase = 600;
+resourceLeft = 800;
+fall = resourceLeft / 2; 
 
 
 

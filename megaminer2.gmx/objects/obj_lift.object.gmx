@@ -61,12 +61,12 @@ spriteLevel[4] = spr_liftMain1;
 
 //Cost array table 
 //cost[0,0]
-cost[0,0] = 'woodCommon'; //Type
+cost[0,0] = RESOURCES.woodCommon; //Type
 cost[0,1] = 500; //Total amount needed
 cost[0,2] = 500; //Amount left
-cost[1,0] = 'stone'; 
-cost[1,1] = 200; 
-cost[1,2] = 200; 
+cost[1,0] = -1; 
+cost[1,1] = -1; 
+cost[1,2] = -1; 
 cost[2,0] = -1; 
 cost[2,1] = -1; 
 cost[2,2] = -1; 
@@ -133,11 +133,6 @@ myElevator = instance_create(x, y, obj_elevator);
 myElevator.myLift = id;
 ropeColor = make_colour_rgb(173, 145, 112);
 
-enum STATES_LIFT{
-    idle,
-    movingUp,
-    movingDown
-}
 
 state = STATES_LIFT.idle;
 </string>
@@ -207,7 +202,7 @@ if (!built){
             <kind>1</kind>
             <string>///State Machine
 
-if (state = STATES.idle){
+if (state = STATES_LIFT.idle){
     myElevator.y  = y + 8; 
 }
 </string>
@@ -252,23 +247,23 @@ if (state = STATES.idle){
 
 //Draw the 2 ropes connecting the elevator and the lift
 if (instance_exists(myElevator) &amp;&amp; built){
-    var rope1X1 = x - 94;
-    var rope1Y1 = y - 106;
-    var rope1X2 = x - 94;
-    var rope1Y2 = myElevator.y - 80;
+    var rope1X1 = x - 48;
+    var rope1Y1 = y - 53;
+    var rope1X2 = x - 48;
+    var rope1Y2 = myElevator.y - 40;
     
-    var rope2X1 = x - 88;
-    var rope2Y1 = y - 106;
-    var rope2X2 = x - 88;
-    var rope2Y2 = myElevator.y - 80;
+    var rope2X1 = x - 46;
+    var rope2Y1 = y - 53;
+    var rope2X2 = x - 46;
+    var rope2Y2 = myElevator.y - 40;
     
     draw_set_colour(ropeColor);
         
         draw_line(rope1X1, rope1Y1, rope1X2, rope1Y2);
         draw_line(rope1X1+1, rope1Y1, rope1X2+1, rope1Y2);
         
-        draw_line(rope2X1, rope2Y1, rope2X2, rope2Y2);
-        draw_line(rope2X1+1, rope2Y1, rope2X2+1, rope2Y2);
+        draw_line(rope2X1, rope2Y1, rope2X2+1, rope2Y2);
+        draw_line(rope2X1, rope2Y1, rope2X2+1, rope2Y2);
     
     draw_set_colour(c_white);
 }

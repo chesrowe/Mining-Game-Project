@@ -10,42 +10,30 @@ if (dir == -1){
 }else{
     scr_sprite_face_right();    
 }
+if (runOn && scr_worker_resource_slot_is_empty()){
+    moveSpeed *= 2;
+}
 
-if (!runOn || !scr_worker_resource_slot_is_empty()){
-    x += moveSpeed;
-}else{
-    x += moveSpeed * 2;    
-}
-//Make the worker go up or down a hill
-//Right
-if (dir == -1){
-    if ( (position_meeting(x + 8, y + 5, obj_tileSurfaceHillUp) || position_meeting(x + 8 ,y + 13 ,obj_tileSurfaceHillUpUnder)) || position_meeting(x - 8 ,y + 13 ,obj_tileSurfaceFlatParent) || position_meeting(x ,y + 15 ,obj_tileSurfaceHillParent) ){
-        if (!runOn || !scr_worker_resource_slot_is_empty()){
-            y -= yMoveSpeed+.3;
-        }else{
-            y -= (yMoveSpeed+.3)*2;    
-        }
-    }else if ( (position_meeting(x + 8 ,y + 13 ,obj_tileSurfaceHillDown) || position_meeting(x ,y + 15 ,obj_tileSurfaceHillDownUnder) || position_meeting(x ,y + 15 ,obj_tileSurfaceHillDown) || place_meeting(x ,y + 2 ,obj_tileSurfaceHillDown))){
-        if (!runOn || !scr_worker_resource_slot_is_empty()){
-            y += yMoveSpeed + .2;
-        }else{
-            y += (yMoveSpeed + .2) * 2;   
-        }
+if (place_meeting(x + moveSpeed, y, obj_tileSurfaceHillParent)){
+    for (i = 0; i <= 100; i++){
+        if (!place_meeting(x + moveSpeed, y - i, obj_tileSurfaceHillParent)){
+            y -= (i - 2);
+            break;
+        }    
     }
-}else{
-    //Left and up
-    if ( (position_meeting(x - 8 ,y + 5 ,obj_tileSurfaceHillDown) || position_meeting(x - 8 ,y + 13 ,obj_tileSurfaceHillDownUnder) || position_meeting(x + 8 ,y + 13 ,obj_tileSurfaceFlatParent) || (position_meeting(x ,y + 15 ,obj_tileSurfaceHillParent) && !position_meeting(x + 3 ,y + 15 ,obj_tileSurfaceFlatParent)) ) ){
-        if (!runOn || !scr_worker_resource_slot_is_empty()){
-            y -= yMoveSpeed + .3;
-        }else{
-            y -= (yMoveSpeed + .3) * 2;    
-        }
-        //left and DOWN
-    }else if ( (position_meeting(x + 12 ,y + 13 ,obj_tileSurfaceHillUp) || position_meeting(x ,y + 15 ,obj_tileSurfaceHillUpUnder) || place_meeting(x + 5 ,y ,obj_tileSurfaceHillUp)) && (!position_meeting(x - 8 ,y + 13 ,obj_tileSurfaceFlatParent)) ){
-        if (!runOn || !scr_worker_resource_slot_is_empty()){
-            y += yMoveSpeed + .2;
-        }else{
-            y += (yMoveSpeed + .2) * 2;   
-        }
-    }    
+       
 }
+
+x += moveSpeed; 
+
+
+
+
+
+
+
+
+
+
+
+

@@ -51,7 +51,7 @@
           <argument>
             <kind>1</kind>
             <string>///Game fade in
-alpha -= .0020;
+alpha -= .0015;
 
 if (alpha &lt;= 0){
     instance_destroy();

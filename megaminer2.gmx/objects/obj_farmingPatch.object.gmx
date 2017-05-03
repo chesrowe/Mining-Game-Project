@@ -5,7 +5,7 @@
   <visible>-1</visible>
   <depth>-3</depth>
   <persistent>0</persistent>
-  <parentName>&lt;undefined&gt;</parentName>
+  <parentName>obj_resourceParent</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -27,8 +27,8 @@
             <kind>1</kind>
             <string>///General
 event_inherited();
-
 //general variabels
+autoBuild = 0;
 levelReq = 1;
 surfaceOnly = 1;
 groundY = 695;
@@ -36,7 +36,7 @@ originOffX = 0;
 originOffY = 0;
 menuObject = noone;
 xp = 25;
-resource = 'food';
+resource = RESOURCES.food;
 //general variables
 placed = 0;
 level = 1;
@@ -48,38 +48,15 @@ originOffX = 0;
 originOffY = 0;
 mouseYOff = 50;
 placeSoundPlayed = 0;
-costWoodCommon = 500;
-costStone = 0;
 totalResourcesNeeded = 0;
 amountBuilt = 0;
 devMode = 0;
 built = 0;
-//Cost to build
-totalResourcesNeeded = 1;
-cost[0,0] = 'woodCommon'; //Type
-cost[0,1] = -1; //Total amount needed
-cost[0,2] = -1; //Amount left
-//Add up the total amount of resources needed to build the building
-for (i = 0; i &lt;= 3; i++;){
-    if (cost[i,1] != -1){
-        totalResourcesNeeded += cost[i,1];
-    }else{
-        break;
-    }
-}
 
-
-exhausted = 0;
-exhaustTimer = 0;
-exhaustTime = 600;
-maxAmountLeft = 500;
-amountLeft = maxAmountLeft;
-resource = 'food';
-exhausted = 0;
-exPopUp = 0;
 //MiddleTimer 
-midTime = 40;
-midRandom = 60;
+midTime = 5;
+midRandom = 35;
+midDistance = 50;
 
 //Sprites for the buildings
 spriteLevel[0] = spr_farmingPatch;
@@ -91,12 +68,43 @@ placeSound[2] = sd_buildingPlace3;
 placeSound[3] = sd_buildingPlace4;
 
 //Misc 
-posDistance = 30;
+posDistance = 40;
 posTime = 30;
 
 
 
 
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Sound
+
+//Tool sounds (the sound the workers tool makes when hitting this resource)
+
+toolSound[0] = sd_farming1; 
+toolSound[1] = sd_farming2; 
+toolSound[2] = sd_farming3; 
+toolSound[3] = sd_farming4;
+
+hitFrame = 5;
 
 </string>
           </argument>
@@ -124,38 +132,41 @@ posTime = 30;
 
 
 
-
-//Makes the building follow the right curser
-
-
-
-//Make the building follow the curcer when it's not placed
+//Make the building follow the curser when it's not placed
 if (!placed){
-    if !(position_meeting(x,y+16,obj_tileSurfaceFlatParent)){
-        groundY = (instance_nearest(mouse_x,mouse_y,obj_tileSurfaceFlatParent).y);
+    if !(position_meeting(x, y + 8, obj_tileSurfaceFlatParent)){
+        //groundY = (instance_nearest(mouse_x,mouse_y,obj_tileSurfaceFlatParent).y);
+        groundY = mouse_y;
     }else{
-        groundY = (instance_position(x,y+16,obj_tileSurfaceFlatParent).y);
+        groundY = (instance_position(x, y + 8, obj_tileSurfaceFlatParent).y);
     }
     placeX = mouse_x;
     placeY = mouse_y
     image_alpha = .5;
     x = placeX-originOffX;
-    if (placeY &gt; groundY - 50){
+    if (placeY &gt; groundY - 25){
         y = groundY-originOffY;
     }else{
         y = placeY+mouseYOff;
     }
+    //Sprite color
+    if (!place_meeting(x, y, obj_buildingParent) &amp;&amp; !place_meeting(x, y, obj_resourceParent) &amp;&amp; !place_meeting(x, y, obj_treeParent) &amp;&amp; scr_building_can_be_placed()){
+        spriteColor = c_white
+    }else{
+        spriteColor = c_red;
+    }
 }else if (built){
     //play the place sound
     image_alpha = 1;
-    if (!placeSoundPlayed){
-        var sound = audio_play_sound_at(placeSound[irandom(3)],x,y,0,1000,200,1,0,999);
-        audio_sound_gain(sound,global.sfxVol,0);
+    if (!placeSoundPlayed &amp;&amp; !autoBuild){
+        var sound = audio_play_sound_at(placeSound[irandom(3)], x, y, 0, 1000, 200, 1, 0, 999);
+        audio_sound_gain(sound, global.sfxVol, 0);
+        placeSoundPlayed = 1;
+    }else if (autoBuild){
         placeSoundPlayed = 1;
     }
 }else if (!built){
-    image_alpha = .5; 
-    percentBuilt = ((amountBuilt/totalResourcesNeeded)*100);   
+    image_alpha = .5;    
 }
 
 
@@ -183,18 +194,7 @@ if (!placed){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Patch exhaustion
-if (exhausted){
-    exhaustTimer ++;
-    image_alpha = .6;    
-    if (exhaustTimer &gt;= exhaustTime){
-        exhausted = 0;
-        exPopUp = 0;
-        amountLeft = maxAmountLeft;
-        exhaustTimer = 0;
-    }
-}
-//auto build the patch
+            <string>///auto build the patch
 if (placed){
     built = 1;
 }
@@ -221,13 +221,12 @@ if (placed){
           <argument>
             <kind>1</kind>
             <string>///Start working
-//Makes the selected worker mine this resource
-event_inherited();
+
 
 //Set the selected workers to woodcutting
 if (!global.workerBuild &amp;&amp; !position_meeting(mouse_x,mouse_y,obj_workerParent) &amp;&amp; built){
     var target = id;
-    scr_unit_array_set_resource_target('farming',target); 
+    scr_unit_array_set_resource_target(STATES_WORKER.farming,target); 
     scr_unit_array_clear();  
 }else{
     scr_unit_array_clear();

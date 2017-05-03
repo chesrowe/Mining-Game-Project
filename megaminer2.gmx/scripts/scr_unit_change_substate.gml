@@ -8,6 +8,7 @@ substate = substateArg
 workTimer = 0;
 moveToTimer = 0;
 middleTimer = 0;
+waitingToWorkTimer = 0;
 
 
 
@@ -24,7 +25,6 @@ switch (substateArg){
         workingLenDirX = lengthdir_x(12, point_direction(x, y, target.x, target.y));
         workingLenDirY = lengthdir_y(13, point_direction(x, y, target.x, target.y));
         workTimer = 0;
-        workTime = (target.workTimeBase + target.workTimeAdd);
         image_index = 0; 
         //Set the sprite based on the target type
         if (object_is_ancestor(target.object_index, obj_treeParent)){
@@ -39,10 +39,17 @@ switch (substateArg){
             sprite_index = spriteBuilding;
             image_speed = buildingImageSpeed;
         }
+        if (target.object_index == obj_farmingPatch){
+            sprite_index = spriteFarming;
+            image_speed = buildingImageSpeed;
+        }
     break;
     
     //goingTo
     case SUBSTATES_WORKER.goingTo:
+        scr_worker_randomize_mid_time(target);
+        scr_worker_randomize_move_to_time();
+        scr_worker_randomize_work_time(target);
         idleTimer = 0;
         image_speed = walkingImageSpeed;    
         if (state == STATES_WORKER.building || state == STATES_WORKER.upgrading){
@@ -64,7 +71,9 @@ switch (substateArg){
     case SUBSTATES_WORKER.resourceDropOff:
         sprite_index = spriteWalkingResources;
         image_speed = walkingImageSpeed; 
-        scr_sprite_face_xpoint(dropOffTarget.x);   
+        scr_sprite_face_xpoint(dropOffTarget.x);  
+        scr_worker_randomize_mid_time(dropOffTarget); 
+        scr_worker_randomize_move_to_time();
     break;
     
     //resourcePickUp
@@ -77,12 +86,14 @@ switch (substateArg){
             sprite_index = spriteWalking;
             image_speed = walkingImageSpeed; 
             scr_sprite_face_xpoint(dropOffTarget.x);   
+            scr_worker_randomize_mid_time(dropOffTarget);
+            scr_worker_randomize_move_to_time();
         }
     break;
     
     //resourcePosition
     case SUBSTATES_WORKER.resourcePosition:
-        resourceDir = scr_unit_dir_x(target.x);
+        resourceDir = scr_unit_dir_x(target.x + target.orgXAdd);
         sprite_index = spriteWalking;
         image_xscale = -(resourceDir);
         positionTime = target.posTime;
@@ -96,8 +107,8 @@ switch (substateArg){
         image_speed = .10; 
     break;
     
-    //waitingToBuild
-    case SUBSTATES_WORKER.waitingToBuild:
+    //waitingToWork
+    case SUBSTATES_WORKER.waitingToWork:
         sprite_index = spriteIdle;
         image_speed = idleImageSpeed;
     break;
